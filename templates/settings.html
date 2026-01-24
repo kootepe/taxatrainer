@@ -10,8 +10,8 @@
   <main class="wrap">
     <header class="top">
       <h1>Settings</h1>
-      <a class="btn" href="/">Back</a>
-      <a class="btn secondary" href="/settings/taxa">Taxa settings</a>
+      <a class="btn" href="/">Taka*sin</a>
+      <a class="btn secondary" href="/settings/taxa">Taxa valinta</a>
     </header>
 
     <section class="card">
@@ -21,7 +21,7 @@
 
       <form method="POST" action="/settings">
         <p style="margin-top:0; opacity:0.9;">
-          Choose which classification levels you want to practice.
+        Valitse mitkä taksonomiset tasot näytetään.
         </p>
 
         <div style="display:grid; gap:10px; margin: 12px 0 16px 0;">
@@ -33,7 +33,7 @@
           {% endfor %}
         </div>
 
-        <button class="btn" type="submit">Save</button>
+        <button class="btn" type="submit">Tallenna</button>
       </form>
     </section>
   </main>
