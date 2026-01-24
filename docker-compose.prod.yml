@@ -1,5 +1,5 @@
 services:
-  taxonomy_trainer:
+  latu:
     build: .
     container_name: taxonomy_trainer
     environment:
