@@ -1,0 +1,33 @@
+services:
+  taxonomy_trainer:
+    build: .
+    container_name: taxonomy_trainer
+    environment:
+      # REQUIRED for Flask sessions to work consistently
+      FLASK_SECRET_KEY: "koulu-juttuja-kaikille"
+
+      # If your app.py supports this env var (it does in our earlier code):
+      TAXONOMY_JSON: "/app/data.json"
+
+      # Optional: if you're using cookies behind HTTPS via edge nginx
+      # (only needed if you later force secure cookies)
+      # FLASK_ENV: "production"
+    volumes:
+      # Keep your JSON editable without rebuilding
+      - ./data.json:/app/data.json:ro
+
+      # Optional: if you want to edit templates/static live without rebuild
+      # - ./templates:/app/templates:ro
+      # - ./static:/app/static:ro
+
+      # If you serve images from /static/img, keep them in repo or mount static/
+    networks:
+      - edge
+    restart: unless-stopped
+    expose:
+      - "8000"   # exposed to other containers on the network (not to host)
+
+networks:
+  edge:
+    external: true
+
