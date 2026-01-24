@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Taxa Settings - Taxonomy Trainer</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <main class="wrap">
+    <header class="top">
+      <h1>Taxa Settings</h1>
+      <div style="display:flex; gap:10px;">
+        <a class="btn secondary" href="/settings">Rank settings</a>
+        <a class="btn" href="/">Back</a>
+      </div>
+    </header>
+
+    <section class="card">
+      {% if saved %}
+        <div style="margin-bottom: 12px; opacity: 0.95;">✅ Saved</div>
+      {% endif %}
+
+      <p style="margin-top:0; opacity:0.9;">
+        Check a box to <strong>disable</strong> that whole group (and everything inside it).
+      </p>
+
+      <form method="POST" action="/settings/taxa">
+        {% macro render_node(n, depth=0) -%}
+          <div style="margin-left: {{ depth * 18 }}px; padding: 6px 0;">
+            <label style="display:flex; gap:10px; align-items:center;">
+              <input
+                type="checkbox"
+                name="disabled"
+                value="{{ n.id }}"
+                {% if n.id in disabled %}checked{% endif %}
+              />
+              <span style="text-transform: capitalize; opacity:0.9;">{{ n.rank }}</span>
+              <span>—</span>
+              <span>{{ n.lat }}</span>
+            </label>
+          </div>
+          {% for ch in n.children %}
+            {{ render_node(ch, depth + 1) }}
+          {% endfor %}
+        {%- endmacro %}
+
+        <div style="margin: 10px 0 16px 0;">
+          {% for n in tree %}
+            {{ render_node(n, 0) }}
+          {% endfor %}
+        </div>
+
+        <button class="btn" type="submit">Save</button>
+      </form>
+    </section>
+  </main>
+</body>
+</html>
+

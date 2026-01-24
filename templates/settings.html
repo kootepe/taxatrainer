@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Settings - Taxonomy Trainer</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <main class="wrap">
+    <header class="top">
+      <h1>Settings</h1>
+      <a class="btn" href="/">Back</a>
+      <a class="btn secondary" href="/settings/taxa">Taxa settings</a>
+    </header>
+
+    <section class="card">
+      {% if saved %}
+        <div style="margin-bottom: 12px; opacity: 0.95;">✅ Saved</div>
+      {% endif %}
+
+      <form method="POST" action="/settings">
+        <p style="margin-top:0; opacity:0.9;">
+          Choose which classification levels you want to practice.
+        </p>
+
+        <div style="display:grid; gap:10px; margin: 12px 0 16px 0;">
+          {% for r in all_ranks %}
+            <label style="display:flex; gap:10px; align-items:center;">
+              <input type="checkbox" name="ranks" value="{{ r }}" {% if r in enabled %}checked{% endif %} />
+              <span style="text-transform: capitalize;">{{ r }}</span>
+            </label>
+          {% endfor %}
+        </div>
+
+        <button class="btn" type="submit">Save</button>
+      </form>
+    </section>
+  </main>
+</body>
+</html>
+

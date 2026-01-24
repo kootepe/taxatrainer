@@ -1,0 +1,210 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Taxonomy Trainer</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <main class="wrap">
+    <header class="top">
+      <h1>Taxonomy Trainer</h1>
+      <div style="display:flex; gap:10px;">
+        <a class="btn secondary" href="/settings">Settings</a>
+        <button id="newBtn" class="btn">New</button>
+      </div>
+    </header>
+
+    <section class="card">
+      <div class="hint">
+        <div><strong>Finnish:</strong> <span id="fin">{{ item.meta.fin }}</span></div>
+      </div>
+
+      <div id="imgBox" class="imgBox" style="display: none;">
+        <img id="img" alt="example" />
+      </div>
+
+      <form id="form" autocomplete="off">
+        {% for r in ranks %}
+        <label class="row" id="row_{{ r }}">
+          <span class="rank">{{ r }}</span>
+          <input
+            type="text"
+            name="{{ r }}"
+            id="in_{{ r }}"
+            placeholder="type {{ r }}…"
+            class="inp"
+          />
+        </label>
+        {% endfor %}
+      </form>
+
+      <div class="actions">
+        <button id="showBtn" class="btn secondary" type="button">Show answers</button>
+        <button id="clearBtn" class="btn secondary" type="button">Clear</button>
+      </div>
+
+      <pre id="answers" class="answers" style="display:none;"></pre>
+    </section>
+  </main>
+
+  <script>
+    const RANKS = {{ ranks|tojson }};
+    let current = {
+      answer: {{ item.answer|tojson }},
+      meta: {{ item.meta|tojson }},
+    };
+
+    function norm(s) {
+      return (s ?? "").toString().trim().toLowerCase().replace(/\s+/g, " ");
+    }
+
+
+function applyVisibleFieldsFromAnswer(answer) {
+  for (const r of RANKS) {
+    const row = document.getElementById("row_" + r);
+    const input = document.getElementById("in_" + r);
+
+    // If ids don't match, don't crash silently
+    if (!row || !input) {
+      console.warn("Missing DOM for rank:", r, { row, input });
+      continue;
+    }
+
+    const raw = answer?.[r];
+    const expected = (raw === null || raw === undefined) ? "" : String(raw);
+    const shouldShow = expected.trim().length > 0;
+
+    row.hidden = !shouldShow; // ✅ hides reliably
+
+    if (!shouldShow) {
+      input.value = "";
+      input.classList.remove("ok", "bad");
+    }
+  }
+}
+
+    function setImage(meta) {
+      const imgBox = document.getElementById("imgBox");
+      const img = document.getElementById("img");
+      if (meta && meta.image) {
+        img.src = meta.image;
+        imgBox.style.display = "block";
+      } else {
+        img.removeAttribute("src");
+        imgBox.style.display = "none";
+      }
+    }
+
+    function updateMeta(meta) {
+      document.getElementById("fin").textContent = meta?.fin ?? "";
+      setImage(meta);
+    }
+
+function clearInputs() {
+  for (const r of RANKS) {
+    const el = document.getElementById("in_" + r);
+    el.value = "";
+    el.classList.remove("ok", "bad");
+  }
+  document.getElementById("answers").style.display = "none";
+}
+
+  async function checkAll() {
+    const inputs = {};
+    for (const r of RANKS) inputs[r] = document.getElementById("in_" + r).value;
+
+    const res = await fetch("/check", {
+      method: "POST",
+      credentials: "same-origin",            // ✅ IMPORTANT (send session cookie)
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ inputs })
+    });
+
+    const data = await res.json();
+
+    // ✅ If the server says there's no active item, don't try to highlight
+    if (data.error) {
+      console.warn("Check error:", data.error);
+      return;
+    }
+
+    for (const r of RANKS) {
+      const el = document.getElementById("in_" + r);
+      const v = (data[r] ? data[r].correct : null);
+
+      el.classList.remove("ok", "bad");
+      if (v === true) el.classList.add("ok");
+      if (v === false) el.classList.add("bad");
+    }
+  }
+
+  function showAnswers() {
+    for (const r of RANKS) {
+      const el = document.getElementById("in_" + r);
+      el.value = current.answer?.[r] ?? "";
+    }
+    checkAll().catch(console.error); // will turn them green
+  }
+async function newItem() {
+  const res = await fetch("/new", {
+    method: "POST",
+    credentials: "same-origin"
+  });
+  const data = await res.json();
+  current = data;
+
+  updateMeta(data.meta);
+  clearInputs();
+  applyVisibleFieldsFromAnswer(data.answer);
+}
+
+function applyDisabledFieldsFromAnswer(answer) {
+  for (const r of RANKS) {
+    const el = document.getElementById("in_" + r);
+    const expected = (answer?.[r] ?? "").toString().trim();
+
+    const shouldDisable = expected === "";
+
+    el.disabled = shouldDisable;
+    el.classList.remove("ok", "bad");
+
+    if (shouldDisable) {
+      el.value = "";                 // keep it empty
+      el.placeholder = "(not in data)";
+    } else {
+      el.placeholder = "type " + r + "…";
+    }
+  }
+}
+    // live checking as you type
+    for (const r of RANKS) {
+      document.getElementById("in_" + r).addEventListener("input", () => {
+        checkAll().catch(console.error);
+      });
+    }
+
+    document.getElementById("newBtn").addEventListener("click", () => newItem().catch(console.error));
+    document.getElementById("clearBtn").addEventListener("click", clearInputs);
+    document.getElementById("showBtn").addEventListener("click", showAnswers);
+
+    // initial
+    updateMeta(current.meta);
+    setImage(current.meta);
+    // applyDisabledFieldsFromAnswer(current.answer);
+    applyVisibleFieldsFromAnswer(current.answer);
+document.addEventListener("keydown", (e) => {
+  // don't trigger while typing in an input
+  const tag = (e.target?.tagName || "").toLowerCase();
+  if (tag === "input" || tag === "textarea") return;
+
+  if (e.key.toLowerCase() === "s") {
+    e.preventDefault();
+    showAnswers();
+  }
+});
+  </script>
+</body>
+</html>
