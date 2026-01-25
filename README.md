@@ -25,5 +25,6 @@ python3 app.py
 docker-compose.prod.yml pyöräyttää sovelluksen docker konttiin gunicornin
 taakse. Tämän avulla se pyörii tuolla latu.ojakastikka.fi.
 
-Koska homma oli yksinkertainen, koodi on tehty 99% tekoälyllä. Lajilistat olen
-koonnut kurssimateriaalista käsin.
+Koska homma oli yksinkertainen, koodi on tehty 99% tekoälyllä eikä esim. nappien
+sijoitteluun yms. ole käytetty juurikaan aikaa. Lajilistat olen koonnut
+kurssimateriaalista käsin.
