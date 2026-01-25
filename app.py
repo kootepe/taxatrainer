@@ -346,9 +346,17 @@ def choose_species_item() -> StudyItem:
         raise RuntimeError(f"No study items extracted from {dataset}.json")
 
     enabled = get_enabled_nodes()
-    pool = [it for it in items if not is_allowed(it.node_id, enabled)]
+
+    pool = (
+        [it for it in items if is_allowed(it.node_id, enabled)]
+        if enabled
+        else items
+    )
+
+    # If selection results in nothing, fallback to all
     if not pool:
         pool = items
+
     return random.choice(pool)
 
 
@@ -359,40 +367,15 @@ def choose_prompt_item() -> PromptItem:
     if not prompt_items:
         raise RuntimeError(f"No prompt items extracted from {dataset}.json")
 
-    allowed_prompt_ranks = set(
-        get_prompt_ranks()
-    )  # e.g. {"family"} or {"order","family"}
-    enabled_ranks = get_enabled_ranks()
-
-    def has_something_to_ask(p: PromptItem) -> bool:
-        # ranks ABOVE prompt rank, that are enabled and present in the answer
-        quiz_ranks = [
-            r
-            for r in enabled_ranks
-            if RANK_INDEX[r] < RANK_INDEX[p.rank]
-            and p.answer.get(r, "").strip()
-        ]
-        return len(quiz_ranks) > 0
-
     enabled = get_enabled_nodes()
 
-    # 1) only allowed prompt ranks
-    candidates = [
-        p
-        for p in prompt_items
-        if p.rank in allowed_prompt_ranks and has_something_to_ask(p)
-    ]
-
-    # If nothing matches (edge case: settings make it impossible), fall back to any usable prompt item
-    if not candidates:
-        candidates = [p for p in prompt_items if has_something_to_ask(p)]
-    if not candidates:
-        candidates = prompt_items  # absolute fallback (should be rare)
-
-    # 2) apply your taxa filter logic (keeping your current behavior)
-    pool = [p for p in candidates if not is_allowed(p.node_id, enabled)]
+    pool = (
+        [p for p in prompt_items if is_allowed(p.node_id, enabled)]
+        if enabled
+        else prompt_items
+    )
     if not pool:
-        pool = candidates
+        pool = prompt_items
 
     return random.choice(pool)
 
@@ -715,7 +698,7 @@ def set_dataset():
     if isinstance(d, str) and d in list_datasets():
         session["dataset_name"] = d
         session.pop(
-            "disabled_nodes", None
+            "enabled_nodes", None
         )  # optional: reset taxa filters per dataset
         session.pop("current_idx", None)  # reset current card
     return ("", 302, {"Location": "/settings"})
