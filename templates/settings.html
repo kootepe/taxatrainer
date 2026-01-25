@@ -1,39 +1,102 @@
 <!doctype html>
-<html lang="en">
+<html lang="fi">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Settings - Taxonomy Trainer</title>
+  <title>Asetukset - Taxa treenaus</title>
   <link rel="stylesheet" href="/static/style.css" />
 </head>
 <body>
   <main class="wrap">
     <header class="top">
-      <h1>Settings</h1>
-      <a class="btn" href="/">Taka*sin</a>
-      <a class="btn secondary" href="/settings/taxa">Taxa valinta</a>
+      <h1>Asetukset</h1>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <a class="btn" href="/">Takaisin</a>
+        <a class="btn secondary" href="/settings/taxa">Taxa valinta</a>
+      </div>
     </header>
 
     <section class="card">
       {% if saved %}
-        <div style="margin-bottom: 12px; opacity: 0.95;">✅ Saved</div>
+        <div style="margin-bottom: 12px; opacity: 0.95;">✅ Tallennettu</div>
       {% endif %}
 
-      <form method="POST" action="/settings">
-        <p style="margin-top:0; opacity:0.9;">
-        Valitse mitkä taksonomiset tasot näytetään.
-        </p>
+      <!-- Dataset selection (uses your existing GET endpoint) -->
+      <div style="margin-bottom: 16px;">
+        <div style="margin-top:0; opacity:0.9; margin-bottom:8px;">Dataset</div>
 
-        <div style="display:grid; gap:10px; margin: 12px 0 16px 0;">
-          {% for r in all_ranks %}
-            <label style="display:flex; gap:10px; align-items:center;">
-              <input type="checkbox" name="ranks" value="{{ r }}" {% if r in enabled %}checked{% endif %} />
-              <span style="text-transform: capitalize;">{{ r }}</span>
+        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+          <select id="datasetSelect" class="inp" style="max-width: 320px;">
+            {% for d in datasets %}
+              <option value="{{ d }}" {% if d == selected_dataset %}selected{% endif %}>
+                {{ d }}
+              </option>
+            {% endfor %}
+          </select>
+
+          <button class="btn secondary" type="button"
+                  onclick="window.location.href='/settings/dataset?d=' + document.getElementById('datasetSelect').value;">
+            Käytä
+          </button>
+        </div>
+      </div>
+
+      <!-- ONE POST form for everything else -->
+      <form method="POST" action="/settings">
+        <p style="margin-top:0; opacity:0.9;">Valitse mitä harjoitellaan.</p>
+
+        <!-- Rank toggles -->
+        <div style="margin: 12px 0 16px 0;">
+          <div style="margin-bottom:8px; opacity:0.9;">Näytettävät taksonomiset tasot</div>
+
+          <div style="display:grid; gap:10px;">
+            {% for r in all_ranks %}
+              <label style="display:flex; gap:10px; align-items:center;">
+                <input type="checkbox" name="ranks" value="{{ r }}"
+                       {% if r in enabled %}checked{% endif %} />
+                <span>{{ rank_fi.get(r, r) }} <span style="opacity:0.7;">({{ r }})</span></span>
+              </label>
+            {% endfor %}
+          </div>
+        </div>
+
+        <hr style="border:0; border-top:1px solid #243244; margin:16px 0;" />
+
+        <!-- Quiz mode -->
+        <div style="margin: 12px 0 10px 0;">
+          <div style="margin-bottom:8px; opacity:0.9;">Harjoitustyyppi</div>
+
+          <label style="display:flex; gap:10px; align-items:center; margin:6px 0;">
+            <input type="radio" name="quiz_mode" value="taxonomy"
+                   {% if quiz_mode == "taxonomy" %}checked{% endif %}>
+            <span>Perus: täytä kaikki valitut tasot</span>
+          </label>
+
+          <label style="display:flex; gap:10px; align-items:center; margin:6px 0;">
+            <input type="radio" name="quiz_mode" value="higher_from_subtaxon"
+                   {% if quiz_mode == "higher_from_subtaxon" %}checked{% endif %}>
+            <span>Ylätasot: annetaan luokka/lahko/heimo → täytä ylemmät tasot</span>
+          </label>
+        </div>
+
+        <!-- Prompt ranks (only used in higher_from_subtaxon) -->
+        <div style="margin-top:10px; padding:10px; border:1px solid #243244; border-radius:12px;">
+          <div style="margin-bottom:6px; opacity:0.9;">
+            Kun “Ylätasot” on käytössä, mitkä tasot voivat olla annettuna?
+          </div>
+
+          {% for r in ["class","order","family"] %}
+            <label style="display:flex; gap:10px; align-items:center; margin:6px 0;">
+              <input type="checkbox" name="prompt_ranks" value="{{ r }}"
+                     {% if r in prompt_ranks %}checked{% endif %} />
+              <span>{{ rank_fi.get(r, r) }} <span style="opacity:0.7;">({{ r }})</span></span>
             </label>
           {% endfor %}
         </div>
 
-        <button class="btn" type="submit">Tallenna</button>
+        <div style="margin-top:16px;">
+          <button class="btn" type="submit">Tallenna</button>
+        </div>
       </form>
     </section>
   </main>

@@ -22,7 +22,8 @@
       {% endif %}
 
       <p style="margin-top:0; opacity:0.9;">
-        Check a box to <strong>disable</strong> that whole group (and everything inside it).
+        Merkkaa laatikko <strong>POISTAAKSESI</strong> ryhmä ja kaikki sen sisällä olevat.
+        <!-- Check a box to <strong>disable</strong> that whole group (and everything inside it). -->
       </p>
 
       <form method="POST" action="/settings/taxa">
@@ -31,9 +32,10 @@
             <label style="display:flex; gap:10px; align-items:center;">
               <input
                 type="checkbox"
-                name="disabled"
+                name="enabled"
                 value="{{ n.id }}"
-                {% if n.id in disabled %}checked{% endif %}
+                data-id="{{ n.id }}"
+                {% if n.id in enabled %}checked{% endif %}
               />
               <span style="text-transform: capitalize; opacity:0.9;">{{ n.rank }}</span>
               <span>—</span>
@@ -55,6 +57,88 @@
       </form>
     </section>
   </main>
+
+<script>
+  function getAllBoxes() {
+    return Array.from(document.querySelectorAll('input[type="checkbox"][name="enabled"][data-id]'));
+  }
+
+  function isDescendant(childId, parentId) {
+    return childId === parentId || childId.startsWith(parentId + ">");
+  }
+
+  function setDescendants(parentId, checked) {
+    for (const cb of getAllBoxes()) {
+      const id = cb.dataset.id;
+      if (isDescendant(id, parentId)) {
+        cb.checked = checked;
+      }
+    }
+  }
+
+  function getParentId(id) {
+    const i = id.lastIndexOf(">");
+    return i >= 0 ? id.slice(0, i) : null;
+  }
+
+  function updateParentsFromChildren(startId) {
+    // Walk upwards, updating each parent based on its direct children.
+    let pid = getParentId(startId);
+    const boxes = getAllBoxes();
+    const byId = new Map(boxes.map(b => [b.dataset.id, b]));
+
+    while (pid) {
+      const parentBox = byId.get(pid);
+      if (!parentBox) {
+        pid = getParentId(pid);
+        continue;
+      }
+
+      // direct children = those with exactly one more segment
+      const parentDepth = pid.split(">").length;
+      const directKids = boxes.filter(b => {
+        const id = b.dataset.id;
+        return id.startsWith(pid + ">") && id.split(">").length === parentDepth + 1;
+      });
+
+      if (directKids.length === 0) {
+        pid = getParentId(pid);
+        continue;
+      }
+
+      const allChecked = directKids.every(b => b.checked);
+      const anyChecked = directKids.some(b => b.checked);
+
+      // If you want tri-state visuals, you can use indeterminate:
+      parentBox.indeterminate = anyChecked && !allChecked;
+      parentBox.checked = allChecked;
+
+      pid = getParentId(pid);
+    }
+  }
+
+  // Bind listeners
+  for (const cb of getAllBoxes()) {
+    cb.addEventListener("change", (e) => {
+      const id = cb.dataset.id;
+      const checked = cb.checked;
+
+      // 1) toggle all descendants
+      setDescendants(id, checked);
+
+      // 2) update all ancestors (optional but nice)
+      // pick one descendant id to seed the update; current id is fine
+      updateParentsFromChildren(id);
+    });
+  }
+
+  // On load: compute indeterminate/parent state from initially checked items
+  // (use deepest-first so parents compute correctly)
+  const boxes = getAllBoxes().sort((a,b) => b.dataset.id.length - a.dataset.id.length);
+  for (const cb of boxes) {
+    updateParentsFromChildren(cb.dataset.id);
+  }
+</script>
 </body>
 </html>
 
