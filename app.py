@@ -285,6 +285,7 @@ def extract_items(data: Dict[str, Any]) -> List[StudyItem]:
         ans.update(path)
 
         meta = {
+            "_kind": "node",
             "fin": fin_or_lat(
                 node.get("fin"),
                 path.get("family")
@@ -328,6 +329,7 @@ def extract_items(data: Dict[str, Any]) -> List[StudyItem]:
                 ans["species"] = species
 
                 meta = {
+                    "_kind": "specie",
                     "fin": fin_or_lat(
                         sp.get("fin"), f"{genus} {species}".strip()
                     ),
@@ -430,7 +432,14 @@ def choose_item() -> StudyItem:
     enabled_ranks = get_enabled_ranks()
     max_enabled_idx = max(RANK_INDEX[r] for r in enabled_ranks)
 
-    def deepest_filled_rank_idx(ans: Dict[str, str]) -> int:
+    def deepest_filled_rank_idx(it: StudyItem) -> int:
+        ans = it.answer
+
+        # If this item came from the "specie" list, treat it as a terminal leaf at species-level
+        # even if species is empty (genus-only records like "Arion sp.")
+        if it.meta.get("_kind") == "specie" and ans.get("genus", "").strip():
+            return RANK_INDEX["species"]
+
         for r in reversed(RANK_KEYS):
             if ans.get(r, "").strip():
                 return RANK_INDEX[r]
@@ -439,17 +448,13 @@ def choose_item() -> StudyItem:
     # ✅ LEAVES relative to settings:
     # only choose items whose deepest rank is EXACTLY the deepest enabled rank
     leaves = [
-        it
-        for it in items
-        if deepest_filled_rank_idx(it.answer) == max_enabled_idx
+        it for it in items if deepest_filled_rank_idx(it) == max_enabled_idx
     ]
 
     # Fallbacks (in case dataset doesn't have that level at all)
     if not leaves:
         leaves = [
-            it
-            for it in items
-            if deepest_filled_rank_idx(it.answer) <= max_enabled_idx
+            it for it in items if deepest_filled_rank_idx(it) <= max_enabled_idx
         ]
     if not leaves:
         leaves = items
