@@ -1,5 +1,9 @@
 # Taxa treenaus
 
+Sovellus pyörii täällä:
+
+[latu.ojakastikka.fi](https://latu.ojakastikka.fi)
+
 Sovellus UEF:in selkärangattomien ja selkärankaisten lajituntemuskurssin tieteellisten nimien harjoitteluun.
 
 Lajilistat on kopioitu materiaaleista joulukuussa 2025.
@@ -18,5 +22,8 @@ pip install flask
 python3 app.py
 ```
 
-docker-compose.prod.yml pyöräyttää sovelluksen docker konttiin gunicorning
-taakse.
+docker-compose.prod.yml pyöräyttää sovelluksen docker konttiin gunicornin
+taakse. Tämän avulla se pyörii tuolla latu.ojakastikka.fi.
+
+Koska homma oli yksinkertainen, koodi on tehty 99% tekoälyllä. Lajilistat olen
+koonnut kurssimateriaalista käsin.
