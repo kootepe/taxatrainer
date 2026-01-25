@@ -17,13 +17,13 @@
     </header>
 
     <section class="card">
+      <button style="margin-bottom:15px;" class="btn" type="submit">Tallenna</button>
       {% if saved %}
         <div style="margin-bottom: 12px; opacity: 0.95;">✅ Saved</div>
       {% endif %}
 
       <p style="margin-top:0; opacity:0.9;">
-        Merkkaa laatikko <strong>POISTAAKSESI</strong> ryhmä ja kaikki sen sisällä olevat.
-        <!-- Check a box to <strong>disable</strong> that whole group (and everything inside it). -->
+      Merkkaa taksonit joita haluat harjoitella.
       </p>
 
       <form method="POST" action="/settings/taxa">
@@ -53,7 +53,6 @@
           {% endfor %}
         </div>
 
-        <button class="btn" type="submit">Tallenna</button>
       </form>
     </section>
   </main>

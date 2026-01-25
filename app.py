@@ -4,20 +4,16 @@ import json
 import os
 import random
 from dataclasses import dataclass
-from typing import Set, Any, Dict, List, Optional, Tuple
 from functools import lru_cache
 from pathlib import Path
-
+from typing import Any, Dict, List, Optional, Set
 
 from flask import Flask, jsonify, render_template, request, session
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY", "dev-secret-change-me")
 
-DATA_PATH = os.environ.get("TAXONOMY_JSON", "data.json")
-
-
-# ---------- helpers to flatten your nested JSON into study items ----------
+# ---------- taxonomy config ----------
 RANK_FI = {
     "phylum": "pääjakso",
     "class": "luokka",
@@ -28,6 +24,7 @@ RANK_FI = {
 }
 
 RANK_KEYS = ["phylum", "class", "order", "family", "genus", "species"]
+RANK_INDEX = {r: i for i, r in enumerate(RANK_KEYS)}
 
 DEFAULT_ENABLED_RANKS = [
     "phylum",
@@ -36,63 +33,88 @@ DEFAULT_ENABLED_RANKS = [
     "family",
     "genus",
     "species",
-]  # tweak default
-
-# Your JSON uses "specie" (singular) as an array key.
-CHILD_KEYS = ["class", "order", "family", "specie"]
-NODE_RANKS = ["phylum", "class", "order", "family"]
+]
 
 BASE_DIR = Path(__file__).resolve().parent
-DATA_DIR = BASE_DIR  # keep json files here
-DEFAULT_DATASET = "selkarangattomat"  # means data.json
+DATA_DIR = BASE_DIR
+DEFAULT_DATASET = "selkarangattomat"
+
+# JSON uses "specie" as an array key
+REAL_CHILD_KEYS = {"class", "order", "family", "specie"}
+META_KEYS = {"lat", "fin", "req", "image"}
 
 
-DEFAULT_QUIZ_MODE = "taxonomy"  # "taxonomy" or "higher_from_subtaxon"
-DEFAULT_PROMPT_RANKS = ["family"]  # allowed given ranks in higher_from_subtaxon
-
-RANK_INDEX = {r: i for i, r in enumerate(RANK_KEYS)}  # phylum=0 .. species=5
-
-
-@dataclass
-class PromptItem:
-    rank: str  # "class" | "order" | "family"
-    value: str  # latin at that rank
-    answer: Dict[
-        str, str
-    ]  # full path dict (phylum/class/order/family/genus/species), but only higher ranks are used
-    meta: Dict[str, Any]
-    node_id: str  # node id at this rank (so disabling works)
-
-
+# ---------- models ----------
 @dataclass
 class StudyItem:
-    answer: Dict[
-        str, str
-    ]  # phylum/class/order/family/genus/species -> expected latin strings
-    meta: Dict[str, Any]  # anything extra (fin, req, image, etc.)
+    answer: Dict[str, str]  # phylum/class/order/family/genus/species
+    meta: Dict[str, Any]  # fin/req/image
     node_id: str
 
 
-def get_quiz_mode() -> str:
-    mode = session.get("quiz_mode")
-    return (
-        mode
-        if mode in ("taxonomy", "higher_from_subtaxon")
-        else DEFAULT_QUIZ_MODE
-    )
+# ---------- transparent container traversal (Option C) ----------
+def looks_taxonomic_container(node: Dict[str, Any]) -> bool:
+    if not isinstance(node, dict):
+        return False
+
+    # direct known children?
+    for k in REAL_CHILD_KEYS:
+        v = node.get(k)
+        if isinstance(v, list) and any(isinstance(x, dict) for x in v):
+            return True
+
+    # nested unknown list-of-dicts that might themselves be containers
+    for k, v in node.items():
+        if k in REAL_CHILD_KEYS or k in META_KEYS:
+            continue
+        if isinstance(v, list) and v and all(isinstance(x, dict) for x in v):
+            if any(looks_taxonomic_container(x) for x in v):
+                return True
+
+    return False
 
 
-def get_prompt_ranks() -> List[str]:
-    raw = session.get("prompt_ranks")
-    if isinstance(raw, list):
-        raw = [r for r in raw if r in ("class", "order", "family")]
-        if raw:
-            return raw
-    return DEFAULT_PROMPT_RANKS
+def iter_transparent_children(node: Dict[str, Any]) -> List[Dict[str, Any]]:
+    out: List[Dict[str, Any]] = []
+    if not isinstance(node, dict):
+        return out
+
+    for k, v in node.items():
+        if k in REAL_CHILD_KEYS or k in META_KEYS:
+            continue
+        if isinstance(v, list) and v and all(isinstance(x, dict) for x in v):
+            if any(looks_taxonomic_container(x) for x in v):
+                out.extend([x for x in v if isinstance(x, dict)])
+    return out
 
 
+def collect_real_children_through_containers(
+    node: Dict[str, Any], key: str
+) -> List[Dict[str, Any]]:
+    found: List[Dict[str, Any]] = []
+
+    direct = node.get(key)
+    if isinstance(direct, list):
+        found.extend([x for x in direct if isinstance(x, dict)])
+
+    for t in iter_transparent_children(node):
+        found.extend(collect_real_children_through_containers(t, key))
+
+    return found
+
+
+def collect_species_lists(node: Dict[str, Any]) -> List[List[Dict[str, Any]]]:
+    out: List[List[Dict[str, Any]]] = []
+    v = node.get("specie")
+    if isinstance(v, list):
+        out.append(v)
+    for t in iter_transparent_children(node):
+        out.extend(collect_species_lists(t))
+    return out
+
+
+# ---------- session helpers ----------
 def list_datasets() -> list[str]:
-    # returns ["data", "animals", "plants"] from files like data.json, animals.json
     files = sorted(DATA_DIR.glob("*.json"))
     return [f.stem for f in files]
 
@@ -109,14 +131,13 @@ def get_selected_dataset() -> str:
     )
 
 
-@lru_cache(maxsize=16)
-def load_dataset_cached(stem: str):
-    path = DATA_DIR / f"{stem}.json"
-    data = load_json(str(path))
-    items = extract_items(data)
-    prompt_items = extract_prompt_items(data)
-    taxa_tree = build_taxa_tree(data)
-    return data, items, prompt_items, taxa_tree
+def get_enabled_ranks() -> List[str]:
+    enabled = session.get("enabled_ranks")
+    if isinstance(enabled, list) and all(isinstance(x, str) for x in enabled):
+        enabled = [r for r in RANK_KEYS if r in enabled]
+        if enabled:
+            return enabled
+    return DEFAULT_ENABLED_RANKS
 
 
 def safe_lat(node: Dict[str, Any]) -> str:
@@ -129,38 +150,18 @@ def make_node_id(parent_id: str, rank: str, lat: str) -> str:
     return part if not parent_id else f"{parent_id}>{part}"
 
 
-def get_enabled_nodes() -> Set[str]:
-    raw = session.get("enabled_nodes")
-    if isinstance(raw, list):
-        return set([x for x in raw if isinstance(x, str)])
-    return set()
-
-
 def is_allowed(node_id: str, enabled: Set[str]) -> bool:
-    # allowed if node_id is inside ANY enabled prefix
     for e in enabled:
         if node_id == e or node_id.startswith(e + ">"):
             return True
     return False
 
 
-def norm(s: str) -> str:
-    return " ".join((s or "").strip().lower().split())
-
-
-def get_enabled_ranks() -> List[str]:
-    enabled = session.get("enabled_ranks")
-    if isinstance(enabled, list) and all(isinstance(x, str) for x in enabled):
-        # keep only known ranks, keep order
-        enabled = [r for r in RANK_KEYS if r in enabled]
-        if enabled:
-            return enabled
-    return DEFAULT_ENABLED_RANKS
-
-
-def load_json(path: str) -> Dict[str, Any]:
-    with open(path, "r", encoding="utf-8") as f:
-        return json.load(f)
+def fin_or_lat(fin: Any, lat: Any) -> str:
+    fin_s = str(fin or "").strip()
+    if fin_s:
+        return fin_s
+    return str(lat or "").strip()
 
 
 def first_nonempty(*vals: Optional[str]) -> Optional[str]:
@@ -171,10 +172,6 @@ def first_nonempty(*vals: Optional[str]) -> Optional[str]:
 
 
 def find_nearest_image(path_nodes: List[Dict[str, Any]]) -> Optional[str]:
-    """
-    If you add `"image": "/static/img/foo.jpg"` to any node,
-    this will pick the closest (deepest) one on the current path.
-    """
     for node in reversed(path_nodes):
         img = node.get("image")
         if isinstance(img, str) and img.strip():
@@ -182,232 +179,23 @@ def find_nearest_image(path_nodes: List[Dict[str, Any]]) -> Optional[str]:
     return None
 
 
-def extract_items(data: Dict[str, Any]) -> List[StudyItem]:
-    items: List[StudyItem] = []
-
-    phyla = data.get("phylum", [])
-    if not isinstance(phyla, list):
-        return items
-
-    def walk(
-        node: Dict[str, Any],
-        path: Dict[str, str],
-        path_nodes: List[Dict[str, Any]],
-        current_node_id: str,
-    ):
-        # If node contains specie list, create items
-        specie_list = node.get("specie")
-        if isinstance(specie_list, list):
-            for sp in specie_list:
-                if not isinstance(sp, dict):
-                    continue
-                genus = str(sp.get("genus", "") or "")
-                species = str(sp.get("species", "") or "")
-
-                ans = dict(path)
-                ans["genus"] = genus
-                ans["species"] = species
-
-                meta = {
-                    "fin": sp.get("fin", ""),
-                    "req": sp.get("req", ""),
-                    "image": first_nonempty(
-                        sp.get("image"),
-                        find_nearest_image(path_nodes + [sp]),
-                    ),
-                }
-                items.append(
-                    StudyItem(answer=ans, meta=meta, node_id=current_node_id)
-                )
-
-        # Recurse into child arrays
-        for ck in CHILD_KEYS:
-            child_list = node.get(ck)
-            if not isinstance(child_list, list):
-                continue
-
-            # "specie" handled above; others are group ranks
-            if ck == "specie":
-                continue
-
-            child_rank = ck  # class/order/family
-            for ch in child_list:
-                if not isinstance(ch, dict):
-                    continue
-
-                new_path = dict(path)
-                lat = safe_lat(ch)
-                if lat:
-                    new_path[child_rank] = lat
-
-                new_node_id = current_node_id
-                if lat:
-                    new_node_id = make_node_id(current_node_id, child_rank, lat)
-
-                walk(ch, new_path, path_nodes + [ch], new_node_id)
-
-    for ph in phyla:
-        if not isinstance(ph, dict):
-            continue
-
-        path: Dict[str, str] = {k: "" for k in RANK_KEYS}
-
-        ph_lat = safe_lat(ph)
-        if ph_lat:
-            path["phylum"] = ph_lat
-
-        ph_id = make_node_id("", "phylum", ph_lat if ph_lat else "UNKNOWN")
-        walk(ph, path, [ph], ph_id)
-
-    return items
+# ---------- data loading ----------
+def load_json(path: str) -> Dict[str, Any]:
+    with open(path, "r", encoding="utf-8") as f:
+        return json.load(f)
 
 
-def extract_prompt_items(data: Dict[str, Any]) -> List[PromptItem]:
-    out: List[PromptItem] = []
-
-    phyla = data.get("phylum", [])
-    if not isinstance(phyla, list):
-        return out
-
-    def walk(
-        node: Dict[str, Any],
-        path: Dict[str, str],
-        path_nodes: List[Dict[str, Any]],
-        current_node_id: str,
-    ):
-        # Recurse into child arrays (class/order/family)
-        for ck in ["class", "order", "family"]:
-            child_list = node.get(ck)
-            if not isinstance(child_list, list):
-                continue
-
-            for ch in child_list:
-                if not isinstance(ch, dict):
-                    continue
-
-                lat = safe_lat(ch)
-                if not lat:
-                    continue
-
-                child_rank = ck
-                new_path = dict(path)
-                new_path[child_rank] = lat
-
-                new_node_id = make_node_id(current_node_id, child_rank, lat)
-
-                # Each node becomes ONE quiz candidate
-                meta = {
-                    "fin": ch.get("fin", "")
-                    or "",  # optional, if you add fin on nodes
-                    "req": ch.get("req", "") or "",
-                    "image": first_nonempty(
-                        ch.get("image"),
-                        find_nearest_image(path_nodes + [ch]),
-                    ),
-                }
-
-                # Ensure all ranks exist in dict (frontend/check code expects keys)
-                full_answer = {k: "" for k in RANK_KEYS}
-                full_answer.update(new_path)
-
-                out.append(
-                    PromptItem(
-                        rank=child_rank,
-                        value=lat,
-                        answer=full_answer,
-                        meta=meta,
-                        node_id=new_node_id,
-                    )
-                )
-
-                walk(ch, new_path, path_nodes + [ch], new_node_id)
-
-    for ph in phyla:
-        if not isinstance(ph, dict):
-            continue
-
-        ph_lat = safe_lat(ph) or ""
-        ph_id = make_node_id("", "phylum", ph_lat if ph_lat else "UNKNOWN")
-
-        path = {k: "" for k in RANK_KEYS}
-        if ph_lat:
-            path["phylum"] = ph_lat
-
-        walk(ph, path, [ph], ph_id)
-
-    return out
+@lru_cache(maxsize=16)
+def load_dataset_cached(stem: str):
+    path = DATA_DIR / f"{stem}.json"
+    data = load_json(str(path))
+    items = extract_items(data)
+    taxa_tree = build_taxa_tree(data)
+    return data, items, taxa_tree
 
 
-def choose_species_item() -> StudyItem:
-    dataset = get_selected_dataset()
-    _, items, _, _ = load_dataset_cached(dataset)
-
-    if not items:
-        raise RuntimeError(f"No study items extracted from {dataset}.json")
-
-    enabled = get_enabled_nodes()
-
-    pool = (
-        [it for it in items if is_allowed(it.node_id, enabled)]
-        if enabled
-        else items
-    )
-
-    # If selection results in nothing, fallback to all
-    if not pool:
-        pool = items
-
-    return random.choice(pool)
-
-
-def choose_prompt_item() -> PromptItem:
-    dataset = get_selected_dataset()
-    _, _, prompt_items, _ = load_dataset_cached(dataset)
-
-    if not prompt_items:
-        raise RuntimeError(f"No prompt items extracted from {dataset}.json")
-
-    enabled = get_enabled_nodes()
-
-    pool = (
-        [p for p in prompt_items if is_allowed(p.node_id, enabled)]
-        if enabled
-        else prompt_items
-    )
-    if not pool:
-        pool = prompt_items
-
-    return random.choice(pool)
-
-
-# def choose_item():
-#     dataset = get_selected_dataset()
-#     _, items, _, _, _ = load_dataset_cached(dataset)
-#
-#     if not items:
-#         raise RuntimeError(f"No study items extracted from {dataset}.json")
-#
-#     disabled = get_disabled_nodes()
-#     pool = [it for it in items if not is_blocked(it.node_id, disabled)]
-#     if not pool:
-#         pool = items
-#     return random.choice(pool)
-
-
-# def choose_item() -> StudyItem:
-#     disabled = get_disabled_nodes()
-#     pool = [it for it in ITEMS if not is_blocked(it.node_id, disabled)]
-#     if not pool:
-#         # fallback: if user disabled everything, ignore filters
-#         pool = ITEMS
-#     return random.choice(pool)
-
-
+# ---------- taxa tree + enabled nodes ----------
 def build_taxa_tree(data: Dict[str, Any]) -> List[Dict[str, Any]]:
-    """
-    Returns a list of tree nodes:
-    { "rank": "phylum", "lat": "cnidaria", "id": "phylum:cnidaria", "children": [...] }
-    """
     phyla = data.get("phylum", [])
     out: List[Dict[str, Any]] = []
     if not isinstance(phyla, list):
@@ -422,13 +210,10 @@ def build_taxa_tree(data: Dict[str, Any]) -> List[Dict[str, Any]]:
         tnode = {"rank": rank, "lat": lat, "id": node_id, "children": []}
 
         for ck in ["class", "order", "family"]:
-            child_list = node.get(ck)
-            if isinstance(child_list, list):
-                for ch in child_list:
-                    if isinstance(ch, dict):
-                        tnode["children"].append(
-                            build_children(ch, node_id, ck)
-                        )
+            child_list = collect_real_children_through_containers(node, ck)
+            for ch in child_list:
+                if isinstance(ch, dict):
+                    tnode["children"].append(build_children(ch, node_id, ck))
 
         return tnode
 
@@ -439,117 +224,260 @@ def build_taxa_tree(data: Dict[str, Any]) -> List[Dict[str, Any]]:
     return out
 
 
+def get_all_node_ids(dataset: str) -> Set[str]:
+    _, _, taxa_tree = load_dataset_cached(dataset)
+    ids: Set[str] = set()
+
+    def walk(n: Dict[str, Any]):
+        ids.add(n["id"])
+        for ch in n.get("children", []):
+            walk(ch)
+
+    for root in taxa_tree:
+        walk(root)
+
+    return ids
+
+
+def get_enabled_nodes() -> Set[str]:
+    raw = session.get("enabled_nodes")
+    if isinstance(raw, list):
+        s = set([x for x in raw if isinstance(x, str)])
+        if s:
+            return s
+
+    # default: everything enabled
+    dataset = get_selected_dataset()
+    return get_all_node_ids(dataset)
+
+
+# ---------- item extraction ----------
+def extract_items(data: Dict[str, Any]) -> List[StudyItem]:
+    items: List[StudyItem] = []
+
+    phyla = data.get("phylum", [])
+    if not isinstance(phyla, list):
+        return items
+
+    def node_has_children(node: Dict[str, Any]) -> bool:
+        # group children through transparent containers
+        if collect_real_children_through_containers(node, "class"):
+            return True
+        if collect_real_children_through_containers(node, "order"):
+            return True
+        if collect_real_children_through_containers(node, "family"):
+            return True
+
+        # species lists (also through containers)
+        for specie_list in collect_species_lists(node):
+            if isinstance(specie_list, list) and len(specie_list) > 0:
+                return True
+
+        return False
+
+    def make_node_item(
+        node: Dict[str, Any],
+        path: Dict[str, str],
+        path_nodes: List[Dict[str, Any]],
+        current_node_id: str,
+    ):
+        ans = {k: "" for k in RANK_KEYS}
+        ans.update(path)
+
+        meta = {
+            "fin": fin_or_lat(
+                node.get("fin"),
+                path.get("family")
+                or path.get("order")
+                or path.get("class")
+                or path.get("phylum"),
+            ),
+            "req": (node.get("req") or ""),
+            "image": first_nonempty(
+                node.get("image"),
+                find_nearest_image(path_nodes + [node]),
+            ),
+        }
+
+        items.append(StudyItem(answer=ans, meta=meta, node_id=current_node_id))
+
+    def walk(
+        node: Dict[str, Any],
+        rank: str,
+        path: Dict[str, str],
+        path_nodes: List[Dict[str, Any]],
+        current_node_id: str,
+    ):
+        # ✅ 0) add an item for this rank node (phylum/class/order/family)
+        # (this is the key fix so "family" is selectable even if species exist below)
+        if rank in ("phylum", "class", "order", "family"):
+            make_node_item(node, path, path_nodes, current_node_id)
+
+        # 1) species items (specie may exist through any number of transparent containers)
+        for specie_list in collect_species_lists(node):
+            for sp in specie_list:
+                if not isinstance(sp, dict):
+                    continue
+
+                genus = str(sp.get("genus", "") or "")
+                species = str(sp.get("species", "") or "")
+
+                ans = {k: "" for k in RANK_KEYS}
+                ans.update(path)
+                ans["genus"] = genus
+                ans["species"] = species
+
+                meta = {
+                    "fin": fin_or_lat(
+                        sp.get("fin"), f"{genus} {species}".strip()
+                    ),
+                    "req": sp.get("req", ""),
+                    "image": first_nonempty(
+                        sp.get("image"),
+                        find_nearest_image(path_nodes + [sp]),
+                    ),
+                }
+
+                items.append(
+                    StudyItem(answer=ans, meta=meta, node_id=current_node_id)
+                )
+
+        # 2) recurse into real rank children (through transparent containers)
+        for ck in ["class", "order", "family"]:
+            child_list = collect_real_children_through_containers(node, ck)
+            if not child_list:
+                continue
+
+            for ch in child_list:
+                if not isinstance(ch, dict):
+                    continue
+
+                lat = safe_lat(ch)
+                if not lat:
+                    continue
+
+                new_path = dict(path)
+                new_path[ck] = lat
+
+                new_node_id = make_node_id(current_node_id, ck, lat)
+                walk(ch, ck, new_path, path_nodes + [ch], new_node_id)
+
+        # 3) optional: leaf/end-node item (kept, but now less important)
+        if not node_has_children(node):
+            make_node_item(node, path, path_nodes, current_node_id)
+
+    for ph in phyla:
+        if not isinstance(ph, dict):
+            continue
+
+        path: Dict[str, str] = {k: "" for k in RANK_KEYS}
+
+        ph_lat = safe_lat(ph)
+        if ph_lat:
+            path["phylum"] = ph_lat
+
+        ph_id = make_node_id("", "phylum", ph_lat if ph_lat else "UNKNOWN")
+        walk(ph, "phylum", path, [ph], ph_id)
+
+    return items
+
+
+# ---------- quiz logic ----------
 def make_quiz_payload(item: StudyItem) -> Dict[str, Any]:
     enabled_ranks = get_enabled_ranks()
-    mode = get_quiz_mode()
+
+    # ranks that are ticked AND exist on this item
+    present = [r for r in enabled_ranks if item.answer.get(r, "").strip()]
 
     payload = {
         "answer": item.answer,
         "meta": item.meta,
-        "mode": mode,
-        "given": None,  # e.g. {"rank":"family","value":"spongillidae"}
-        "quiz_ranks": enabled_ranks,  # ranks the UI should render inputs for
+        "mode": "taxonomy",
+        "given": None,
+        "quiz_ranks": present if present else enabled_ranks,
     }
 
-    if mode != "higher_from_subtaxon":
+    # if we can't do a "given" + "asked", just ask what exists
+    if len(present) < 2:
         return payload
 
-    # pick a prompt rank that exists on this item
-    prompt_candidates = [
-        r for r in get_prompt_ranks() if item.answer.get(r, "").strip()
-    ]
-    if not prompt_candidates:
-        return payload  # fallback to normal if nothing usable
+    # ✅ highest (most general) selected rank is allowed to be given
+    given_rank = min(present, key=lambda r: RANK_INDEX[r])
 
-    prompt_rank = random.choice(prompt_candidates)
+    # quiz_ranks = [
+    #     r
+    #     for r in enabled_ranks
+    #     if RANK_INDEX[r] > RANK_INDEX[given_rank]
+    #     and item.answer.get(r, "").strip()
+    # ]
 
-    # ranks ABOVE prompt_rank (higher taxa)
-    quiz_ranks = [
-        r
-        for r in enabled_ranks
-        if RANK_INDEX[r] < RANK_INDEX[prompt_rank]
-        and item.answer.get(r, "").strip()
-    ]
+    # if not quiz_ranks:
+    #     return payload
 
-    # if nothing to ask, fallback to normal
-    if not quiz_ranks:
-        return payload
-
-    payload["given"] = {"rank": prompt_rank, "value": item.answer[prompt_rank]}
-    payload["quiz_ranks"] = quiz_ranks
+    payload["given"] = {"rank": given_rank, "value": item.answer[given_rank]}
+    payload["mode"] = "higher_from_subtaxon"
+    payload["quiz_ranks"] = present
     return payload
 
 
-def make_prompt_quiz_payload(p: PromptItem) -> Dict[str, Any]:
+def choose_item() -> StudyItem:
+    dataset = get_selected_dataset()
+    _, items, _ = load_dataset_cached(dataset)
+
+    if not items:
+        raise RuntimeError(f"No study items extracted from {dataset}.json")
+
     enabled_ranks = get_enabled_ranks()
+    max_enabled_idx = max(RANK_INDEX[r] for r in enabled_ranks)
 
-    prompt_rank = p.rank
-    # only allow if user enabled it as a prompt rank in settings
-    allowed = get_prompt_ranks()
-    if prompt_rank not in allowed:
-        # fallback: pretend normal taxonomy
-        return {
-            "answer": p.answer,
-            "meta": p.meta,
-            "mode": "taxonomy",
-            "given": None,
-            "quiz_ranks": enabled_ranks,
-        }
+    def deepest_filled_rank_idx(ans: Dict[str, str]) -> int:
+        for r in reversed(RANK_KEYS):
+            if ans.get(r, "").strip():
+                return RANK_INDEX[r]
+        return -1
 
-    quiz_ranks = [
-        r
-        for r in enabled_ranks
-        if RANK_INDEX[r] < RANK_INDEX[prompt_rank]
-        and p.answer.get(r, "").strip()
+    # ✅ LEAVES relative to settings:
+    # only choose items whose deepest rank is EXACTLY the deepest enabled rank
+    leaves = [
+        it
+        for it in items
+        if deepest_filled_rank_idx(it.answer) == max_enabled_idx
     ]
-    if not quiz_ranks:
-        # nothing higher to ask -> fallback to taxonomy-like
-        return {
-            "answer": p.answer,
-            "meta": p.meta,
-            "mode": "taxonomy",
-            "given": None,
-            "quiz_ranks": enabled_ranks,
-        }
 
-    return {
-        "answer": p.answer,
-        "meta": p.meta,
-        "mode": "higher_from_subtaxon",
-        "given": {"rank": prompt_rank, "value": p.value},
-        "quiz_ranks": quiz_ranks,
-    }
+    # Fallbacks (in case dataset doesn't have that level at all)
+    if not leaves:
+        leaves = [
+            it
+            for it in items
+            if deepest_filled_rank_idx(it.answer) <= max_enabled_idx
+        ]
+    if not leaves:
+        leaves = items
+
+    enabled_nodes = get_enabled_nodes()
+    pool = (
+        [it for it in leaves if is_allowed(it.node_id, enabled_nodes)]
+        if enabled_nodes
+        else leaves
+    )
+    if not pool:
+        pool = leaves
+
+    return random.choice(pool)
+
+
+def norm(s: str) -> str:
+    return " ".join((s or "").strip().lower().split())
 
 
 # ---------- routes ----------
-
-
 @app.get("/")
 def index():
-    mode = get_quiz_mode()
-
-    if mode == "higher_from_subtaxon":
-        p = choose_prompt_item()
-        session["current_kind"] = "prompt"
-        session["current_node_id"] = p.node_id
-        payload = make_prompt_quiz_payload(p)
-
-        return render_template(
-            "index.html",
-            item=p,  # p has .answer and .meta just like StudyItem
-            ranks=payload["quiz_ranks"],
-            rank_fi=RANK_FI,
-            quiz_mode=payload["mode"],
-            given=payload["given"],
-        )
-
-    # taxonomy mode (old behavior)
     dataset = get_selected_dataset()
-    _, items, _, _ = load_dataset_cached(dataset)
+    _, items, _ = load_dataset_cached(dataset)
 
-    item = choose_species_item()
+    item = choose_item()
     idx = items.index(item)
-    session["current_kind"] = "species"
     session["current_idx"] = idx
 
     payload = make_quiz_payload(item)
@@ -563,50 +491,32 @@ def index():
     )
 
 
+@app.get("/manual")
+def manual():
+    return render_template("manual.html")
+
+
 @app.post("/new")
 def new_item():
-    mode = get_quiz_mode()
-
-    if mode == "higher_from_subtaxon":
-        p = choose_prompt_item()
-        session["current_kind"] = "prompt"
-        session["current_node_id"] = p.node_id
-        return jsonify(make_prompt_quiz_payload(p))
-
     dataset = get_selected_dataset()
-    _, items, _, _ = load_dataset_cached(dataset)
+    _, items, _ = load_dataset_cached(dataset)
 
-    item = choose_species_item()
-    idx = items.index(item)
-    session["current_kind"] = "species"
-    session["current_idx"] = idx
+    item = choose_item()
+    session["current_idx"] = items.index(item)
     return jsonify(make_quiz_payload(item))
 
 
 @app.post("/check")
 def check():
     dataset = get_selected_dataset()
-    _, items, prompt_items, _ = load_dataset_cached(dataset)
+    _, items, _ = load_dataset_cached(dataset)
 
-    kind = session.get("current_kind")
+    idx = session.get("current_idx")
+    if idx is None or not (0 <= int(idx) < len(items)):
+        return jsonify({"error": "no active item"}), 400
 
-    if kind == "prompt":
-        node_id = session.get("current_node_id")
-        if not isinstance(node_id, str):
-            return jsonify({"error": "no active item"}), 400
-
-        item = next((p for p in prompt_items if p.node_id == node_id), None)
-        if item is None:
-            return jsonify({"error": "no active item"}), 400
-
-        answer_dict = item.answer
-
-    else:
-        idx = session.get("current_idx")
-        if idx is None or not (0 <= int(idx) < len(items)):
-            return jsonify({"error": "no active item"}), 400
-        item = items[int(idx)]
-        answer_dict = item.answer
+    item = items[int(idx)]
+    answer_dict = item.answer
 
     payload = request.get_json(force=True) or {}
     inputs = payload.get("inputs", {})
@@ -649,32 +559,16 @@ def settings():
         datasets=datasets,
         selected_dataset=selected,
         rank_fi=RANK_FI,
-        quiz_mode=get_quiz_mode(),
-        prompt_ranks=get_prompt_ranks(),
     )
 
 
 @app.post("/settings")
 def save_settings():
-    # rank toggles (existing)
     selected_ranks = request.form.getlist("ranks")
     selected_ranks = [r for r in RANK_KEYS if r in selected_ranks]
     if not selected_ranks:
         selected_ranks = DEFAULT_ENABLED_RANKS
     session["enabled_ranks"] = selected_ranks
-
-    # NEW: quiz mode
-    mode = request.form.get("quiz_mode", DEFAULT_QUIZ_MODE)
-    if mode not in ("taxonomy", "higher_from_subtaxon"):
-        mode = DEFAULT_QUIZ_MODE
-    session["quiz_mode"] = mode
-
-    # NEW: allowed prompt ranks (class/order/family)
-    pr = request.form.getlist("prompt_ranks")
-    pr = [r for r in pr if r in ("class", "order", "family")]
-    if not pr:
-        pr = DEFAULT_PROMPT_RANKS
-    session["prompt_ranks"] = pr
 
     datasets = list_datasets()
     selected = get_selected_dataset()
@@ -686,8 +580,6 @@ def save_settings():
         datasets=datasets,
         selected_dataset=selected,
         rank_fi=RANK_FI,
-        quiz_mode=mode,
-        prompt_ranks=pr,
         saved=True,
     )
 
@@ -697,17 +589,15 @@ def set_dataset():
     d = request.args.get("d", "")
     if isinstance(d, str) and d in list_datasets():
         session["dataset_name"] = d
-        session.pop(
-            "enabled_nodes", None
-        )  # optional: reset taxa filters per dataset
-        session.pop("current_idx", None)  # reset current card
+        session.pop("enabled_nodes", None)  # reset taxa filters per dataset
+        session.pop("current_idx", None)
     return ("", 302, {"Location": "/settings"})
 
 
 @app.get("/settings/taxa")
 def settings_taxa():
     dataset = get_selected_dataset()
-    _, _, _, taxa_tree = load_dataset_cached(dataset)
+    _, _, taxa_tree = load_dataset_cached(dataset)
 
     enabled = get_enabled_nodes()
     return render_template(
@@ -718,17 +608,48 @@ def settings_taxa():
 @app.post("/settings/taxa")
 def save_settings_taxa():
     dataset = get_selected_dataset()
-    _, _, _, taxa_tree = load_dataset_cached(dataset)
+    _, _, taxa_tree = load_dataset_cached(dataset)
 
     selected = request.form.getlist("enabled")
     selected = [x for x in selected if isinstance(x, str) and x.strip()]
+
     session["enabled_nodes"] = selected
 
     return render_template(
-        "settings_taxa.html", tree=taxa_tree, enabled=set(selected), saved=True
+        "settings_taxa.html",
+        tree=taxa_tree,
+        enabled=set(selected),
+        saved=True,
     )
 
 
+@app.get("/debug/payload")
+def debug_payload():
+    dataset = get_selected_dataset()
+    _, items, _ = load_dataset_cached(dataset)
+
+    if not items:
+        return jsonify({"error": f"no items in dataset {dataset}"}), 400
+
+    idx = session.get("current_idx")
+    if idx is None or not (0 <= int(idx) < len(items)):
+        item = choose_item()
+        idx = items.index(item)
+        session["current_idx"] = idx
+    else:
+        item = items[int(idx)]
+
+    payload = make_quiz_payload(item)
+    payload["_debug"] = {
+        "dataset": dataset,
+        "current_idx": int(idx),
+        "enabled_ranks": get_enabled_ranks(),
+        "enabled_nodes_count": len(get_enabled_nodes()),
+        "node_id": getattr(item, "node_id", None),
+    }
+
+    return jsonify(payload)
+
+
 if __name__ == "__main__":
-    # debug=True is fine for localhost
     app.run(host="0.0.0.0", port=5000, debug=True)

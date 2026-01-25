@@ -63,7 +63,7 @@ body {
   background: #0b1220;
   color: #e2e8f0;
   outline: none;
-  max-width: 100%;
+  max-width: 80%;
   min-width: 0;  /* critical for grid overflow issues */
 }
 
@@ -151,4 +151,14 @@ body {
   max-height: 240px;
   border-radius: 12px;
   border: 1px solid #334155;
+}
+
+.staticVal {
+  display: inline-block;
+  min-width: 180px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid #243244;
+  background: rgba(255,255,255,0.03);
+  font-size: 16px;
 }

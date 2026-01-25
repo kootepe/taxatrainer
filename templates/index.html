@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -12,6 +11,7 @@
     <header class="top">
       <h1>Taxa Treenaus</h1>
       <div style="display:flex; gap:10px;">
+        <a class="btn secondary" href="/manual">Ohjeet</a>
         <a class="btn secondary" href="/settings">Asetukset</a>
       </div>
     </header>
@@ -43,13 +43,14 @@
             </span>
 
             <div class="cell">
-              <input
-                type="text"
-                name="{{ r }}"
-                id="in_{{ r }}"
-                placeholder="type {{ r }}…"
-                class="inp"
-              />
+        <span class="staticVal" id="in_{{ r }}">—</span>
+              <!-- <input -->
+              <!--   type="text" -->
+              <!--   name="{{ r }}" -->
+              <!--   id="in_{{ r }}" -->
+              <!--   placeholder="type {{ r }}…" -->
+              <!--   class="inp" -->
+              <!-- /> -->
 
               <button type="button" class="miniBtn" id="btn_{{ r }}">?</button>
             </div>
@@ -128,24 +129,24 @@ function applyVisibleFieldsFromAnswer(answer) {
 function clearInputs() {
   for (const r of getRanks()) {
     const el = document.getElementById("in_" + r);
-    el.value = "";
+    el.textContent = "—";
     el.classList.remove("ok", "bad");
   }
   document.getElementById("answers").style.display = "none";
   for (const r of getRanks()) {
-  const res = document.getElementById("res_" + r);
-  if (res) res.hidden = true;
-}
+    const res = document.getElementById("res_" + r);
+    if (res) res.hidden = true;
+  }
 }
 
 function hintFill(rank) {
-  const input = document.getElementById("in_" + rank);
+  const el = document.getElementById("in_" + rank);
   const expected = (current.answer?.[rank] ?? "").toString();
 
-  if (!expected.trim()) return; // nothing to fill
+  if (!expected.trim()) return;
 
-  input.value = expected;
-  checkAll().catch(console.error); // will mark it green
+  el.textContent = expected;
+  el.classList.add("ok");
 }
 async function checkAll() {
   const inputs = {};
@@ -176,13 +177,13 @@ async function checkAll() {
   }
 }
 
-  function showAnswers() {
-    for (const r of getRanks()) {
-      const el = document.getElementById("in_" + r);
-      el.value = current.answer?.[r] ?? "";
-    }
-    checkAll().catch(console.error); // will turn them green
+function showAnswers() {
+  for (const r of getRanks()) {
+    const el = document.getElementById("in_" + r);
+    el.textContent = current.answer?.[r] ?? "";
+    el.classList.add("ok");
   }
+}
 async function newItem() {
   const res = await fetch("/new", {
     method: "POST",
@@ -206,7 +207,8 @@ function renderGivenBox() {
 
   if (given && given.value) {
     const rankFi = RANK_FI[given.rank] || given.rank;
-    finEl.textContent = `${baseFin} (${rankFi}: ${given.value})`;
+    <!-- finEl.textContent = `${baseFin} (${rankFi}: ${given.value})`; -->
+    finEl.textContent = `${baseFin} `;
   } else {
     finEl.textContent = baseFin;
   }
@@ -222,13 +224,7 @@ function buildForm() {
       <span class="rank">${(RANK_FI[r] || r)}</span>
 
       <div class="cell">
-        <input
-          type="text"
-          name="${r}"
-          id="in_${r}"
-          placeholder="kirjoita…"
-          class="inp"
-        />
+        <span class="staticVal" id="in_${r}">—</span>
         <button type="button" class="miniBtn" id="btn_${r}">?</button>
       </div>
 
@@ -236,18 +232,13 @@ function buildForm() {
     </label>
   `).join("");
 
-  // bind listeners for the newly created inputs/buttons
+  // bind hint buttons
   for (const r of ranks) {
-    document.getElementById("in_" + r).addEventListener("input", () => {
-      checkAll().catch(console.error);
-    });
-
     document.getElementById("btn_" + r).addEventListener("click", () => {
       hintFill(r);
     });
   }
 
-  // hide empty fields (based on this card’s answers)
   applyVisibleFieldsFromAnswer(current.answer);
 }
     // live checking as you type

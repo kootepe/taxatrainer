@@ -62,38 +62,6 @@
 
         <hr style="border:0; border-top:1px solid #243244; margin:16px 0;" />
 
-        <!-- Quiz mode -->
-        <div style="margin: 12px 0 10px 0;">
-          <div style="margin-bottom:8px; opacity:0.9;">Harjoitustyyppi</div>
-
-          <label style="display:flex; gap:10px; align-items:center; margin:6px 0;">
-            <input type="radio" name="quiz_mode" value="taxonomy"
-                   {% if quiz_mode == "taxonomy" %}checked{% endif %}>
-            <span>Perus: täytä kaikki valitut tasot</span>
-          </label>
-
-          <label style="display:flex; gap:10px; align-items:center; margin:6px 0;">
-            <input type="radio" name="quiz_mode" value="higher_from_subtaxon"
-                   {% if quiz_mode == "higher_from_subtaxon" %}checked{% endif %}>
-            <span>Ylätasot: annetaan luokka/lahko/heimo → täytä ylemmät tasot</span>
-          </label>
-        </div>
-
-        <!-- Prompt ranks (only used in higher_from_subtaxon) -->
-        <div style="margin-top:10px; padding:10px; border:1px solid #243244; border-radius:12px;">
-          <div style="margin-bottom:6px; opacity:0.9;">
-            Kun “Ylätasot” on käytössä, mitkä tasot voivat olla annettuna?
-          </div>
-
-          {% for r in ["class","order","family"] %}
-            <label style="display:flex; gap:10px; align-items:center; margin:6px 0;">
-              <input type="checkbox" name="prompt_ranks" value="{{ r }}"
-                     {% if r in prompt_ranks %}checked{% endif %} />
-              <span>{{ rank_fi.get(r, r) }} <span style="opacity:0.7;">({{ r }})</span></span>
-            </label>
-          {% endfor %}
-        </div>
-
         <div style="margin-top:16px;">
           <button class="btn" type="submit">Tallenna</button>
         </div>

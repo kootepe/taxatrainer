@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="fi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ohje - Taxa Treenaus</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <main class="wrap">
+    <header class="top">
+      <h1>Ohje</h1>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <a class="btn" href="/">Takaisin</a>
+      </div>
+    </header>
+
+    <section class="card">
+      <h2 style="margin-top:0;">Mikä tämä on?</h2>
+      <p style="opacity:0.95;">
+        <strong>Taxa Treenaus</strong> on harjoitussovellus, jolla voit opetella eliöiden taksonomiaa
+        (esim. <em>pääjakso → luokka → lahko → heimo → suku → laji</em>).
+      </p>
+      <p style="opacity:0.95;">
+          Säätämällä valittuja taksoneita ja taksonomisia tasoja voit
+          harjoitella esim. pelkästään lintulajeja (aves), pelkästään
+          nisäkkäitä (mammalia), pelkästään lintuheimoja tai vaikka pelkästään
+          västäräkkejä (motacilidae). Oletuksena kaikki taksonit ovat päällä.
+      </p>
+      <p style="opacity:0.95;">
+        <strong>HUOM!</strong> sovelluksessa näkyy vain pääjakso, luokka,
+          lahko, heimo, suku ja laji. Alajaksoja, ryhmiä yms. ei voi
+          harjoitella. Eli esim. alajakso hydracarina (vesipunkit) puuttuu
+          kokonaan, vaikka se kuuluukin laajaan lajituntemukseen. Sitä vain ei
+          kysytä tentissä, jossa on vain pääjakso, luokka, lahko, heimo suku ja
+          laji.
+      </p>
+      <p style="opacity:0.95;">
+        <strong>HUOM!</strong>
+          Kortit tulevat täysin satunnaisessa järjestyksessä. Eli sama kortti
+          voi tulla monta kertaa putkeen jos sinulla on vain muutama taksoni
+          valittuna.
+      </p>
+
+
+      <hr style="border:0; border-top:1px solid #243244; margin:16px 0;" />
+
+      <h2>Päänäkymä (harjoituskortti)</h2>
+      <p style="opacity:0.95;">
+        Harjoituskortti näyttää yhden kohteen kerrallaan. Kortissa näkyy:
+      </p>
+
+      <ul style="line-height:1.55; opacity:0.95;">
+        <li>
+          <strong>Vihje (nimi):</strong> kortin yläosassa näkyy nimi suomeksi.
+          Jos suomenkielistä nimeä ei ole (useat heimot), näytetään latinankielinen nimi.
+        </li>
+        <li>
+          <strong>Taksonomiatasot:</strong> kortissa näkyvät vain ne tasot, jotka olet valinnut asetuksista.
+        </li>
+      </ul>
+
+      <hr style="border:0; border-top:1px solid #243244; margin:16px 0;" />
+
+      <h2>Painikkeet</h2>
+      <ul style="line-height:1.55; opacity:0.95;">
+        <li><strong>Uusi:</strong> hakee uuden harjoituskortin. Pikanäppäin N.</li>
+        <li><strong>Tyhjennä:</strong> nollaa näkyvät kentät / paljastukset.</li>
+        <li><strong>Näytä:</strong> näyttää oikeat vastaukset kaikkiin näkyviin kohtiin. Pikanäppäin S.</li>
+        <li><strong>?</strong> (rivillä): paljastaa oikean vastauksen vain siihen riviin.</li>
+      </ul>
+
+      <hr style="border:0; border-top:1px solid #243244; margin:16px 0;" />
+
+      <h2>Asetukset (Tasoasetukset)</h2>
+      <p style="opacity:0.95;">
+        Asetuksissa valitaan, mitä taksonomiatasoja harjoitellaan. Vain valitut
+          tasot näytetään harjoituksessa.
+      </p>
+
+      <p style="opacity:0.95;">
+          Ota huomioon että vaikka sinulla olisi laji ja suku valittuna,
+          sinulta voidaan silti kysyä luokkia, lahkoja ja heimoja joilla ei ole
+          materiaalissa alataksoneita. Esim. lukit (opiliones) on luokka jossa
+          ei ole heimoja eikä lajeja. Se siis voi tulla kysyttäväksi, koska
+          muuten se saattaisi jäädä kokonaan harjoittelematta.
+      </p>
+
+      <hr style="border:0; border-top:1px solid #243244; margin:16px 0;" />
+
+      <h2>Dataset (aineisto)</h2>
+      <p style="opacity:0.95;">
+          Tällä hetkellä löytyy laaja selkärangattomat ja laaja selkärankaiset.
+      </p>
+
+      <hr style="border:0; border-top:1px solid #243244; margin:16px 0;" />
+
+      <h2>Taxa valinta (rajaukset)</h2>
+      <p style="opacity:0.95;">
+        Taxa valinta -sivulla voit rajata harjoittelun tiettyihin ryhmiin.
+      </p>
+      <ul style="line-height:1.55; opacity:0.95;">
+        <li><strong>Oletus:</strong> kaikki taksonit ovat valittuna.</li>
+        <li>
+          Kun valitset ryhmän, ryhmä ja kaikki sen alaryhmät ovat mukana harjoituksessa.
+          Kun poistat valinnan, ryhmä ja sen sisältö jätetään pois.
+        </li>
+      </ul>
+
+
+      <hr style="border:0; border-top:1px solid #243244; margin:16px 0;" />
+
+      <h2>Yleisimmät ongelmat</h2>
+
+      <h3 style="margin-bottom:6px;">En näe mitään kysyttävää</h3>
+      <p style="opacity:0.95; margin-top:0;">
+        Varmista, että vähintään yksi taksonomiataso on valittuna asetuksissa.
+        Lisäksi Taxa valinnassa täytyy olla valittuna ainakin yksi ryhmä.
+      </p>
+
+      <h3 style="margin-bottom:6px;">Sovellus näyttää vain tiettyä ryhmää</h3>
+      <p style="opacity:0.95; margin-top:0;">
+        Taxa valinnassa voi olla rajaus päällä. Mene <strong>Taxa valinta</strong> -sivulle ja valitse enemmän ryhmiä
+        (tai kaikki).
+      </p>
+    </section>
+  </main>
+</body>
+</html>
+
