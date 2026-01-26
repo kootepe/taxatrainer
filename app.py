@@ -171,6 +171,11 @@ def safe_lat(node: Dict[str, Any]) -> str:
     return v.strip() if isinstance(v, str) else ""
 
 
+def safe_fin(node: Dict[str, Any]) -> str:
+    v = node.get("fin", "")
+    return v.strip() if isinstance(v, str) else ""
+
+
 def make_node_id(parent_id: str, rank: str, lat: str) -> str:
     part = f"{rank}:{lat}"
     return part if not parent_id else f"{parent_id}>{part}"
@@ -231,9 +236,16 @@ def build_taxa_tree(data: Dict[str, Any]) -> List[Dict[str, Any]]:
         node: Dict[str, Any], parent_id: str, rank: str
     ) -> Dict[str, Any]:
         lat = safe_lat(node) or "UNKNOWN"
+        fin = safe_fin(node) or "UNKNOWN"
         node_id = make_node_id(parent_id, rank, lat)
 
-        tnode = {"rank": rank, "lat": lat, "id": node_id, "children": []}
+        tnode = {
+            "rank": RANK_FI.get(rank),
+            "lat": lat,
+            "fin": fin,
+            "id": node_id,
+            "children": [],
+        }
 
         for ck in ["class", "order", "family"]:
             child_list = collect_real_children_through_containers(node, ck)
