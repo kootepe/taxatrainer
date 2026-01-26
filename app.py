@@ -7,11 +7,20 @@ from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set
+from datetime import timedelta
 
 from flask import Flask, jsonify, render_template, request, session
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY", "dev-secret-change-me")
+
+
+app.config.update(
+    SESSION_PERMANENT=True,
+    PERMANENT_SESSION_LIFETIME=timedelta(days=365),
+    SESSION_COOKIE_SAMESITE="Lax",
+    SESSION_COOKIE_SECURE=True,  # set True if you serve over HTTPS
+)
 
 # ---------- taxonomy config ----------
 RANK_FI = {
@@ -586,6 +595,7 @@ def settings():
 
 @app.post("/settings")
 def save_settings():
+    session.permanent = True
     selected_ranks = request.form.getlist("ranks")
     selected_ranks = [r for r in RANK_KEYS if r in selected_ranks]
 
@@ -646,6 +656,7 @@ def settings_taxa():
 
 @app.post("/settings/taxa")
 def save_settings_taxa():
+    session.permanent = True
     dataset = get_selected_dataset()
     _, _, taxa_tree = load_dataset_cached(dataset)
 
