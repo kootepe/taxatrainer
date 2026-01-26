@@ -183,27 +183,7 @@
     {
       "req": "s",
       "lat": "nematoda",
-      "fin": "sukkulamadot",
-      "specie": [
-        {
-          "req": "",
-          "genus": "trichinella",
-          "species": "spiralis",
-          "fin": "trikiini"
-        },
-        {
-          "req": "",
-          "genus": "enterobius",
-          "species": "vermicularis",
-          "fin": "kihomato"
-        },
-        {
-          "req": "",
-          "genus": "ascaris",
-          "species": "lumbricoides",
-          "fin": "suolinkainen"
-        }
-      ]
+      "fin": "sukkulamadot"
     },
     {
       "req": "s",
