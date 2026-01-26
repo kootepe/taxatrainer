@@ -1,0 +1,1791 @@
+{
+  "phylum": [
+    {
+      "lat": "calcarea & silicea",
+      "fin": "sienieläimet",
+      "class": [
+        {
+          "lat": "demospongiae",
+          "fin": "piisienet",
+          "family": [
+            {
+              "lat": "spongillidae",
+              "fin": "järvisienet",
+              "specie": [
+                {
+                  "genus": "spongilla",
+                  "species": "",
+                  "fin": ""
+                },
+                {
+                  "genus": "ephydatia",
+                  "species": "",
+                  "fin": ""
+                }
+              ]
+            },
+            {
+              "lat": "spongiidae",
+              "fin": "",
+              "specie": [
+                {
+                  "genus": "spongia",
+                  "species": "officinalis",
+                  "fin": ""
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "lat": "cnidaria",
+      "fin": "polttiaiseläimet",
+      "class": [
+        {
+          "lat": "hydrozoa",
+          "fin": "hydropolyypit",
+          "specie": [
+            {
+              "genus": "hydra",
+              "species": "",
+              "fin": "lampipolyyppi"
+            }
+          ]
+        },
+        {
+          "lat": "scyphozoa",
+          "fin": "liskameduusat",
+          "specie": [
+            {
+              "genus": "aurelia",
+              "species": "aurita",
+              "fin": "korvameduusa"
+            }
+          ]
+        },
+        {
+          "lat": "anthozoa",
+          "fin": "korallit ja merivuokot"
+        }
+      ]
+    },
+    {
+      "lat": "ctenophora",
+      "fin": "kampamaneetit",
+      "specie": [
+        {
+          "genus": "pleurobrachia",
+          "species": "pileus",
+          "fin": "pikkumaneetti"
+        }
+      ]
+    },
+    {
+      "lat": "platyhelminthes",
+      "fin": "laakamadot",
+      "class": [
+        {
+          "lat": "turbellaria",
+          "fin": "värysmadot",
+          "order": [
+            {
+              "lat": "tricladida",
+              "fin": "purolattanat",
+              "specie": [
+                {
+                  "genus": "planaria",
+                  "species": "",
+                  "fin": "lattana"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "lat": "trematoda",
+          "fin": "tiehytmadot",
+          "specie": [
+            {
+              "genus": "fasciola",
+              "species": "hepatica",
+              "fin": "lampaanmaksamato"
+            }
+          ]
+        },
+        {
+          "lat": "cestoda",
+          "fin": "heisimadot",
+          "specie": [
+            {
+              "genus": "diphyllobothrium",
+              "species": "latum",
+              "fin": "leveäheisimato"
+            },
+            {
+              "genus": "taenia",
+              "species": "solium",
+              "fin": "väkäsheisimato"
+            },
+            {
+              "genus": "taenia",
+              "species": "saginata",
+              "fin": "kapeaheisimato"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "lat": "rotifera",
+      "fin": "rataseläimet"
+    },
+    {
+      "lat": "nematomorpha",
+      "fin": "jouhimadot",
+      "specie": [
+        {
+          "genus": "gordius",
+          "species": "",
+          "fin": "jouhimato"
+        }
+      ]
+    },
+    {
+      "lat": "nematoda",
+      "fin": "sukkulamadot"
+    },
+    {
+      "lat": "annelida",
+      "fin": "nivelmadot",
+      "class": [
+        {
+          "lat": "polychaeta",
+          "fin": "monisukasmadot",
+          "specie": [
+            {
+              "genus": "nereis",
+              "species": "diversicolor",
+              "fin": "merisukajalkainen"
+            }
+          ]
+        },
+        {
+          "lat": "oligochaeta",
+          "fin": "harvasukamadot",
+          "family": [
+            {
+              "lat": "lumbricidae",
+              "fin": "lierot",
+              "specie": [
+                {
+                  "genus": "lumbricus",
+                  "species": "terrestris",
+                  "fin": "kasteliero"
+                },
+                {
+                  "genus": "lumbricus",
+                  "species": "rubellus",
+                  "fin": "onkiliero"
+                },
+                {
+                  "genus": "aporrectodea",
+                  "species": "caliginosa",
+                  "fin": "peltoliero"
+                }
+              ]
+            },
+            {
+              "lat": "enchytaeidae",
+              "fin": "änkyrimadot"
+            }
+          ]
+        },
+        {
+          "lat": "hirudinea",
+          "fin": "juotikkaat",
+          "specie": [
+            {
+              "genus": "haemopis",
+              "species": "sanguisuga",
+              "fin": "hevosjuotikas"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "lat": "mollusca",
+      "fin": "nilviäiset",
+      "class": [
+        {
+          "lat": "gastropoda",
+          "fin": "kotilot",
+          "order": [
+            {
+              "lat": "basommatophora",
+              "fin": "vesikeuhkokotilot",
+              "family": [
+                {
+                  "lat": "lymnaeidae",
+                  "fin": "limakotilot",
+                  "specie": [
+                    {
+                      "genus": "lymnaea",
+                      "species": "stagnalis",
+                      "fin": "limakotilo"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "lat": "stylommatophora",
+              "fin": "maakeuhkokotilot",
+              "family": [
+                {
+                  "lat": "helicidae",
+                  "fin": "tarhakotilot",
+                  "specie": [
+                    {
+                      "genus": "arianta",
+                      "species": "arbustorum",
+                      "fin": "lehtokotilo"
+                    }
+                  ]
+                },
+                {
+                  "lat": "arionidae",
+                  "fin": "siruetanat",
+                  "specie": [
+                    {
+                      "genus": "arion",
+                      "species": "",
+                      "fin": "siruetanat"
+                    }
+                  ]
+                },
+                {
+                  "lat": "limacidae",
+                  "fin": "harjaetanat",
+                  "specie": [
+                    {
+                      "genus": "deroceras",
+                      "species": "agrestre",
+                      "fin": "peltoetana"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "lat": "bivalvia",
+          "fin": "simpukat",
+          "order": [
+            {
+              "lat": "filibranchia",
+              "fin": "rihmakiduksiset",
+              "family": [
+                {
+                  "lat": "mytilidae",
+                  "fin": "sinisimpukat",
+                  "specie": [
+                    {
+                      "genus": "mytilus",
+                      "species": "edulis",
+                      "fin": "sinisimpukka"
+                    }
+                  ]
+                },
+                {
+                  "lat": "ostreidae",
+                  "fin": "osterit",
+                  "specie": [
+                    {
+                      "genus": "ostrea",
+                      "species": "edulis",
+                      "fin": "osteri"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "lat": "eulamellibranchia",
+              "fin": "lehtikiduksiset",
+              "family": [
+                {
+                  "lat": "tellinidae",
+                  "fin": "liejusimpukat",
+                  "specie": [
+                    {
+                      "genus": "macoma",
+                      "species": "baltica",
+                      "fin": "itämerensimpukat"
+                    }
+                  ]
+                },
+                {
+                  "lat": "unionidae",
+                  "fin": "jokisimpukat",
+                  "specie": [
+                    {
+                      "genus": "unio",
+                      "species": "",
+                      "fin": "jokisimpukka"
+                    },
+                    {
+                      "genus": "anodonta",
+                      "species": "",
+                      "fin": "järvisimpukka"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "lat": "cephalopoda",
+          "fin": "pääjalkaiset"
+        }
+      ]
+    },
+    {
+      "lat": "bryozoa",
+      "fin": "sammaleläimet"
+    },
+    {
+      "lat": "arthropoda",
+      "fin": "niveljalkaiset",
+      "class": [
+        {
+          "lat": "malacostraca",
+          "fin": "kuoriäyriset",
+          "order": [
+            {
+              "lat": "decapoda",
+              "fin": "kymmenjalkaiset",
+              "family": [
+                {
+                  "lat": "palaemonidae",
+                  "fin": "katkaravut",
+                  "specie": [
+                    {
+                      "genus": "palaemon",
+                      "species": "adspersus",
+                      "fin": "leveäkatkarapu"
+                    }
+                  ]
+                },
+                {
+                  "lat": "astacidae",
+                  "fin": "ravut",
+                  "specie": [
+                    {
+                      "genus": "astacus",
+                      "species": "astacua",
+                      "fin": "jokirapu"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "lat": "amphipoda",
+              "fin": "katkat",
+              "family": [
+                {
+                  "lat": "gammaridae",
+                  "fin": "varsinaiset katkat",
+                  "specie": [
+                    {
+                      "genus": "gammarus",
+                      "species": "",
+                      "fin": "leväkatkat"
+                    }
+                  ]
+                },
+                {
+                  "lat": "pallaseidae",
+                  "fin": "",
+                  "specie": [
+                    {
+                      "genus": "pallaseopsis",
+                      "species": "quadrispinosa",
+                      "fin": "okakatka"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "lat": "mysida",
+              "fin": "massiäyriäiset",
+              "family": [
+                {
+                  "lat": "mysidae",
+                  "fin": "",
+                  "specie": [
+                    {
+                      "genus": "mysis",
+                      "species": "relicta",
+                      "fin": "jäännemassiainen"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "lat": "isopoda",
+              "fin": "siirat",
+              "family": [
+                {
+                  "lat": "porcellionidae",
+                  "fin": "",
+                  "specie": [
+                    {
+                      "genus": "porcellio",
+                      "species": "",
+                      "fin": "maasiirat"
+                    }
+                  ]
+                },
+                {
+                  "lat": "chaetiliidae",
+                  "fin": "",
+                  "specie": [
+                    {
+                      "genus": "saduria",
+                      "species": "entomon",
+                      "fin": "kilkki"
+                    }
+                  ]
+                },
+                {
+                  "lat": "asellidae",
+                  "fin": "",
+                  "specie": [
+                    {
+                      "genus": "asellus",
+                      "species": "aquaticus",
+                      "fin": "vesisiira"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "lat": "maxillopoda",
+          "fin": "leukajalkaiset",
+          "order": [
+            {
+              "lat": "cyclopoida",
+              "fin": "kyklooppihankajalkaiset",
+              "family": [
+                {
+                  "lat": "cyclopidae",
+                  "fin": "leukajalkaiset",
+                  "specie": [
+                    {
+                      "genus": "cyclops",
+                      "species": "",
+                      "fin": "kyklooppihankajalkaiset"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "lat": "thoracica",
+              "fin": "siimajalkaiset",
+              "family": [
+                {
+                  "lat": "balanidae",
+                  "fin": "merirokot",
+                  "specie": [
+                    {
+                      "genus": "amphibalanus",
+                      "species": "improvisus",
+                      "fin": "merirokko"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "lat": "branchiopoda",
+          "fin": "kidusjalkaiset",
+          "order": [
+            {
+              "lat": "diplostraca",
+              "fin": "",
+              "family": [
+                {
+                  "lat": "daphniidae",
+                  "fin": "vesikirput",
+                  "specie": [
+                    {
+                      "genus": "daphnia",
+                      "species": "",
+                      "fin": "piippovesikirput"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "lat": "ostracoda",
+          "fin": "raakkuäyriäiset"
+        },
+        {
+          "lat": "arachnida",
+          "fin": "hämähäkkieläimet",
+          "order": [
+            {
+              "lat": "pseudoscorpiones",
+              "fin": "valeskorpionit"
+            },
+            {
+              "lat": "opiliones",
+              "fin": "lukit"
+            },
+            {
+              "lat": "araneae",
+              "fin": "hämähäkit",
+              "family": [
+                {
+                  "lat": "lycosidae",
+                  "fin": "juoksuhämähäkit"
+                },
+                {
+                  "lat": "araneidae",
+                  "fin": "ristihämähäkit"
+                }
+              ]
+            },
+            {
+              "lat": "acari",
+              "fin": "punkit",
+              "specie": [
+                {
+                  "genus": "ixodes",
+                  "species": "ricinus",
+                  "fin": "puutiainen"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "lat": "diplopoda",
+          "fin": "kaksoisjalkaiset"
+        },
+        {
+          "lat": "chilopoda",
+          "fin": "juoksujalkaiset"
+        },
+        {
+          "lat": "entognatha",
+          "fin": "sisäleukaiset",
+          "order": [
+            {
+              "lat": "collembola",
+              "fin": "hyppyhäntäiset"
+            }
+          ]
+        },
+        {
+          "lat": "insecta",
+          "fin": "hyönteiset",
+          "order": [
+            {
+              "lat": "thysanura",
+              "fin": "kolmisukahäntäiset",
+              "specie": [
+                {
+                  "genus": "lepisma",
+                  "species": "saccharina",
+                  "fin": "sokeritoukka"
+                }
+              ]
+            },
+            {
+              "lat": "ephemeroptera",
+              "fin": "päivänkorennot",
+              "specie": [
+                {
+                  "genus": "ephemera",
+                  "species": "vulgata",
+                  "fin": "isosurviainen"
+                }
+              ]
+            },
+            {
+              "lat": "odonata",
+              "fin": "sudenkorennot",
+              "family": [
+                {
+                  "lat": "coenagrionidae",
+                  "fin": "tytönkorennot"
+                },
+                {
+                  "lat": "calopterygidae",
+                  "fin": "neidonkorennot"
+                },
+                {
+                  "lat": "aeshnidae",
+                  "fin": "ukonkorennot"
+                },
+                {
+                  "lat": "corduliidae",
+                  "fin": "kiiltokorennot"
+                },
+                {
+                  "lat": "libellulidae",
+                  "fin": "varsinaiset sudenkorennot"
+                }
+              ]
+            },
+            {
+              "lat": "plecoptera",
+              "fin": "koskikorennot"
+            },
+            {
+              "lat": "orthoptera",
+              "fin": "suorasiipiset",
+              "family": [
+                {
+                  "lat": "acrididae",
+                  "fin": "heinäsirkat"
+                },
+                {
+                  "lat": "gryllidae",
+                  "fin": "sirkat",
+                  "specie": [
+                    {
+                      "genus": "acheta",
+                      "species": "domesticus",
+                      "fin": "kotisirkka"
+                    }
+                  ]
+                },
+                {
+                  "lat": "tetrigidae",
+                  "fin": "okasirkat"
+                },
+                {
+                  "lat": "tettigoniidae",
+                  "fin": "hepokatit"
+                }
+              ]
+            },
+            {
+              "lat": "dermaptera",
+              "fin": "pihtihäntäiset",
+              "specie": [
+                {
+                  "genus": "forficula",
+                  "species": "auricularia",
+                  "fin": "isopihtihäntä"
+                }
+              ]
+            },
+            {
+              "lat": "dictyoptera",
+              "fin": "torakat ja rukoilijasirkat",
+              "family": [
+                {
+                  "lat": "blattidae",
+                  "fin": "",
+                  "specie": [
+                    {
+                      "genus": "ectobius",
+                      "species": "",
+                      "fin": "mm. metsä- ja lapintorakka"
+                    },
+                    {
+                      "genus": "blattella",
+                      "species": "germanica",
+                      "fin": "russakka"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "lat": "psocoptera",
+              "fin": "jäytiäiset"
+            },
+            {
+              "lat": "phthiraptera",
+              "fin": "täit ja väiveet",
+              "family": [
+                {
+                  "lat": "pediculidae",
+                  "fin": "ihmistäit",
+                  "specie": [
+                    {
+                      "genus": "pediculus",
+                      "species": "",
+                      "fin": "päätäi ja vaatetäi"
+                    },
+                    {
+                      "genus": "phthirus",
+                      "species": "pubis",
+                      "fin": "satiainen"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "lat": "hemiptera",
+              "fin": "nivelkärsäiset",
+              "family": [
+                {
+                  "lat": "nepidae",
+                  "fin": "vesiskorpionit",
+                  "specie": [
+                    {
+                      "genus": "nepa",
+                      "species": "cinerea",
+                      "fin": "vesiskorpioni"
+                    }
+                  ]
+                },
+                {
+                  "lat": "corixidae",
+                  "fin": "pikkumalluaiset"
+                },
+                {
+                  "lat": "notonectidae",
+                  "fin": "malluaiset"
+                },
+                {
+                  "lat": "gerridae",
+                  "fin": "vesimittarit"
+                },
+                {
+                  "lat": "anthocoridae",
+                  "fin": "nokkaluteet"
+                },
+                {
+                  "lat": "cimicidae",
+                  "fin": "lutikat",
+                  "specie": [
+                    {
+                      "genus": "cimex",
+                      "species": "lectularius",
+                      "fin": "lude, lutikka"
+                    }
+                  ]
+                },
+                {
+                  "lat": "miridae",
+                  "fin": "kuneluteet"
+                },
+                {
+                  "lat": "pentatomidae",
+                  "fin": "typpyluteet",
+                  "specie": [
+                    {
+                      "genus": "dolycoris",
+                      "species": "baccarum",
+                      "fin": "marjalude"
+                    }
+                  ]
+                },
+                {
+                  "lat": "aphrophoridae",
+                  "fin": "sylkikaskaat",
+                  "specie": [
+                    {
+                      "genus": "philaenus",
+                      "species": "spumarius",
+                      "fin": "sylkikaskas"
+                    }
+                  ]
+                },
+                {
+                  "lat": "cicadellidae",
+                  "fin": "varsinaiset kaskaat"
+                },
+                {
+                  "lat": "psyllidae",
+                  "fin": "kempit"
+                },
+                {
+                  "lat": "aleyrodidae",
+                  "fin": "jauhiaiset"
+                },
+                {
+                  "lat": "aphididae",
+                  "fin": "lehtikirvat"
+                },
+                {
+                  "lat": "coccidae",
+                  "fin": "kilpikirvat"
+                }
+              ]
+            },
+            {
+              "lat": "thysanoptera",
+              "fin": "ripsiäiset"
+            },
+            {
+              "lat": "megaloptera",
+              "fin": "kaislakorennot",
+              "family": [
+                {
+                  "lat": "sialidae",
+                  "fin": "kaislakorennot"
+                }
+              ]
+            },
+            {
+              "lat": "neuroptera",
+              "fin": "verkkosiipiset",
+              "family": [
+                {
+                  "lat": "chrysopidae",
+                  "fin": "harsokorennot"
+                },
+                {
+                  "lat": "myrmeleontidae",
+                  "fin": "muurahaiskorennot"
+                }
+              ]
+            },
+            {
+              "lat": "mecoptera",
+              "fin": "kärsäkorennot",
+              "family": [
+                {
+                  "lat": "panorpidae",
+                  "fin": "skorpionikorennot"
+                },
+                {
+                  "lat": "boreidae",
+                  "fin": "lumikorennot",
+                  "specie": [
+                    {
+                      "genus": "boreus",
+                      "species": "westwoodi",
+                      "fin": "lumikorento"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "lat": "trichoptera",
+              "fin": "vesiperhoset"
+            },
+            {
+              "lat": "lepidoptera",
+              "fin": "perhoset",
+              "family": [
+                {
+                  "lat": "hepialidae",
+                  "fin": "juuriperhoset"
+                },
+                {
+                  "lat": "tineidae",
+                  "fin": "aitokoit"
+                },
+                {
+                  "lat": "yponomeutidae",
+                  "fin": "kehrääjäkoit"
+                },
+                {
+                  "lat": "sesiidae",
+                  "fin": "lasisiipiset"
+                },
+                {
+                  "lat": "tortricidae",
+                  "fin": "kääriäiset"
+                },
+                {
+                  "lat": "pterophoridae",
+                  "fin": "sulkaperhoset"
+                },
+                {
+                  "lat": "pyralidae",
+                  "fin": "koisaperhoset"
+                },
+                {
+                  "lat": "hesperiidae",
+                  "fin": "paksupäät"
+                },
+                {
+                  "lat": "papilionidae",
+                  "fin": "ritariperhoset",
+                  "specie": [
+                    {
+                      "genus": "papilio",
+                      "species": "machaon",
+                      "fin": "ritariperhonen"
+                    },
+                    {
+                      "genus": "parnassius",
+                      "species": "apollo",
+                      "fin": "apolloperhonen"
+                    },
+                    {
+                      "genus": "parnassius",
+                      "species": "mnemosyne",
+                      "fin": "pikkuapollo"
+                    }
+                  ]
+                },
+                {
+                  "lat": "pieridae",
+                  "fin": "kaaliperhoset",
+                  "specie": [
+                    {
+                      "genus": "pieris",
+                      "species": "brassicae",
+                      "fin": "kaaliperhonen"
+                    },
+                    {
+                      "genus": "pieris",
+                      "species": "napi",
+                      "fin": "lanttuperhonen"
+                    },
+                    {
+                      "genus": "pieris",
+                      "species": "rapae",
+                      "fin": "naurisperhonen"
+                    },
+                    {
+                      "genus": "anthocharis",
+                      "species": "cardamines",
+                      "fin": "auroraperhonen"
+                    },
+                    {
+                      "genus": "colias",
+                      "fin": "keltaperhoset"
+                    },
+                    {
+                      "genus": "gonepteryx",
+                      "species": "rhamni",
+                      "fin": "sitruunaperhonen"
+                    }
+                  ]
+                },
+                {
+                  "lat": "lycaenidae",
+                  "fin": "sinisiivet",
+                  "specie": [
+                    {
+                      "genus": "callophrys",
+                      "species": "rubi",
+                      "fin": "kangasperhonen"
+                    },
+                    {
+                      "genus": "lycaena",
+                      "fin": "kultasiivet"
+                    },
+                    {
+                      "genus": "plebeius",
+                      "fin": "useimmat suomen sinisiivet"
+                    }
+                  ]
+                },
+                {
+                  "lat": "nymphalidae",
+                  "fin": "täpläperhoset",
+                  "specie": [
+                    {
+                      "genus": "argynnis",
+                      "fin": "isot hopeatäplät"
+                    },
+                    {
+                      "genus": "boloria",
+                      "fin": "(useimmat) pienet hopeatäplät"
+                    },
+                    {
+                      "genus": "melitaea",
+                      "fin": "(useat) verkkoperhoset"
+                    },
+                    {
+                      "genus": "nymphalis",
+                      "species": "antiopa",
+                      "fin": "suruvaippa"
+                    },
+                    {
+                      "genus": "nymphalis",
+                      "species": "urticae",
+                      "fin": "nokkosperhonen"
+                    },
+                    {
+                      "genus": "nymphalis",
+                      "species": "c-album",
+                      "fin": "liuskaperhonen"
+                    },
+                    {
+                      "genus": "erebia",
+                      "fin": "nokiperhoset"
+                    },
+                    {
+                      "genus": "coenonympha",
+                      "fin": "niittyperhoset"
+                    },
+                    {
+                      "genus": "pararge",
+                      "fin": "papurikot"
+                    }
+                  ]
+                },
+                {
+                  "lat": "lasiocampidae",
+                  "fin": "karvakehrääjät",
+                  "specie": [
+                    {
+                      "genus": "lasiocampa",
+                      "species": "quercus",
+                      "fin": "tammikehrääjä"
+                    },
+                    {
+                      "genus": "macrothylacia",
+                      "species": "rubi",
+                      "fin": "heinähukka"
+                    },
+                    {
+                      "genus": "dendrolimus",
+                      "species": "pini",
+                      "fin": "mäntykehrääjä"
+                    }
+                  ]
+                },
+                {
+                  "lat": "saturniidae",
+                  "fin": "riikinkukkokehrääjät"
+                },
+                {
+                  "lat": "drepanidae",
+                  "fin": "sirppisiivet"
+                },
+                {
+                  "lat": "geometridae",
+                  "fin": "mittarit",
+                  "specie": [
+                    {
+                      "genus": "geometra",
+                      "species": "papilionaria",
+                      "fin": "isomittari"
+                    },
+                    {
+                      "genus": "xanthorhoe",
+                      "species": "montanata",
+                      "fin": "mäkikenttämittari"
+                    },
+                    {
+                      "genus": "scotopteryx",
+                      "species": "chenopodiata",
+                      "fin": "pihamittari"
+                    },
+                    {
+                      "genus": "epirrhoe",
+                      "species": "",
+                      "fin": "raanumittarit"
+                    },
+                    {
+                      "genus": "epirrita",
+                      "species": "autumnata",
+                      "fin": "tunturimittari"
+                    },
+                    {
+                      "genus": "operophtera",
+                      "species": "brumata",
+                      "fin": "hallamittari"
+                    },
+                    {
+                      "genus": "selenia",
+                      "species": "",
+                      "fin": "kuumittarit"
+                    },
+                    {
+                      "genus": "biston",
+                      "species": "betularius",
+                      "fin": "koivumittari"
+                    },
+                    {
+                      "genus": "ematurga",
+                      "species": "atomaria",
+                      "fin": "metsämittari"
+                    },
+                    {
+                      "genus": "bupalus",
+                      "species": "piniarius",
+                      "fin": "mäntymittari"
+                    }
+                  ]
+                },
+                {
+                  "lat": "sphingidae",
+                  "fin": "kiitäjät",
+                  "specie": [
+                    {
+                      "genus": "sphinx",
+                      "species": "pinastri",
+                      "fin": "mäntykiitäjä"
+                    },
+                    {
+                      "genus": "laothoe",
+                      "species": "populi",
+                      "fin": "poppelikiitäjä"
+                    },
+                    {
+                      "genus": "hemaris",
+                      "species": "",
+                      "fin": "päiväkiitäjät"
+                    },
+                    {
+                      "genus": "deilephila",
+                      "species": "elpenor",
+                      "fin": "horsmakiitäjä"
+                    }
+                  ]
+                },
+                {
+                  "lat": "notodontidae",
+                  "fin": "nirkot"
+                },
+                {
+                  "lat": "arctiidae",
+                  "fin": "siilikkäät",
+                  "specie": [
+                    {
+                      "genus": "arctia",
+                      "species": "caja",
+                      "fin": "isosiilikäs"
+                    },
+                    {
+                      "genus": "diacrisia",
+                      "species": "sannio",
+                      "fin": "karhusiilikäs"
+                    },
+                    {
+                      "genus": "spilosoma",
+                      "species": "lubricipedum",
+                      "fin": "tiikerisiilikäs"
+                    }
+                  ]
+                },
+                {
+                  "lat": "noctuidae",
+                  "fin": "yökköset",
+                  "specie": [
+                    {
+                      "genus": "cerapteryx",
+                      "species": "graminis",
+                      "fin": "niitty-yökkönen"
+                    },
+                    {
+                      "genus": "panolis",
+                      "species": "flammea",
+                      "fin": "mänty-yökkönen"
+                    },
+                    {
+                      "genus": "mythimna",
+                      "species": "",
+                      "fin": "olkiyökköset"
+                    },
+                    {
+                      "genus": "catocala",
+                      "species": "",
+                      "fin": "ritariyökköset"
+                    },
+                    {
+                      "genus": "scoliopteryx",
+                      "species": "libatrix",
+                      "fin": "liuskayökkönen"
+                    }
+                  ]
+                },
+                {
+                  "lat": "plusiinae",
+                  "fin": "metalliyökköset"
+                }
+              ]
+            },
+            {
+              "lat": "diptera",
+              "fin": "kaksisiipiset",
+              "family": [
+                {
+                  "lat": "tipulidae",
+                  "fin": "vaaksiaiset"
+                },
+                {
+                  "lat": "culicidae",
+                  "fin": "hyttyset"
+                },
+                {
+                  "lat": "ceratopogonidae",
+                  "fin": "polttiaiset"
+                },
+                {
+                  "lat": "simuliidae",
+                  "fin": "mäkärät"
+                },
+                {
+                  "lat": "chironomidae",
+                  "fin": "surviaissääsket"
+                },
+                {
+                  "lat": "mycetophilidae",
+                  "fin": "sienisääsket"
+                },
+                {
+                  "lat": "cecidomyiidae",
+                  "fin": "äkämäsääsket"
+                },
+                {
+                  "lat": "tabanidae",
+                  "fin": "paarmat",
+                  "specie": [
+                    {
+                      "genus": "tabanus",
+                      "species": "",
+                      "fin": "nautapaarma"
+                    },
+                    {
+                      "genus": "chrysops",
+                      "species": "",
+                      "fin": "sokkopaarma"
+                    },
+                    {
+                      "genus": "haematopota",
+                      "species": "",
+                      "fin": "suppupaarma"
+                    }
+                  ]
+                },
+                {
+                  "lat": "bombyliidae",
+                  "fin": "kimalaiskärpäset"
+                },
+                {
+                  "lat": "asilidae",
+                  "fin": "petokärpäset",
+                  "specie": [
+                    {
+                      "genus": "laphria",
+                      "species": "",
+                      "fin": "palokärpänen"
+                    }
+                  ]
+                },
+                {
+                  "lat": "syrphidae",
+                  "fin": "kukkakärpäset"
+                },
+                {
+                  "lat": "drosophilidae",
+                  "fin": "mahlakärpäset",
+                  "specie": [
+                    {
+                      "genus": "drosophila",
+                      "species": "melanogaster",
+                      "fin": "banaanikärpänen"
+                    }
+                  ]
+                },
+                {
+                  "lat": "muscidae",
+                  "fin": "sukaskärpäset",
+                  "specie": [
+                    {
+                      "genus": "musca",
+                      "species": "domestica",
+                      "fin": "huonekärpänen"
+                    },
+                    {
+                      "genus": "stomoxys",
+                      "species": "calcitrans",
+                      "fin": "pistokärpänen"
+                    }
+                  ]
+                },
+                {
+                  "lat": "tachinidae",
+                  "fin": "loiskärpäset"
+                },
+                {
+                  "lat": "calliphoridae",
+                  "fin": "raatokärpäset",
+                  "specie": [
+                    {
+                      "genus": "lucilia",
+                      "species": "",
+                      "fin": "kiiltokärpänen"
+                    },
+                    {
+                      "genus": "calliphora",
+                      "species": "",
+                      "fin": "lihakärpänen"
+                    }
+                  ]
+                },
+                {
+                  "lat": "sarcophagidae",
+                  "fin": "ruutukärpäset"
+                },
+                {
+                  "lat": "hippoboscidae",
+                  "fin": "täikärpäset"
+                }
+              ]
+            },
+            {
+              "lat": "siphonaptera",
+              "fin": "kirput"
+            },
+            {
+              "lat": "hymenoptera",
+              "fin": "pistiäiset",
+              "family": [
+                {
+                  "lat": "tenthredinidae",
+                  "fin": "lehtipistiäiset"
+                },
+                {
+                  "lat": "cimbicidae",
+                  "fin": "nuijapistiäiset"
+                },
+                {
+                  "lat": "siricidae",
+                  "fin": "puupistiäiset"
+                },
+                {
+                  "lat": "formicidae",
+                  "fin": "muurahaiset",
+                  "specie": [
+                    {
+                      "genus": "formica",
+                      "species": "rufa–ryhmä",
+                      "fin": "kekomuurahaiset"
+                    },
+                    {
+                      "genus": "camponotus",
+                      "species": "herculeanus",
+                      "fin": "hevosmuurahainen"
+                    },
+                    {
+                      "genus": "lasius",
+                      "species": "niger",
+                      "fin": "pihamauriainen"
+                    },
+                    {
+                      "genus": "lasius",
+                      "species": "flavus",
+                      "fin": "keltiäinen"
+                    }
+                  ]
+                },
+                {
+                  "lat": "myrmicinae",
+                  "fin": "viholaiset",
+                  "specie": [
+                    {
+                      "genus": "myrmica",
+                      "species": "",
+                      "fin": "viholainen"
+                    }
+                  ]
+                },
+                {
+                  "lat": "pompilidae",
+                  "fin": "tiepistiäiset"
+                },
+                {
+                  "lat": "sphecidae",
+                  "fin": "petopistiäiset"
+                },
+                {
+                  "lat": "vespidae",
+                  "fin": "yhteiskunta-ampiaiset",
+                  "specie": [
+                    {
+                      "genus": "vespula",
+                      "species": "",
+                      "fin": "yhteiskunta-ampiainen"
+                    }
+                  ]
+                },
+                {
+                  "lat": "eumeninae",
+                  "fin": "erakkoampiaiset"
+                },
+                {
+                  "lat": "apidae",
+                  "fin": "varsinaiset mehiläiset",
+                  "specie": [
+                    {
+                      "genus": "apis",
+                      "species": "mellifera",
+                      "fin": "tarhamehiläinen"
+                    },
+                    {
+                      "genus": "bombus",
+                      "species": "",
+                      "fin": "kimalaiset"
+                    },
+                    {
+                      "genus": "psithyrus (nyk. bombus)",
+                      "species": "",
+                      "fin": "loiskimalaiset"
+                    }
+                  ]
+                }
+              ],
+              "superfamily": [
+                {
+                  "lat": "icheumonoidea",
+                  "fin": "loistpistiäiset"
+                },
+                {
+                  "lat": "chalcidoidea",
+                  "fin": "kiilupistiäiset"
+                }
+              ]
+            },
+            {
+              "lat": "coleoptera",
+              "fin": "kovakuoriaiset",
+              "family": [
+                {
+                  "lat": "carabidae",
+                  "fin": "maakiitäjäiset",
+                  "specie": [
+                    {
+                      "genus": "cicindela",
+                      "species": "",
+                      "fin": "hietakiitäjäiset"
+                    },
+                    {
+                      "genus": "carabus",
+                      "species": "",
+                      "fin": "maakiitäjäiset"
+                    }
+                  ]
+                },
+                {
+                  "lat": "dytiscidae",
+                  "fin": "sukeltajat"
+                },
+                {
+                  "lat": "gyrinidae",
+                  "fin": "hopeasepät"
+                },
+                {
+                  "lat": "silphidae",
+                  "fin": "raatokuoriaiset",
+                  "specie": [
+                    {
+                      "genus": "nicrophorus",
+                      "species": "",
+                      "fin": "turkkilot"
+                    },
+                    {
+                      "genus": "oiceoptoma",
+                      "species": "thoracica",
+                      "fin": "punaselkähaiskiainen"
+                    }
+                  ]
+                },
+                {
+                  "lat": "staphylinidae",
+                  "fin": "lyhytsiipiset"
+                },
+                {
+                  "lat": "geotrupidae",
+                  "fin": "sittiäiset",
+                  "specie": [
+                    {
+                      "genus": "geotrupes",
+                      "species": "",
+                      "fin": "sittiäiset ja sontiaiset"
+                    }
+                  ]
+                },
+                {
+                  "lat": "scarabaeidae",
+                  "fin": "lehtisarviset",
+                  "specie": [
+                    {
+                      "genus": "aphodius",
+                      "species": "",
+                      "fin": "lantiaiset"
+                    },
+                    {
+                      "genus": "melolontha",
+                      "species": "hippocastani",
+                      "fin": "kastanjaturilas"
+                    },
+                    {
+                      "genus": "cetonia",
+                      "species": "aurata",
+                      "fin": "kultakuoriainen"
+                    },
+                    {
+                      "genus": "trichius",
+                      "species": "fasciatus",
+                      "fin": "kimalaiskuoriainen"
+                    },
+                    {
+                      "genus": "oryctes",
+                      "species": "nasicornis",
+                      "fin": "sarvikuonokas"
+                    }
+                  ]
+                },
+                {
+                  "lat": "buprestidae",
+                  "fin": "jalokuoriaiset"
+                },
+                {
+                  "lat": "cantharidae",
+                  "fin": "sylkikuoriaiset"
+                },
+                {
+                  "lat": "lampyridae",
+                  "fin": "kiiltomadot",
+                  "specie": [
+                    {
+                      "genus": "lampyris",
+                      "species": "noctiluca",
+                      "fin": "kiiltomato"
+                    }
+                  ]
+                },
+                {
+                  "lat": "elateridae",
+                  "fin": "sepät"
+                },
+                {
+                  "lat": "dermestidae",
+                  "fin": "haaskakuoriaiset",
+                  "specie": [
+                    {
+                      "genus": "dermestes",
+                      "species": "lardarius",
+                      "fin": "vyöihrakuoriainen"
+                    },
+                    {
+                      "genus": "attagenus",
+                      "species": "pellio",
+                      "fin": "pilkkuturkiskuoriainen"
+                    },
+                    {
+                      "genus": "anthrenus",
+                      "species": "museorum",
+                      "fin": "museokuoriainen"
+                    }
+                  ]
+                },
+                {
+                  "lat": "anobiidae",
+                  "fin": "jumit",
+                  "specie": [
+                    {
+                      "genus": "anobium",
+                      "species": "punctatum",
+                      "fin": "tupajumi"
+                    },
+                    {
+                      "genus": "hadrobregmus",
+                      "species": "pertinax",
+                      "fin": "kuolemankello"
+                    }
+                  ]
+                },
+                {
+                  "lat": "cleridae",
+                  "fin": "kirjokuoriaiset",
+                  "specie": [
+                    {
+                      "genus": "thanasimus",
+                      "species": "formicarius",
+                      "fin": "muurahaiskuoriainen"
+                    }
+                  ]
+                },
+                {
+                  "lat": "silvanidae",
+                  "fin": "",
+                  "specie": [
+                    {
+                      "genus": "oryzaephilus",
+                      "species": "surinamensis",
+                      "fin": "riisihärö"
+                    }
+                  ]
+                },
+                {
+                  "lat": "coccinellidae",
+                  "fin": "leppäkertut",
+                  "specie": [
+                    {
+                      "genus": "coccinella",
+                      "species": "septempunctata",
+                      "fin": "seitsenpistepirkko"
+                    }
+                  ]
+                },
+                {
+                  "lat": "tenebrionidae",
+                  "fin": "pimikkökuoriaiset",
+                  "specie": [
+                    {
+                      "genus": "tenebrio",
+                      "species": "molitor",
+                      "fin": "jauhopukki"
+                    }
+                  ]
+                },
+                {
+                  "lat": "meloidae",
+                  "fin": "toukohärät",
+                  "specie": [
+                    {
+                      "genus": "meloe",
+                      "species": "",
+                      "fin": "toukohärät"
+                    }
+                  ]
+                },
+                {
+                  "lat": "cerambycidae",
+                  "fin": "sarvijäärät",
+                  "specie": [
+                    {
+                      "genus": "rhagium",
+                      "species": "",
+                      "fin": "kantojäärät"
+                    },
+                    {
+                      "genus": "spondylis",
+                      "species": "buprestoides",
+                      "fin": "jymyjäärä"
+                    },
+                    {
+                      "genus": "callidium",
+                      "species": "violaceum",
+                      "fin": "papintappaja"
+                    },
+                    {
+                      "genus": "leptura",
+                      "species": "quadrifasciata",
+                      "fin": "nelivyöjäärä"
+                    },
+                    {
+                      "genus": "acanthocinus",
+                      "species": "aedilis",
+                      "fin": "sarvijaakko"
+                    }
+                  ]
+                },
+                {
+                  "lat": "chrysomelidae",
+                  "fin": "lehtikuoriaiset",
+                  "specie": [
+                    {
+                      "genus": "lochmaea",
+                      "species": "capreae",
+                      "fin": "raidanlehtikuoriainen"
+                    },
+                    {
+                      "genus": "linaeidea",
+                      "species": "aenea",
+                      "fin": "lepänlehtikuoriainen"
+                    },
+                    {
+                      "genus": "chrysomela",
+                      "species": "populi",
+                      "fin": "haavanlehtikuoriainen"
+                    },
+                    {
+                      "genus": "leptinotarsa",
+                      "species": "decemlineata",
+                      "fin": "koloradonkuoriainen"
+                    }
+                  ]
+                },
+                {
+                  "lat": "attelabidae",
+                  "fin": "käärökärsäkkäät"
+                },
+                {
+                  "lat": "apionidae",
+                  "fin": "nirput"
+                },
+                {
+                  "lat": "curculionidae",
+                  "fin": "kärsäkkäät",
+                  "specie": [
+                    {
+                      "genus": "hylobius",
+                      "species": "abietis",
+                      "fin": "tukkimiehentäi"
+                    }
+                  ]
+                },
+                {
+                  "lat": "scolytinae",
+                  "fin": "kaarnakuoriaiset",
+                  "specie": [
+                    {
+                      "genus": "tomicus",
+                      "species": "",
+                      "fin": "ytimennävertäjät"
+                    },
+                    {
+                      "genus": "ips",
+                      "species": "",
+                      "fin": "kirjanpainajat"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "lat": "echinodermata",
+      "fin": "piikkinahkaiset",
+      "class": [
+        {
+          "lat": "asteroidea",
+          "fin": "meritähdet"
+        },
+        {
+          "lat": "ophiuroidea",
+          "fin": "käärmetähdet"
+        },
+        {
+          "lat": "echinoidea",
+          "fin": "merisiilit"
+        },
+        {
+          "lat": "holothuroidea",
+          "fin": "merimakkarat"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,540 @@
+{
+  "phylum": [
+    {
+      "lat": "calcarea & silicea",
+      "fin": "sienieläimet"
+    },
+    {
+      "lat": "cnidaria",
+      "fin": "polttiaiseläimet",
+      "class": [
+        {
+          "lat": "hydrozoa",
+          "fin": "hydropolyypit"
+        },
+        {
+          "lat": "scyphozoa",
+          "fin": "liskameduusat"
+        }
+      ]
+    },
+    {
+      "lat": "platyhelminthes",
+      "fin": "laakamadot",
+      "class": [
+        {
+          "lat": "turbellaria",
+          "fin": "värysmadot"
+        },
+        {
+          "lat": "cestoda",
+          "fin": "heisimadot"
+        }
+      ]
+    },
+    {
+      "lat": "rotifera",
+      "fin": "rataseläimet"
+    },
+    {
+      "lat": "nematomorpha",
+      "fin": "jouhimadot"
+    },
+    {
+      "lat": "nematoda",
+      "fin": "sukkulamadot"
+    },
+    {
+      "lat": "annelida",
+      "fin": "nivelmadot",
+      "class": [
+        {
+          "lat": "polychaeta",
+          "fin": "monisukasmadot"
+        },
+        {
+          "lat": "oligochaeta",
+          "fin": "harvasukamadot",
+          "family": [
+            {
+              "lat": "lumbricidae",
+              "fin": "lierot"
+            },
+            {
+              "lat": "enchytaeidae",
+              "fin": "änkyrimadot"
+            }
+          ]
+        },
+        {
+          "lat": "hirudinea",
+          "fin": "juotikkaat"
+        }
+      ]
+    },
+    {
+      "lat": "mollusca",
+      "fin": "nilviäiset",
+      "class": [
+        {
+          "lat": "bivalvia",
+          "fin": "simpukat",
+          "order": [
+            {
+              "lat": "filibranchia",
+              "fin": "rihmakiduksiset",
+              "family": [
+                {
+                  "lat": "mytilidae",
+                  "fin": "sinisimpukat"
+                }
+              ]
+            },
+            {
+              "lat": "eulamellibranchia",
+              "fin": "lehtikiduksiset",
+              "family": [
+                {
+                  "lat": "unionidae",
+                  "fin": "jokisimpukat"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "lat": "arthropoda",
+      "fin": "niveljalkaiset",
+      "class": [
+        {
+          "lat": "malacostraca",
+          "fin": "kuoriäyriset",
+          "order": [
+            {
+              "lat": "decapoda",
+              "fin": "kymmenjalkaiset",
+              "family": [
+                {
+                  "lat": "astacidae",
+                  "fin": "ravut"
+                }
+              ]
+            },
+            {
+              "lat": "amphipoda",
+              "fin": "katkat"
+            },
+            {
+              "lat": "isopoda",
+              "fin": "siirat"
+            }
+          ]
+        },
+        {
+          "lat": "branchiopoda",
+          "fin": "kidusjalkaiset",
+          "order": [
+            {
+              "lat": "diplostraca",
+              "fin": ""
+            }
+          ]
+        },
+        {
+          "lat": "diplopoda",
+          "fin": "kaksoisjalkaiset"
+        },
+        {
+          "lat": "chilopoda",
+          "fin": "juoksujalkaiset"
+        },
+        {
+          "lat": "entognatha",
+          "fin": "sisäleukaiset",
+          "order": [
+            {
+              "lat": "collembola",
+              "fin": "hyppyhäntäiset"
+            }
+          ]
+        },
+        {
+          "lat": "insecta",
+          "fin": "hyönteiset",
+          "order": [
+            {
+              "lat": "thysanura",
+              "fin": "kolmisukahäntäiset"
+            },
+            {
+              "lat": "ephemeroptera",
+              "fin": "päivänkorennot"
+            },
+            {
+              "lat": "odonata",
+              "fin": "sudenkorennot",
+              "family": [
+                {
+                  "lat": "coenagrionidae",
+                  "fin": "tytönkorennot"
+                },
+                {
+                  "lat": "aeshnidae",
+                  "fin": "ukonkorennot"
+                }
+              ]
+            },
+            {
+              "lat": "plecoptera",
+              "fin": "koskikorennot"
+            },
+            {
+              "lat": "orthoptera",
+              "fin": "suorasiipiset",
+              "family": [
+                {
+                  "lat": "acrididae",
+                  "fin": "heinäsirkat"
+                },
+                {
+                  "lat": "tettigoniidae",
+                  "fin": "hepokatit"
+                }
+              ]
+            },
+            {
+              "lat": "dermaptera",
+              "fin": "pihtihäntäiset"
+            },
+            {
+              "lat": "dictyoptera",
+              "fin": "torakat ja rukoilijasirkat"
+            },
+            {
+              "lat": "psocoptera",
+              "fin": "jäytiäiset"
+            },
+            {
+              "lat": "phthiraptera",
+              "fin": "täit ja väiveet"
+            },
+            {
+              "lat": "hemiptera",
+              "fin": "nivelkärsäiset",
+              "family": [
+                {
+                  "lat": "nepidae",
+                  "fin": "vesiskorpionit"
+                },
+                {
+                  "lat": "notonectidae",
+                  "fin": "malluaiset"
+                },
+                {
+                  "lat": "gerridae",
+                  "fin": "vesimittarit"
+                },
+                {
+                  "lat": "pentatomidae",
+                  "fin": "typpyluteet"
+                },
+                {
+                  "lat": "aphrophoridae",
+                  "fin": "sylkikaskaat"
+                },
+                {
+                  "lat": "cicadellidae",
+                  "fin": "varsinaiset kaskaat"
+                },
+                {
+                  "lat": "psyllidae",
+                  "fin": "kempit"
+                },
+                {
+                  "lat": "aphididae",
+                  "fin": "lehtikirvat"
+                }
+              ]
+            },
+            {
+              "lat": "thysanoptera",
+              "fin": "ripsiäiset"
+            },
+            {
+              "lat": "megaloptera",
+              "fin": "kaislakorennot"
+            },
+            {
+              "lat": "neuroptera",
+              "fin": "verkkosiipiset"
+            },
+            {
+              "lat": "mecoptera",
+              "fin": "kärsäkorennot"
+            },
+            {
+              "lat": "trichoptera",
+              "fin": "vesiperhoset"
+            },
+            {
+              "lat": "lepidoptera",
+              "fin": "perhoset",
+              "family": [
+                {
+                  "lat": "hepialidae",
+                  "fin": "juuriperhoset"
+                },
+                {
+                  "lat": "tineidae",
+                  "fin": "aitokoit"
+                },
+                {
+                  "lat": "yponomeutidae",
+                  "fin": "kehrääjäkoit"
+                },
+                {
+                  "lat": "sesiidae",
+                  "fin": "lasisiipiset"
+                },
+                {
+                  "lat": "tortricidae",
+                  "fin": "kääriäiset"
+                },
+                {
+                  "lat": "pterophoridae",
+                  "fin": "sulkaperhoset"
+                },
+                {
+                  "lat": "hesperiidae",
+                  "fin": "paksupäät"
+                },
+                {
+                  "lat": "papilionidae",
+                  "fin": "ritariperhoset"
+                },
+                {
+                  "lat": "pieridae",
+                  "fin": "kaaliperhoset"
+                },
+                {
+                  "lat": "lycaenidae",
+                  "fin": "sinisiivet"
+                },
+                {
+                  "lat": "nymphalidae",
+                  "fin": "täpläperhoset"
+                },
+                {
+                  "lat": "lasiocampidae",
+                  "fin": "karvakehrääjät"
+                },
+                {
+                  "lat": "saturniidae",
+                  "fin": "riikinkukkokehrääjät"
+                },
+                {
+                  "lat": "drepanidae",
+                  "fin": "sirppisiivet"
+                },
+                {
+                  "lat": "geometridae",
+                  "fin": "mittarit"
+                },
+                {
+                  "lat": "sphingidae",
+                  "fin": "kiitäjät"
+                },
+                {
+                  "lat": "notodontidae",
+                  "fin": "nirkot"
+                },
+                {
+                  "lat": "arctiidae",
+                  "fin": "siilikkäät"
+                },
+                {
+                  "lat": "noctuidae",
+                  "fin": "yökköset"
+                }
+              ]
+            },
+            {
+              "lat": "diptera",
+              "fin": "kaksisiipiset",
+              "family": [
+                {
+                  "lat": "tipulidae",
+                  "fin": "vaaksiaiset"
+                },
+                {
+                  "lat": "culicidae",
+                  "fin": "hyttyset"
+                },
+                {
+                  "lat": "simuliidae",
+                  "fin": "mäkärät"
+                },
+                {
+                  "lat": "chironomidae",
+                  "fin": "surviaissääsket"
+                },
+                {
+                  "lat": "mycetophilidae",
+                  "fin": "sienisääsket"
+                },
+                {
+                  "lat": "tabanidae",
+                  "fin": "paarmat"
+                },
+                {
+                  "lat": "bombyliidae",
+                  "fin": "kimalaiskärpäset"
+                },
+                {
+                  "lat": "asilidae",
+                  "fin": "petokärpäset"
+                },
+                {
+                  "lat": "syrphidae",
+                  "fin": "kukkakärpäset"
+                },
+                {
+                  "lat": "drosophilidae",
+                  "fin": "mahlakärpäset"
+                },
+                {
+                  "lat": "muscidae",
+                  "fin": "sukaskärpäset"
+                },
+                {
+                  "lat": "calliphoridae",
+                  "fin": "raatokärpäset"
+                },
+                {
+                  "lat": "sarcophagidae",
+                  "fin": "ruutukärpäset"
+                },
+                {
+                  "lat": "hippoboscidae",
+                  "fin": "täikärpäset"
+                }
+              ]
+            },
+            {
+              "lat": "siphonaptera",
+              "fin": "kirput"
+            },
+            {
+              "lat": "hymenoptera",
+              "fin": "pistiäiset",
+              "family": [
+                {
+                  "lat": "tenthredinidae",
+                  "fin": "lehtipistiäiset"
+                },
+                {
+                  "lat": "siricidae",
+                  "fin": "puupistiäiset"
+                },
+                {
+                  "lat": "formicidae",
+                  "fin": "muurahaiset"
+                },
+                {
+                  "lat": "vespidae",
+                  "fin": "yhteiskunta-ampiaiset"
+                },
+                {
+                  "lat": "apidae",
+                  "fin": "varsinaiset mehiläiset"
+                }
+              ]
+            },
+            {
+              "lat": "coleoptera",
+              "fin": "kovakuoriaiset",
+              "family": [
+                {
+                  "lat": "carabidae",
+                  "fin": "maakiitäjäiset"
+                },
+                {
+                  "lat": "dytiscidae",
+                  "fin": "sukeltajat"
+                },
+                {
+                  "lat": "silphidae",
+                  "fin": "raatokuoriaiset"
+                },
+                {
+                  "lat": "staphylinidae",
+                  "fin": "lyhytsiipiset"
+                },
+                {
+                  "lat": "scarabaeidae",
+                  "fin": "lehtisarviset"
+                },
+                {
+                  "lat": "lampyridae",
+                  "fin": "kiiltomadot"
+                },
+                {
+                  "lat": "elateridae",
+                  "fin": "sepät"
+                },
+                {
+                  "lat": "dermestidae",
+                  "fin": "haaskakuoriaiset"
+                },
+                {
+                  "lat": "anobiidae",
+                  "fin": "jumit"
+                },
+                {
+                  "lat": "coccinellidae",
+                  "fin": "leppäkertut"
+                },
+                {
+                  "lat": "tenebrionidae",
+                  "fin": "pimikkökuoriaiset"
+                },
+                {
+                  "lat": "meloidae",
+                  "fin": "toukohärät"
+                },
+                {
+                  "lat": "cerambycidae",
+                  "fin": "sarvijäärät"
+                },
+                {
+                  "lat": "chrysomelidae",
+                  "fin": "lehtikuoriaiset"
+                },
+                {
+                  "lat": "curculionidae",
+                  "fin": "kärsäkkäät"
+                },
+                {
+                  "lat": "scolytinae",
+                  "fin": "kaarnakuoriaiset"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "lat": "echinodermata",
+      "fin": "piikkinahkaiset",
+      "class": [
+        {
+          "lat": "asteroidea",
+          "fin": "meritähdet"
+        }
+      ]
+    }
+  ]
+}
