@@ -162,3 +162,20 @@ body {
   background: rgba(255,255,255,0.03);
   font-size: 16px;
 }
+a {
+  color: #4ea1ff;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+a:visited {
+  color: #8a6bff;
+}
+
+a:active {
+  opacity: 0.85;
+}
+
