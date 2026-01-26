@@ -133,17 +133,28 @@ def get_selected_dataset() -> str:
 
 def get_enabled_ranks() -> List[str]:
     enabled = session.get("enabled_ranks")
-    # force genus/species to be coupled
-    if ("genus" in enabled) ^ ("species" in enabled):
+
+    # Normalize to a list of strings
+    if not isinstance(enabled, list) or not all(
+        isinstance(x, str) for x in enabled
+    ):
+        enabled = list(DEFAULT_ENABLED_RANKS)
+    else:
+        enabled = [
+            r for r in RANK_KEYS if r in enabled
+        ]  # canonical order + known ranks
+        if not enabled:
+            enabled = list(DEFAULT_ENABLED_RANKS)
+
+    # Force genus/species to be coupled
+    has_genus = "genus" in enabled
+    has_species = "species" in enabled
+    if has_genus ^ has_species:
         enabled = [r for r in enabled if r not in ("genus", "species")]
         enabled += ["genus", "species"]
         enabled = [r for r in RANK_KEYS if r in enabled]
 
-    if isinstance(enabled, list) and all(isinstance(x, str) for x in enabled):
-        enabled = [r for r in RANK_KEYS if r in enabled]
-        if enabled:
-            return enabled
-    return DEFAULT_ENABLED_RANKS
+    return enabled
 
 
 def safe_lat(node: Dict[str, Any]) -> str:
