@@ -133,6 +133,12 @@ def get_selected_dataset() -> str:
 
 def get_enabled_ranks() -> List[str]:
     enabled = session.get("enabled_ranks")
+    # force genus/species to be coupled
+    if ("genus" in enabled) ^ ("species" in enabled):
+        enabled = [r for r in enabled if r not in ("genus", "species")]
+        enabled += ["genus", "species"]
+        enabled = [r for r in RANK_KEYS if r in enabled]
+
     if isinstance(enabled, list) and all(isinstance(x, str) for x in enabled):
         enabled = [r for r in RANK_KEYS if r in enabled]
         if enabled:
@@ -571,8 +577,25 @@ def settings():
 def save_settings():
     selected_ranks = request.form.getlist("ranks")
     selected_ranks = [r for r in RANK_KEYS if r in selected_ranks]
+
+    # genus+species combined toggle
+    gs_on = request.form.get("ranks_genus_species") == "1"
+    if gs_on:
+        if "genus" not in selected_ranks:
+            selected_ranks.append("genus")
+        if "species" not in selected_ranks:
+            selected_ranks.append("species")
+    else:
+        selected_ranks = [
+            r for r in selected_ranks if r not in ("genus", "species")
+        ]
+
+    # If nothing selected, fallback
     if not selected_ranks:
         selected_ranks = DEFAULT_ENABLED_RANKS
+
+    # keep canonical order
+    selected_ranks = [r for r in RANK_KEYS if r in selected_ranks]
     session["enabled_ranks"] = selected_ranks
 
     datasets = list_datasets()

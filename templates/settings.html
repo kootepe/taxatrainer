@@ -50,13 +50,33 @@
           <div style="margin-bottom:8px; opacity:0.9;">Näytettävät taksonomiset tasot</div>
 
           <div style="display:grid; gap:10px;">
-            {% for r in all_ranks %}
-              <label style="display:flex; gap:10px; align-items:center;">
-                <input type="checkbox" name="ranks" value="{{ r }}"
-                       {% if r in enabled %}checked{% endif %} />
-                <span>{{ rank_fi.get(r, r) }} <span style="opacity:0.7;">({{ r }})</span></span>
-              </label>
-            {% endfor %}
+            <label style="display:flex; gap:10px; align-items:center;">
+              <input type="checkbox" name="ranks" value="phylum" {% if "phylum" in enabled %}checked{% endif %} />
+              <span>{{ rank_fi.get("phylum","phylum") }} <span style="opacity:0.7;">(phylum)</span></span>
+            </label>
+
+            <label style="display:flex; gap:10px; align-items:center;">
+              <input type="checkbox" name="ranks" value="class" {% if "class" in enabled %}checked{% endif %} />
+              <span>{{ rank_fi.get("class","class") }} <span style="opacity:0.7;">(class)</span></span>
+            </label>
+
+            <label style="display:flex; gap:10px; align-items:center;">
+              <input type="checkbox" name="ranks" value="order" {% if "order" in enabled %}checked{% endif %} />
+              <span>{{ rank_fi.get("order","order") }} <span style="opacity:0.7;">(order)</span></span>
+            </label>
+
+            <label style="display:flex; gap:10px; align-items:center;">
+              <input type="checkbox" name="ranks" value="family" {% if "family" in enabled %}checked{% endif %} />
+              <span>{{ rank_fi.get("family","family") }} <span style="opacity:0.7;">(family)</span></span>
+            </label>
+
+            {# Combined checkbox #}
+            <label style="display:flex; gap:10px; align-items:center;">
+              <input type="checkbox" name="ranks_genus_species" value="1"
+                    {% if "genus" in enabled or "species" in enabled %}checked{% endif %} />
+              <span>Suku + laji <span style="opacity:0.7;">(genus + species)</span></span>
+            </label>
+
           </div>
         </div>
 
