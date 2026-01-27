@@ -513,6 +513,87 @@ def norm(s: str) -> str:
     return " ".join((s or "").strip().lower().split())
 
 
+def build_pool_indices(items: List[StudyItem]) -> List[int]:
+    enabled_ranks = get_enabled_ranks()
+    max_enabled_idx = max(RANK_INDEX[r] for r in enabled_ranks)
+
+    def deepest_filled_rank_idx(it: StudyItem) -> int:
+        ans = it.answer
+
+        # Treat specie items as terminal leaves at species depth if genus exists
+        if it.meta.get("_kind") == "specie" and ans.get("genus", "").strip():
+            return RANK_INDEX["species"]
+
+        for r in reversed(RANK_KEYS):
+            if ans.get(r, "").strip():
+                return RANK_INDEX[r]
+        return -1
+
+    # prefer "leaves" relative to current enabled ranks
+    leaves = [
+        i
+        for i, it in enumerate(items)
+        if deepest_filled_rank_idx(it) == max_enabled_idx
+    ]
+    if not leaves:
+        leaves = [
+            i
+            for i, it in enumerate(items)
+            if deepest_filled_rank_idx(it) <= max_enabled_idx
+        ]
+    if not leaves:
+        leaves = list(range(len(items)))
+
+    enabled_nodes = get_enabled_nodes()
+    if enabled_nodes:
+        leaves = [
+            i for i in leaves if is_allowed(items[i].node_id, enabled_nodes)
+        ]
+
+    return leaves
+
+
+def get_deck_key(dataset: str) -> str:
+    # include settings in the key so deck refreshes when settings change
+    ranks_key = ",".join(get_enabled_ranks())
+    # enabled_nodes can be large; but we need it in the key to avoid stale decks
+    nodes = sorted(get_enabled_nodes())
+    nodes_key = str(hash(tuple(nodes)))
+    return f"{dataset}|{ranks_key}|{nodes_key}"
+
+
+def draw_item_from_deck(items: List[StudyItem]) -> StudyItem:
+    dataset = get_selected_dataset()
+    deck_key = get_deck_key(dataset)
+
+    # if settings changed since last time, rebuild
+    if session.get("deck_key") != deck_key:
+        session["deck_key"] = deck_key
+        session.pop("deck", None)
+
+    deck = session.get("deck")
+    if not isinstance(deck, list) or not deck:
+        pool = build_pool_indices(items)
+        if not pool:
+            raise RuntimeError("No eligible items for current settings.")
+        random.shuffle(pool)
+        deck = pool
+        session["deck"] = deck
+
+    # draw next (no repeats until empty)
+    next_idx = int(deck.pop())
+    session["deck"] = deck
+    return items[next_idx]
+
+
+def choose_item() -> StudyItem:
+    dataset = get_selected_dataset()
+    _, items, _ = load_dataset_cached(dataset)
+    if not items:
+        raise RuntimeError(f"No study items extracted from {dataset}.json")
+    return draw_item_from_deck(items)
+
+
 # ---------- routes ----------
 @app.get("/")
 def index():
@@ -634,6 +715,9 @@ def save_settings():
     datasets = list_datasets()
     selected = get_selected_dataset()
 
+    session.pop("deck", None)
+    session.pop("deck_key", None)
+
     return render_template(
         "settings.html",
         all_ranks=RANK_KEYS,
@@ -652,6 +736,9 @@ def set_dataset():
         session["dataset_name"] = d
         session.pop("enabled_nodes", None)  # reset taxa filters per dataset
         session.pop("current_idx", None)
+
+        session.pop("deck", None)
+        session.pop("deck_key", None)
     return ("", 302, {"Location": "/settings"})
 
 
@@ -676,6 +763,9 @@ def save_settings_taxa():
     selected = [x for x in selected if isinstance(x, str) and x.strip()]
 
     session["enabled_nodes"] = selected
+
+    session.pop("deck", None)
+    session.pop("deck_key", None)
 
     return render_template(
         "settings_taxa.html",
