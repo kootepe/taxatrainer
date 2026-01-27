@@ -22,6 +22,11 @@
         <button id="newBtn" class="btn">Uusi</button>
       </div>
     <section class="card">
+
+      <div id="clickhint">
+        <span>Ekalla klikkauksella lattarit näykviin, toisella suomenkieliset</span>
+      </div>
+
       <div class="hint">
         <div> <strong><span id="fin">{{ item.meta.fin }}</span></strong></div>
       </div>
@@ -30,9 +35,6 @@
         <img id="img" alt="example" />
       </div>
 
-      <!-- <div id="givenBox" class="given" style="display:none;"> -->
-      <!--   <div><strong>Annettu:</strong> <span id="givenText"></span></div> -->
-      <!-- </div> -->
 
       <form id="form" autocomplete="off">
         {% for r in ranks %}
@@ -44,7 +46,6 @@
 
             <div class="cell">
               <span class="staticVal" id="in_{{ r }}">Klikkaa näkyviin</span>
-              <button type="button" class="miniBtn" id="btn_{{ r }}">?</button>
             </div>
 
             <div class="result" id="res_{{ r }}" hidden></div>
@@ -158,6 +159,7 @@ function clearInputs() {
     el.classList.remove("ok", "bad");
   }
   document.getElementById("answers").style.display = "none";
+  document.getElementById("clickhint").style.display = "none";
   for (const r of getRanks()) {
     const res = document.getElementById("res_" + r);
     if (res) res.hidden = true;
@@ -207,14 +209,19 @@ async function checkAll() {
   }
 }
 function showAnswers() {
-  // first click reveals latin, then toggle latin <-> finnish
+  // global cycle: hidden -> lat -> fin -> lat ...
   if (showMode === "hidden") showMode = "lat";
   else showMode = (showMode === "lat") ? "fin" : "lat";
 
   for (const r of getRanks()) {
     const el = document.getElementById("in_" + r);
+
+    // show according to global mode
     el.textContent = formatByMode(r, showMode);
     el.classList.add("ok");
+
+    // ✅ IMPORTANT: sync per-row hint state so ? continues correctly
+    rankShowMode[r] = showMode;
   }
 }
 
@@ -276,7 +283,6 @@ function buildForm() {
 
       <div class="cell">
         <span class="staticVal" id="in_${r}">Klikkaa näkyviin</span>
-        <button type="button" class="miniBtn" id="btn_${r}">?</button>
       </div>
 
       <div class="result" id="res_${r}" hidden></div>
@@ -285,7 +291,7 @@ function buildForm() {
 
   // bind hint buttons
   for (const r of ranks) {
-    document.getElementById("btn_" + r).addEventListener("click", () => {
+    document.getElementById("in_" + r).addEventListener("click", () => {
       hintFill(r);
     });
   }
