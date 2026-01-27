@@ -3,6 +3,10 @@ html {
   background: #0f172a;
 }
 
+.manp{
+  opacity: 0.95;
+}
+
 body {
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   background: #0f172a;

@@ -68,6 +68,7 @@
       given: {{ given|tojson }},
     };
 
+    let showMode = "hidden"; // hidden -> lat -> fin -> lat -> fin ...
     function getRanks() {
       return current.quiz_ranks || [];
     }
@@ -77,6 +78,30 @@
     }
 
 
+function getFinForRank(rank) {
+  // best: fin per rank (if you added fin_by_rank in backend)
+  const byRank = current?.meta?.fin_by_rank?.[rank];
+  if (byRank && String(byRank).trim()) return String(byRank).trim();
+
+  // fallback: one finnish label for whole card
+  const one = current?.meta?.fin;
+  if (one && String(one).trim()) return String(one).trim();
+
+  return "";
+}
+
+function formatShown(rank) {
+  const lat = (current.answer?.[rank] ?? "").toString().trim();
+  if (!lat) return "";
+
+  if (showMode === "fin") {
+    const fin = getFinForRank(rank);
+    return fin || lat; // fallback to latin if no finnish
+  }
+
+  // default latin
+  return lat;
+}
 function applyVisibleFieldsFromAnswer(answer) {
   for (const r of getRanks() ) {
     const row = document.getElementById("row_" + r);
@@ -136,8 +161,10 @@ function hintFill(rank) {
   const expected = (current.answer?.[rank] ?? "").toString();
 
   if (!expected.trim()) return;
+  if (showMode === "hidden") showMode = "lat";
+  else showMode = (showMode === "lat") ? "fin" : "lat";
 
-  el.textContent = expected;
+  el.textContent = formatShown(rank);
   el.classList.add("ok");
 }
 async function checkAll() {
@@ -168,14 +195,18 @@ async function checkAll() {
     if (v === false) el.classList.add("bad");
   }
 }
-
 function showAnswers() {
+  // first click reveals latin, then toggle latin <-> finnish
+  if (showMode === "hidden") showMode = "lat";
+  else showMode = (showMode === "lat") ? "fin" : "lat";
+
   for (const r of getRanks()) {
     const el = document.getElementById("in_" + r);
-    el.textContent = current.answer?.[r] ?? "";
+    el.textContent = formatShown(r);
     el.classList.add("ok");
   }
 }
+
 async function newItem() {
   const res = await fetch("/new", {
     method: "POST",
@@ -184,6 +215,7 @@ async function newItem() {
   const data = await res.json();
 
   current = data; // now includes answer/meta/mode/given/quiz_ranks
+  showMode = "hidden";
 
   updateMeta(current.meta);
   renderGivenBox();
@@ -206,6 +238,20 @@ function renderGivenBox() {
   }
 }
 
+function formatAnswer(rank) {
+  const lat = (current.answer?.[rank] ?? "").toString().trim();
+  if (!lat) return "";
+
+  // Finnish name logic:
+  // species/genus → use meta.fin
+  // higher ranks → meta.fin already matches that node
+  const fin = (current.meta?.fin ?? "").toString().trim();
+
+  if (fin && fin.toLowerCase() !== lat.toLowerCase()) {
+    return `${lat} (${fin})`;
+  }
+  return lat;
+}
 
 function buildForm() {
   const form = document.getElementById("form");

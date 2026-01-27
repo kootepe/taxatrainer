@@ -316,6 +316,7 @@ def extract_items(data: Dict[str, Any]) -> List[StudyItem]:
     def make_node_item(
         node: Dict[str, Any],
         path: Dict[str, str],
+        path_fin: Dict[str, str],
         path_nodes: List[Dict[str, Any]],
         current_node_id: str,
     ):
@@ -331,7 +332,7 @@ def extract_items(data: Dict[str, Any]) -> List[StudyItem]:
                 or path.get("class")
                 or path.get("phylum"),
             ),
-            "req": (node.get("req") or ""),
+            "fin_by_rank": dict(path_fin),
             "image": first_nonempty(
                 node.get("image"),
                 find_nearest_image(path_nodes + [node]),
@@ -344,13 +345,14 @@ def extract_items(data: Dict[str, Any]) -> List[StudyItem]:
         node: Dict[str, Any],
         rank: str,
         path: Dict[str, str],
+        path_fin: Dict[str, str],
         path_nodes: List[Dict[str, Any]],
         current_node_id: str,
     ):
         # ✅ 0) add an item for this rank node (phylum/class/order/family)
         # (this is the key fix so "family" is selectable even if species exist below)
         if rank in ("phylum", "class", "order", "family"):
-            make_node_item(node, path, path_nodes, current_node_id)
+            make_node_item(node, path, path_fin, path_nodes, current_node_id)
 
         # 1) species items (specie may exist through any number of transparent containers)
         for specie_list in collect_species_lists(node):
@@ -365,12 +367,17 @@ def extract_items(data: Dict[str, Any]) -> List[StudyItem]:
                 ans.update(path)
                 ans["genus"] = genus
                 ans["species"] = species
-
+                fin_by_rank = dict(path_fin)
+                # Finnish for the organism itself (best effort)
+                sp_fin = str(sp.get("fin") or "").strip()
+                if sp_fin:
+                    fin_by_rank["species"] = sp_fin
                 meta = {
                     "_kind": "specie",
                     "fin": fin_or_lat(
                         sp.get("fin"), f"{genus} {species}".strip()
                     ),
+                    "fin_by_rank": fin_by_rank,  # ✅ add this
                     "req": sp.get("req", ""),
                     "image": first_nonempty(
                         sp.get("image"),
@@ -399,25 +406,41 @@ def extract_items(data: Dict[str, Any]) -> List[StudyItem]:
                 new_path = dict(path)
                 new_path[ck] = lat
 
+                new_path_fin = dict(path_fin)
+                ch_fin = safe_fin(ch)
+                if ch_fin:
+                    new_path_fin[ck] = ch_fin
+
                 new_node_id = make_node_id(current_node_id, ck, lat)
-                walk(ch, ck, new_path, path_nodes + [ch], new_node_id)
+                walk(
+                    ch,
+                    ck,
+                    new_path,
+                    new_path_fin,
+                    path_nodes + [ch],
+                    new_node_id,
+                )
 
         # 3) optional: leaf/end-node item (kept, but now less important)
         if not node_has_children(node):
-            make_node_item(node, path, path_nodes, current_node_id)
+            make_node_item(node, path, path_fin, path_nodes, current_node_id)
 
     for ph in phyla:
         if not isinstance(ph, dict):
             continue
 
         path: Dict[str, str] = {k: "" for k in RANK_KEYS}
-
+        path_fin = {k: "" for k in RANK_KEYS}
         ph_lat = safe_lat(ph)
         if ph_lat:
             path["phylum"] = ph_lat
 
+        ph_fin = safe_fin(ph)
+        if ph_fin:
+            path_fin["phylum"] = ph_fin
+
         ph_id = make_node_id("", "phylum", ph_lat if ph_lat else "UNKNOWN")
-        walk(ph, "phylum", path, [ph], ph_id)
+        walk(ph, "phylum", path, path_fin, [ph], ph_id)
 
     return items
 
