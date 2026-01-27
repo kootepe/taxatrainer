@@ -236,7 +236,7 @@ def build_taxa_tree(data: Dict[str, Any]) -> List[Dict[str, Any]]:
         node: Dict[str, Any], parent_id: str, rank: str
     ) -> Dict[str, Any]:
         lat = safe_lat(node) or "UNKNOWN"
-        fin = safe_fin(node) or "UNKNOWN"
+        fin = safe_fin(node) or "Ei suomenkielistä nimeä"
         node_id = make_node_id(parent_id, rank, lat)
 
         tnode = {

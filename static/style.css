@@ -1,3 +1,7 @@
+html {
+  height: 100%;
+  background: #0f172a;
+}
 
 body {
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
@@ -5,12 +9,13 @@ body {
   color: #e2e8f0;
   margin: 0;
 }
+
 [hidden] {
   display: none !important;
 }
 .wrap {
-  max-width: 900px;
-  margin: 32px auto;
+  max-width: 90%;
+  margin: auto;
   padding: 0 16px;
 }
 
@@ -109,17 +114,25 @@ body {
 }
 
 .actions {
-  margin-top: 12px;
+  margin-top: 2px;
   display: flex;
   gap: 10px;
 }
+@media (max-width: 480px) {
+  .actions {
+    display: flex;
+  }
 
+  .actions .btn {
+    flex: 1 1 0;
+  }
+}
 .btn {
   border: 1px solid #334155;
   background: #0b1220;
   color: #e2e8f0;
   padding: 10px 12px;
-  border-radius: 12px;
+  border-radius: 11px;
   cursor: pointer;
 }
 
@@ -155,12 +168,15 @@ body {
 
 .staticVal {
   display: inline-block;
-  min-width: 180px;
+  min-width: 0;
   padding: 10px 12px;
   border-radius: 12px;
   border: 1px solid #243244;
   background: rgba(255,255,255,0.03);
   font-size: 16px;
+  overflow: hidden;
+  text-overflow: ellipsis; /* avoid spill */
+  white-space: nowrap;     /* keep one line */
 }
 a {
   color: #4ea1ff;
@@ -177,5 +193,23 @@ a:visited {
 
 a:active {
   opacity: 0.85;
+}
+
+
+/* Taxa settings rows: allow wrapping instead of overflowing the card */
+input[type="checkbox"][name="enabled"] {
+  flex: 0 0 auto;
+}
+
+label:has(input[type="checkbox"][name="enabled"]) {
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+/* Let the long latin/fi names actually shrink/wrap */
+label:has(input[type="checkbox"][name="enabled"]) span {
+  min-width: 0;
+  overflow-wrap: anywhere;   /* modern + very effective */
+  word-break: break-word;    /* fallback */
 }
 
