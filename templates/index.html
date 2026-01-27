@@ -43,7 +43,7 @@
             </span>
 
             <div class="cell">
-              <span class="staticVal" id="in_{{ r }}">—</span>
+              <span class="staticVal" id="in_{{ r }}">Klikkaa näkyviin</span>
               <button type="button" class="miniBtn" id="btn_{{ r }}">?</button>
             </div>
 
@@ -69,6 +69,7 @@
     };
 
     let showMode = "hidden"; // hidden -> lat -> fin -> lat -> fin ...
+    let rankShowMode = Object.create(null); // per-row ( ? )
     function getRanks() {
       return current.quiz_ranks || [];
     }
@@ -79,17 +80,24 @@
 
 
 function getFinForRank(rank) {
-  // best: fin per rank (if you added fin_by_rank in backend)
   const byRank = current?.meta?.fin_by_rank?.[rank];
   if (byRank && String(byRank).trim()) return String(byRank).trim();
 
-  // fallback: one finnish label for whole card
   const one = current?.meta?.fin;
   if (one && String(one).trim()) return String(one).trim();
 
   return "";
 }
+function formatByMode(rank, mode) {
+  const lat = (current.answer?.[rank] ?? "").toString().trim();
+  if (!lat) return "";
 
+  if (mode === "fin") {
+    const fin = getFinForRank(rank);
+    return fin || lat;
+  }
+  return lat; // "lat" or default
+}
 function formatShown(rank) {
   const lat = (current.answer?.[rank] ?? "").toString().trim();
   if (!lat) return "";
@@ -155,18 +163,21 @@ function clearInputs() {
     if (res) res.hidden = true;
   }
 }
-
 function hintFill(rank) {
   const el = document.getElementById("in_" + rank);
-  const expected = (current.answer?.[rank] ?? "").toString();
+  const lat = (current.answer?.[rank] ?? "").toString().trim();
+  if (!lat) return;
 
-  if (!expected.trim()) return;
-  if (showMode === "hidden") showMode = "lat";
-  else showMode = (showMode === "lat") ? "fin" : "lat";
+  // per-rank cycle: hidden -> lat -> fin -> lat -> ...
+  const prev = rankShowMode[rank] || "hidden";
+  const next = (prev === "hidden") ? "lat" : (prev === "lat" ? "fin" : "lat");
+  rankShowMode[rank] = next;
 
-  el.textContent = formatShown(rank);
+  el.textContent = formatByMode(rank, next);
   el.classList.add("ok");
 }
+
+
 async function checkAll() {
   const inputs = {};
   for (const r of getRanks()) {
@@ -202,7 +213,7 @@ function showAnswers() {
 
   for (const r of getRanks()) {
     const el = document.getElementById("in_" + r);
-    el.textContent = formatShown(r);
+    el.textContent = formatByMode(r, showMode);
     el.classList.add("ok");
   }
 }
@@ -216,10 +227,12 @@ async function newItem() {
 
   current = data; // now includes answer/meta/mode/given/quiz_ranks
   showMode = "hidden";
+  rankShowMode = Object.create(null);
 
   updateMeta(current.meta);
   renderGivenBox();
   buildForm();
+  rankShowMode = Object.create(null);
   clearInputs();
 }
 
@@ -262,7 +275,7 @@ function buildForm() {
       <span class="rank">${(RANK_FI[r] || r)}</span>
 
       <div class="cell">
-        <span class="staticVal" id="in_${r}">—</span>
+        <span class="staticVal" id="in_${r}">Klikkaa näkyviin</span>
         <button type="button" class="miniBtn" id="btn_${r}">?</button>
       </div>
 
