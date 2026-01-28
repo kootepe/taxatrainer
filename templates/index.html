@@ -237,14 +237,11 @@ function showAnswers() {
 
   for (const r of getRanks()) {
     const el = document.getElementById("in_" + r);
-
-    // show according to global mode
     el.textContent = formatByMode(r, showMode);
     el.classList.add("ok");
-
-    // ✅ IMPORTANT: sync per-row hint state so ? continues correctly
     rankShowMode[r] = showMode;
   }
+  updateShowButton();
 }
 
 async function newItem() {
@@ -264,6 +261,19 @@ async function newItem() {
   buildForm();
   rankShowMode = Object.create(null);
   clearInputs();
+  updateShowButton();
+}
+
+function updateShowButton() {
+  const btn = document.getElementById("showBtn");
+  if (!btn) return;
+
+  let next;
+  if (showMode === "hidden") next = "lat";
+  else if (showMode === "lat") next = "fin";
+  else next = "lat";
+
+  btn.textContent = `Näytä ${next}`;
 }
 
 function getLatinHint() {
@@ -352,11 +362,8 @@ function buildForm() {
     setImage(current.meta);
     renderGivenBox();
     buildForm(); // binds listeners + hides empty fields
+    updateShowButton();
 
-    <!-- updateMeta(current.meta); -->
-    <!-- setImage(current.meta); -->
-    <!-- // applyDisabledFieldsFromAnswer(current.answer); -->
-    <!-- applyVisibleFieldsFromAnswer(current.answer); -->
 
     document.addEventListener("keydown", (e) => {
       // don't trigger while typing in an input
