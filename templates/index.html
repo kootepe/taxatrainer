@@ -27,9 +27,19 @@
         <span>Ekalla klikkauksella lattarit näykviin, toisella suomenkieliset</span>
       </div>
 
-      <div class="hint">
-        <div> <strong><span id="fin">{{ item.meta.fin }}</span></strong></div>
+
+      <div class="cardHeader">
+        <strong class="cardTitle">
+          <span id="fin">{{ item.meta.fin }}</span>
+        </strong>
+
+        <div id="cardCounter" class="cardCounter">
+          {{ counter }} / {{ total }}
+        </div>
       </div>
+      <!-- <div class="hint"> -->
+      <!--   <div> <strong><span id="fin">{{ item.meta.fin }}</span></strong></div> -->
+      <!-- </div> -->
 
       <div id="imgBox" class="imgBox" style="display: none;">
         <img id="img" alt="example" />
@@ -67,6 +77,8 @@
       quiz_ranks: {{ ranks|tojson }},     // ranks rendered for THIS card
       mode: {{ quiz_mode|tojson }},
       given: {{ given|tojson }},
+      counter: {{ counter|tojson }},
+      total: {{ total|tojson }},
     };
 
     let showMode = "hidden"; // hidden -> lat -> fin -> lat -> fin ...
@@ -75,9 +87,18 @@
       return current.quiz_ranks || [];
     }
 
+    updateCounter();
     function norm(s) {
       return (s ?? "").toString().trim().toLowerCase().replace(/\s+/g, " ");
     }
+function updateCounter() {
+  const el = document.getElementById("cardCounter");
+  if (!el) return;
+
+  const c = current?.counter ?? "";
+  const t = current?.total ?? "";
+  el.textContent = `${c} / ${t}`.trim();
+}
 
 
 function getFinForRank(rank) {
@@ -233,6 +254,7 @@ async function newItem() {
   const data = await res.json();
 
   current = data; // now includes answer/meta/mode/given/quiz_ranks
+  updateCounter();
   showMode = "hidden";
   rankShowMode = Object.create(null);
 

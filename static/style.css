@@ -157,6 +157,25 @@ body {
   overflow: auto;
 }
 
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.cardTitle {
+  font-size: 1.05em;
+  font-weight: 600;
+  min-width: 0;               /* allows text to shrink */
+}
+
+.cardCounter {
+  font-size: 0.9em;
+  opacity: 0.75;
+  white-space: nowrap;        /* keep "x / y" on one line */
+}
 .imgBox {
   margin: 10px 0 14px 0;
   display: flex;

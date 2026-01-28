@@ -62,6 +62,12 @@ class StudyItem:
     node_id: str
 
 
+def bump_card_counter() -> int:
+    n = int(session.get("card_counter", 0) or 0) + 1
+    session["card_counter"] = n
+    return n
+
+
 # ---------- transparent container traversal (Option C) ----------
 def looks_taxonomic_container(node: Dict[str, Any]) -> bool:
     if not isinstance(node, dict):
@@ -82,6 +88,13 @@ def looks_taxonomic_container(node: Dict[str, Any]) -> bool:
                 return True
 
     return False
+
+
+def get_pool_total(items: List[StudyItem]) -> int:
+    try:
+        return len(build_pool_indices(items))
+    except Exception:
+        return len(items)
 
 
 def iter_transparent_children(node: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -484,55 +497,6 @@ def make_quiz_payload(item: StudyItem) -> Dict[str, Any]:
     return payload
 
 
-def choose_item() -> StudyItem:
-    dataset = get_selected_dataset()
-    _, items, _ = load_dataset_cached(dataset)
-
-    if not items:
-        raise RuntimeError(f"No study items extracted from {dataset}.json")
-
-    enabled_ranks = get_enabled_ranks()
-    max_enabled_idx = max(RANK_INDEX[r] for r in enabled_ranks)
-
-    def deepest_filled_rank_idx(it: StudyItem) -> int:
-        ans = it.answer
-
-        # If this item came from the "specie" list, treat it as a terminal leaf at species-level
-        # even if species is empty (genus-only records like "Arion sp.")
-        if it.meta.get("_kind") == "specie" and ans.get("genus", "").strip():
-            return RANK_INDEX["species"]
-
-        for r in reversed(RANK_KEYS):
-            if ans.get(r, "").strip():
-                return RANK_INDEX[r]
-        return -1
-
-    # ✅ LEAVES relative to settings:
-    # only choose items whose deepest rank is EXACTLY the deepest enabled rank
-    leaves = [
-        it for it in items if deepest_filled_rank_idx(it) == max_enabled_idx
-    ]
-
-    # Fallbacks (in case dataset doesn't have that level at all)
-    if not leaves:
-        leaves = [
-            it for it in items if deepest_filled_rank_idx(it) <= max_enabled_idx
-        ]
-    if not leaves:
-        leaves = items
-
-    enabled_nodes = get_enabled_nodes()
-    pool = (
-        [it for it in leaves if is_allowed(it.node_id, enabled_nodes)]
-        if enabled_nodes
-        else leaves
-    )
-    if not pool:
-        pool = leaves
-
-    return random.choice(pool)
-
-
 def norm(s: str) -> str:
     return " ".join((s or "").strip().lower().split())
 
@@ -597,6 +561,7 @@ def draw_item_from_deck(items: List[StudyItem]) -> StudyItem:
 
     deck = session.get("deck")
     if not isinstance(deck, list) or not deck:
+        session["card_counter"] = 0
         pool = build_pool_indices(items)
         if not pool:
             raise RuntimeError("No eligible items for current settings.")
@@ -621,14 +586,21 @@ def choose_item() -> StudyItem:
 # ---------- routes ----------
 @app.get("/")
 def index():
+    session["card_counter"] = 0  # ✅ reset on F5 / reload
     dataset = get_selected_dataset()
     _, items, _ = load_dataset_cached(dataset)
+    total = get_pool_total(items)
 
     item = choose_item()
     idx = items.index(item)
     session["current_idx"] = idx
 
+    counter = bump_card_counter()
+
     payload = make_quiz_payload(item)
+    payload["counter"] = counter
+    payload["total"] = total
+
     return render_template(
         "index.html",
         item=item,
@@ -636,6 +608,8 @@ def index():
         rank_fi=RANK_FI,
         quiz_mode=payload["mode"],
         given=payload["given"],
+        counter=counter,
+        total=total,
     )
 
 
@@ -651,7 +625,14 @@ def new_item():
 
     item = choose_item()
     session["current_idx"] = items.index(item)
-    return jsonify(make_quiz_payload(item))
+
+    counter = bump_card_counter()
+    total = get_pool_total(items)
+
+    payload = make_quiz_payload(item)
+    payload["counter"] = counter
+    payload["total"] = total
+    return jsonify(payload)
 
 
 @app.post("/check")
@@ -763,6 +744,8 @@ def set_dataset():
 
         session.pop("deck", None)
         session.pop("deck_key", None)
+
+        session.pop("card_counter", None)
     return ("", 302, {"Location": "/settings"})
 
 
