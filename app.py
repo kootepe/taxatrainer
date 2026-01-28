@@ -8,6 +8,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set
 from datetime import timedelta
+from collections import Counter
 
 from flask import Flask, jsonify, render_template, request, session
 
@@ -435,10 +436,6 @@ def extract_items(data: Dict[str, Any]) -> List[StudyItem]:
                     new_node_id,
                 )
 
-        # 3) optional: leaf/end-node item (kept, but now less important)
-        if not node_has_children(node):
-            make_node_item(node, path, path_fin, path_nodes, current_node_id)
-
     for ph in phyla:
         if not isinstance(ph, dict):
             continue
@@ -517,25 +514,18 @@ def build_pool_indices(items: List[StudyItem]) -> List[int]:
                 return RANK_INDEX[r]
         return -1
 
-    # prefer "leaves" relative to current enabled ranks
-    leaves = [
+    pool = [
         i
         for i, it in enumerate(items)
-        if deepest_filled_rank_idx(it) == max_enabled_idx
+        if deepest_filled_rank_idx(it) <= max_enabled_idx
     ]
-    if not leaves:
-        leaves = [
-            i
-            for i, it in enumerate(items)
-            if deepest_filled_rank_idx(it) <= max_enabled_idx
-        ]
-    if not leaves:
-        leaves = list(range(len(items)))
+    if not pool:
+        pool = list(range(len(items)))
 
     enabled_nodes = get_enabled_nodes()
     if enabled_nodes:
         leaves = [
-            i for i in leaves if is_allowed(items[i].node_id, enabled_nodes)
+            i for i in pool if is_allowed(items[i].node_id, enabled_nodes)
         ]
 
     return leaves
@@ -808,6 +798,128 @@ def debug_payload():
     }
 
     return jsonify(payload)
+
+
+from collections import Counter
+
+
+@app.get("/debug/stats")
+def debug_stats():
+    dataset = get_selected_dataset()
+    _, items, _ = load_dataset_cached(dataset)
+
+    # paging
+    try:
+        limit = int(request.args.get("limit", "200"))
+    except ValueError:
+        limit = 200
+    try:
+        offset = int(request.args.get("offset", "0"))
+    except ValueError:
+        offset = 0
+
+    limit = max(1, min(limit, 5000))  # safety cap
+    offset = max(0, offset)
+
+    include_pool_cards = request.args.get("pool", "0") == "1"
+
+    def deepest_idx(it: StudyItem) -> int:
+        ans = it.answer
+        if it.meta.get("_kind") == "specie" and ans.get("genus", "").strip():
+            return RANK_INDEX["species"]
+        for r in reversed(RANK_KEYS):
+            if ans.get(r, "").strip():
+                return RANK_INDEX[r]
+        return -1
+
+    kind_counts = Counter(it.meta.get("_kind", "unknown") for it in items)
+    depth_counts = Counter(deepest_idx(it) for it in items)
+    depth_counts_named = {
+        (RANK_KEYS[k] if 0 <= k < len(RANK_KEYS) else str(k)): v
+        for k, v in depth_counts.items()
+    }
+
+    pool = build_pool_indices(items)
+
+    # serialize ALL items (but paginate in response)
+    def serialize(it: StudyItem, idx: int) -> Dict[str, Any]:
+        return {
+            "idx": idx,
+            "node_id": it.node_id,
+            "kind": it.meta.get("_kind"),
+            "answer": it.answer,  # latin per rank
+            "fin_by_rank": it.meta.get("fin_by_rank", {}),
+            "fin": it.meta.get("fin", ""),
+            "image": it.meta.get("image", ""),
+        }
+
+    page_items = items[offset : offset + limit]
+    cards = [serialize(it, offset + i) for i, it in enumerate(page_items)]
+
+    out: Dict[str, Any] = {
+        "dataset": dataset,
+        "items_total": len(items),
+        "pool_total": len(pool),
+        "enabled_ranks": get_enabled_ranks(),
+        "enabled_nodes_count": len(get_enabled_nodes()),
+        "kind_counts": dict(kind_counts),
+        "deepest_rank_counts": depth_counts_named,
+        "paging": {
+            "offset": offset,
+            "limit": limit,
+            "returned": len(cards),
+            "next_offset": (offset + limit)
+            if (offset + limit) < len(items)
+            else None,
+        },
+        "cards": cards,  # ✅ this is the card list (paged)
+        "pool_indices": pool[:2000],  # keep pool list from becoming enormous
+    }
+
+    if include_pool_cards:
+        # pool cards can also be huge, so return up to first 2000
+        pool_cards = [
+            serialize(items[i], i) for i in pool[:2000] if 0 <= i < len(items)
+        ]
+        out["pool_cards_first_2000"] = pool_cards
+
+    return jsonify(out)
+
+
+# @app.get("/debug/stats")
+# def debug_stats():
+#     dataset = get_selected_dataset()
+#     _, items, _ = load_dataset_cached(dataset)
+#
+#     kind_counts = Counter(it.meta.get("_kind", "unknown") for it in items)
+#
+#     def deepest_idx(it: StudyItem) -> int:
+#         ans = it.answer
+#         if it.meta.get("_kind") == "specie" and ans.get("genus", "").strip():
+#             return RANK_INDEX["species"]
+#         for r in reversed(RANK_KEYS):
+#             if ans.get(r, "").strip():
+#                 return RANK_INDEX[r]
+#         return -1
+#
+#     depth_counts = Counter(deepest_idx(it) for it in items)
+#     depth_counts_named = {
+#         RANK_KEYS[k]: v for k, v in depth_counts.items() if k >= 0
+#     }
+#
+#     pool = build_pool_indices(items)
+#
+#     return jsonify(
+#         {
+#             "dataset": dataset,
+#             "items_total": len(items),
+#             "kind_counts": dict(kind_counts),
+#             "deepest_rank_counts": depth_counts_named,
+#             "pool_total": len(pool),
+#             "enabled_ranks": get_enabled_ranks(),
+#             "enabled_nodes_count": len(get_enabled_nodes()),
+#         }
+#     )
 
 
 if __name__ == "__main__":
