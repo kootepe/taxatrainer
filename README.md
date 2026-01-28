@@ -14,12 +14,19 @@ komennot.
 ```
 # tehdään python virtualenv
 python3 -m venv .env
+# jos olet windowsilla, googlaa miten aktivoida python env
 # aktivoidaan env
 source .env/bin/activate
 # asennetaan flask
 pip install flask
-# ajetaan varsinainen ohjelma
-python3 app.py
+# aja yksi seuraavista riippuen käyttöjärjestelmästä
+# jos COOKIE_SECURE on TRUE/1 (oletus) niin et voi tallentaa asetuksia
+# jos olet linuxilla
+COOKIE_SECURE=0 python3 app.py
+# jos olet windowsilla powershellissä
+$env:COOKIE_SECURE=0; python app.py
+# jos olet windowsilla cmdssä
+set COOKIE_SECURE=0 && python app.py
 ```
 
 docker-compose.prod.yml pyöräyttää sovelluksen docker konttiin gunicornin

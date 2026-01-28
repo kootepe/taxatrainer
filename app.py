@@ -19,7 +19,8 @@ app.config.update(
     SESSION_PERMANENT=True,
     PERMANENT_SESSION_LIFETIME=timedelta(days=365),
     SESSION_COOKIE_SAMESITE="Lax",
-    SESSION_COOKIE_SECURE=True,  # set True if you serve over HTTPS
+    # SESSION_COOKIE_SECURE=False,
+    SESSION_COOKIE_SECURE=os.environ.get("COOKIE_SECURE", "1") == "1",
 )
 
 # ---------- taxonomy config ----------
