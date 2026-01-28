@@ -69,6 +69,11 @@ def bump_card_counter() -> int:
     return n
 
 
+def get_hint_language() -> str:
+    v = session.get("hint_language")
+    return v if v in ("fin", "lat") else "fin"
+
+
 # ---------- transparent container traversal (Option C) ----------
 def looks_taxonomic_container(node: Dict[str, Any]) -> bool:
     if not isinstance(node, dict):
@@ -607,6 +612,7 @@ def index():
         counter=counter,
         total=total,
         actions_position=actions_position,
+        hint_language=get_hint_language(),
     )
 
 
@@ -629,6 +635,7 @@ def new_item():
     payload = make_quiz_payload(item)
     payload["counter"] = counter
     payload["total"] = total
+    payload["hint_language"] = get_hint_language()
     return jsonify(payload)
 
 
@@ -686,6 +693,7 @@ def settings():
         selected_dataset=selected,
         rank_fi=RANK_FI,
         actions_position=get_actions_position(),
+        hint_language=get_hint_language(),
     )
 
 
@@ -723,6 +731,10 @@ def save_settings():
 
     session.pop("deck", None)
     session.pop("deck_key", None)
+    hint_lang = request.form.get("hint_language", "fin")
+    session["hint_language"] = (
+        hint_lang if hint_lang in ("fin", "lat") else "fin"
+    )
 
     return render_template(
         "settings.html",
@@ -732,6 +744,7 @@ def save_settings():
         selected_dataset=selected,
         rank_fi=RANK_FI,
         actions_position=session.get("actions_position", "top"),
+        hint_language=get_hint_language(),
         saved=True,
     )
 

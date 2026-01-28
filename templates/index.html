@@ -79,6 +79,7 @@
       given: {{ given|tojson }},
       counter: {{ counter|tojson }},
       total: {{ total|tojson }},
+      hint_language: {{ hint_language|tojson }},
     };
 
     let showMode = "hidden"; // hidden -> lat -> fin -> lat -> fin ...
@@ -265,18 +266,38 @@ async function newItem() {
   clearInputs();
 }
 
+function getLatinHint() {
+  // Prefer species/genus, fallback to highest available rank
+  const order = ["species", "genus", "family", "order", "class", "phylum"];
+  for (const r of order) {
+    const v = current?.answer?.[r];
+    if (v && String(v).trim()) return String(v).trim();
+  }
+  return "";
+}
+
+function visibleRankCount() {
+  return (current.quiz_ranks || []).length;
+}
+
+
 function renderGivenBox() {
-  const finEl = document.getElementById("fin");
+  const el = document.getElementById("fin");
+  if (!el) return;
 
-  const baseFin = current?.meta?.fin ?? "";
-  const given = current?.given;
+  const onlyOneRank = visibleRankCount() <= 1;
 
-  if (given && given.value) {
-    const rankFi = RANK_FI[given.rank] || given.rank;
-    <!-- finEl.textContent = `${baseFin} (${rankFi}: ${given.value})`; -->
-    finEl.textContent = `${baseFin} `;
+  // Force Finnish hint if only one rank (e.g. phylum-only cards)
+  if (onlyOneRank) {
+    el.textContent = current?.meta?.fin ?? "";
+    return;
+  }
+
+  // Otherwise respect user setting
+  if (current.hint_language === "lat") {
+    el.textContent = getLatinHint();
   } else {
-    finEl.textContent = baseFin;
+    el.textContent = current?.meta?.fin ?? "";
   }
 }
 
