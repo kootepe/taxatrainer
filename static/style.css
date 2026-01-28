@@ -116,20 +116,71 @@ body {
   border-color: #ef4444;
   box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12);
 }
-
-.actions {
-  margin-top: 2px;
-  display: flex;
-  gap: 10px;
+/* Default: buttons in normal flow (top) */
+body[data-actions="top"] .actions {
+  position: static;
 }
+
 @media (max-width: 480px) {
-  .actions {
-    display: flex;
+  body[data-actions="bottom"] .actions {
+    position: fixed;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: calc(100% - 32px);   /* match wrap padding feel */
+    max-width: 90%;             /* match .wrap max-width */
+    box-sizing: border-box;
+
+    display: flex;              /* re-assert */
+    gap: 10px;                  /* re-assert */
+
+    padding: 10px 0 calc(10px + env(safe-area-inset-bottom));
+    background: #0f172a;
+    border-top: 1px solid #243244;
+    z-index: 1000;
   }
 
-  .actions .btn {
+  body[data-actions="bottom"] .actions .btn {
     flex: 1 1 0;
+    white-space: nowrap;
   }
+
+  body[data-actions="bottom"] .wrap {
+    padding-bottom: 110px; /* room for the fixed bar */
+  }
+}
+
+
+/* .actions { */
+/*   margin-top: 2px; */
+/*   display: flex; */
+/*   gap: 10px; */
+/* } */
+/* @media (max-width: 480px) { */
+/*   .actions { */
+/*     position: fixed; */
+/*     left: 0; */
+/*     right: 0; */
+/*     bottom: 0; */
+/**/
+/*     padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); */
+/*     background: #0f172a;            /* same as body */ */
+/*     border-top: 1px solid #243244; */
+/**/
+/*     z-index: 1000; */
+/*   } */
+/**/
+/**/
+/*   /* Make room so the fixed bar doesn't cover content */ */
+/*   .wrap { */
+/*     padding-bottom: 90px; */
+/*   } */
+/* } */
+
+.actions .btn {
+    flex: 1 1 0;                    /* 50/50 */
+    white-space: nowrap;
 }
 .btn {
   border: 1px solid #334155;

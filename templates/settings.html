@@ -83,6 +83,24 @@
 
         <hr style="border:0; border-top:1px solid #243244; margin:16px 0;" />
 
+        <div style="margin: 12px 0 16px 0;">
+          <div style="margin-bottom:8px; opacity:0.9;">Toimintonapit</div>
+
+          <label style="display:flex; gap:10px; align-items:center;">
+            <input type="radio" name="actions_position" value="top"
+                  {% if actions_position != "bottom" %}checked{% endif %} />
+            <span>Napit kortin yläpuolella</span>
+          </label>
+
+          <label style="display:flex; gap:10px; align-items:center; margin-top:8px;">
+            <input type="radio" name="actions_position" value="bottom"
+                  {% if actions_position == "bottom" %}checked{% endif %} />
+            <span>Napit ruudun alareunassa (mobiili)</span>
+          </label>
+        </div>
+
+        <hr style="border:0; border-top:1px solid #243244; margin:16px 0;" />
+
         <div style="margin-top:16px;">
           <button class="btn" type="submit">Tallenna</button>
         </div>

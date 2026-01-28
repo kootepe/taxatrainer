@@ -240,6 +240,11 @@ def load_dataset_cached(stem: str):
     return data, items, taxa_tree
 
 
+def get_actions_position() -> str:
+    v = session.get("actions_position")
+    return v if v in ("top", "bottom") else "top"
+
+
 # ---------- taxa tree + enabled nodes ----------
 def build_taxa_tree(data: Dict[str, Any]) -> List[Dict[str, Any]]:
     phyla = data.get("phylum", [])
@@ -591,6 +596,7 @@ def index():
     payload["counter"] = counter
     payload["total"] = total
 
+    actions_position = get_actions_position()
     return render_template(
         "index.html",
         item=item,
@@ -600,6 +606,7 @@ def index():
         given=payload["given"],
         counter=counter,
         total=total,
+        actions_position=actions_position,
     )
 
 
@@ -678,6 +685,7 @@ def settings():
         datasets=datasets,
         selected_dataset=selected,
         rank_fi=RANK_FI,
+        actions_position=get_actions_position(),
     )
 
 
@@ -709,6 +717,9 @@ def save_settings():
 
     datasets = list_datasets()
     selected = get_selected_dataset()
+
+    pos = request.form.get("actions_position", "top")
+    session["actions_position"] = pos if pos in ("top", "bottom") else "top"
 
     session.pop("deck", None)
     session.pop("deck_key", None)
