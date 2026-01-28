@@ -598,16 +598,21 @@ def choose_item() -> StudyItem:
 # ---------- routes ----------
 @app.get("/")
 def index():
-    session["card_counter"] = 0  # ✅ reset on F5 / reload
+    # Refresh = restart run (new deck + counter)
+    session.pop("deck", None)
+    session.pop("deck_key", None)
+    session.pop("current_idx", None)
+    session["card_counter"] = 0
+
     dataset = get_selected_dataset()
     _, items, _ = load_dataset_cached(dataset)
     total = get_pool_total(items)
 
-    item = choose_item()
+    item = choose_item()  # will rebuild + shuffle deck because we popped it
     idx = items.index(item)
     session["current_idx"] = idx
 
-    counter = bump_card_counter()
+    counter = bump_card_counter()  # becomes 1
 
     payload = make_quiz_payload(item)
     payload["counter"] = counter
