@@ -350,6 +350,7 @@ def extract_items(data: Dict[str, Any]) -> List[StudyItem]:
 
         meta = {
             "_kind": "node",
+            "has_children": node_has_children(node),  # ✅ ADD THIS
             "fin": fin_or_lat(
                 node.get("fin"),
                 path.get("family")
@@ -514,21 +515,33 @@ def build_pool_indices(items: List[StudyItem]) -> List[int]:
 
     def deepest_filled_rank_idx(it: StudyItem) -> int:
         ans = it.answer
-
-        # Treat specie items as terminal leaves at species depth if genus exists
         if it.meta.get("_kind") == "specie" and ans.get("genus", "").strip():
             return RANK_INDEX["species"]
-
         for r in reversed(RANK_KEYS):
             if ans.get(r, "").strip():
                 return RANK_INDEX[r]
         return -1
 
-    pool = [
-        i
-        for i, it in enumerate(items)
-        if deepest_filled_rank_idx(it) <= max_enabled_idx
-    ]
+    def current_node_rank_idx(it: StudyItem) -> int:
+        # for node-items, the deepest filled rank is the node's own rank
+        return deepest_filled_rank_idx(it)
+
+    pool = []
+    for i, it in enumerate(items):
+        d = deepest_filled_rank_idx(it)
+
+        # keep only items that are not deeper than user wants
+        if d > max_enabled_idx:
+            continue
+
+        # ✅ drop "higher node" cards if they have children AND user trains deeper ranks
+        if it.meta.get("_kind") == "node" and it.meta.get("has_children"):
+            node_rank = current_node_rank_idx(it)
+            if max_enabled_idx > node_rank:
+                continue
+
+        pool.append(i)
+
     if not pool:
         pool = list(range(len(items)))
 
@@ -537,7 +550,6 @@ def build_pool_indices(items: List[StudyItem]) -> List[int]:
         leaves = [
             i for i in pool if is_allowed(items[i].node_id, enabled_nodes)
         ]
-
     return leaves
 
 
@@ -909,42 +921,6 @@ def debug_stats():
         out["pool_cards_first_2000"] = pool_cards
 
     return jsonify(out)
-
-
-# @app.get("/debug/stats")
-# def debug_stats():
-#     dataset = get_selected_dataset()
-#     _, items, _ = load_dataset_cached(dataset)
-#
-#     kind_counts = Counter(it.meta.get("_kind", "unknown") for it in items)
-#
-#     def deepest_idx(it: StudyItem) -> int:
-#         ans = it.answer
-#         if it.meta.get("_kind") == "specie" and ans.get("genus", "").strip():
-#             return RANK_INDEX["species"]
-#         for r in reversed(RANK_KEYS):
-#             if ans.get(r, "").strip():
-#                 return RANK_INDEX[r]
-#         return -1
-#
-#     depth_counts = Counter(deepest_idx(it) for it in items)
-#     depth_counts_named = {
-#         RANK_KEYS[k]: v for k, v in depth_counts.items() if k >= 0
-#     }
-#
-#     pool = build_pool_indices(items)
-#
-#     return jsonify(
-#         {
-#             "dataset": dataset,
-#             "items_total": len(items),
-#             "kind_counts": dict(kind_counts),
-#             "deepest_rank_counts": depth_counts_named,
-#             "pool_total": len(pool),
-#             "enabled_ranks": get_enabled_ranks(),
-#             "enabled_nodes_count": len(get_enabled_nodes()),
-#         }
-#     )
 
 
 if __name__ == "__main__":
