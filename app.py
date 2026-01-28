@@ -731,6 +731,7 @@ def save_settings():
         datasets=datasets,
         selected_dataset=selected,
         rank_fi=RANK_FI,
+        actions_position=session.get("actions_position", "top"),
         saved=True,
     )
 
