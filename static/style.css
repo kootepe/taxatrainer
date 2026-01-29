@@ -287,3 +287,23 @@ label:has(input[type="checkbox"][name="enabled"]) span {
   word-break: break-word;    /* fallback */
 }
 
+.lightbox[hidden] { display: none; }
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 9999;
+}
+
+.lightboxInner img {
+  max-width: min(1200px, 95vw);
+  max-height: 90vh;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  background: #111;
+}

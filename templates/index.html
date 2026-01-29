@@ -41,9 +41,6 @@
       <!--   <div> <strong><span id="fin">{{ item.meta.fin }}</span></strong></div> -->
       <!-- </div> -->
 
-      <div id="imgBox" class="imgBox" style="display: none;">
-        <img id="img" alt="example" />
-      </div>
 
 
       <form id="form" autocomplete="off">
@@ -66,8 +63,15 @@
 
       <pre id="answers" class="answers" style="display:none;"></pre>
     </section>
+      <div id="imgBox" class="imgBox" style="">
+        <img id="img" alt="example" />
+      </div>
   </main>
-
+<div id="lightbox" class="lightbox" hidden>
+  <div class="lightboxInner">
+    <img id="lightboxImg" alt="large preview" />
+  </div>
+</div>
   <script>
     const RANK_FI = {{ rank_fi|tojson }};
 
@@ -92,6 +96,23 @@
     function norm(s) {
       return (s ?? "").toString().trim().toLowerCase().replace(/\s+/g, " ");
     }
+
+
+function openLightbox(src) {
+  const lb = document.getElementById("lightbox");
+  const im = document.getElementById("lightboxImg");
+  if (!lb || !im || !src) return;
+  im.src = src;
+  lb.hidden = false;
+}
+
+function closeLightbox() {
+  const lb = document.getElementById("lightbox");
+  const im = document.getElementById("lightboxImg");
+  if (!lb || !im) return;
+  lb.hidden = true;
+  im.removeAttribute("src");
+}
 function updateCounter() {
   const el = document.getElementById("cardCounter");
   if (!el) return;
@@ -157,22 +178,26 @@ function applyVisibleFieldsFromAnswer(answer) {
   }
 }
 
-    function setImage(meta) {
-      const imgBox = document.getElementById("imgBox");
-      const img = document.getElementById("img");
-      if (meta && meta.image) {
-        img.src = meta.image;
-        imgBox.style.display = "block";
-      } else {
-        img.removeAttribute("src");
-        imgBox.style.display = "none";
-      }
-    }
 
-    function updateMeta(meta) {
-      setImage(meta);
-      renderGivenBox(); // updates fin + given text together
-    }
+function setImage(meta) {
+  const imgBox = document.getElementById("imgBox");
+  const img = document.getElementById("img");
+  if (meta && meta.image) {
+    img.src = meta.image;
+    imgBox.style.display = "block";
+
+    img.onclick = () => openLightbox(meta.image); // ✅ add
+  } else {
+    img.removeAttribute("src");
+    img.onclick = null; // ✅ add
+    imgBox.style.display = "none";
+  }
+}
+
+function updateMeta(meta) {
+  setImage(meta);
+  renderGivenBox(); // updates fin + given text together
+}
 
 function clearInputs() {
   for (const r of getRanks()) {
@@ -375,6 +400,18 @@ function buildForm() {
         showAnswers();
       }
     });
+
+  // close lightbox on click outside image
+  document.getElementById("lightbox")?.addEventListener("click", (e) => {
+    if (e.target.id === "lightbox" || e.target.classList.contains("lightboxInner")) {
+      closeLightbox();
+    }
+  });
+
+  // close on Escape
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeLightbox();
+  });
 
     document.addEventListener("keydown", (e) => {
       // don't trigger while typing in an input

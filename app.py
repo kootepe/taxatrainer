@@ -348,6 +348,11 @@ def extract_items(data: Dict[str, Any]) -> List[StudyItem]:
         ans = {k: "" for k in RANK_KEYS}
         ans.update(path)
 
+        img = first_nonempty(
+            node.get("image"),
+            find_nearest_image(path_nodes + [node]),
+        )
+        img = "static/img/" + img if img is not None else None
         meta = {
             "_kind": "node",
             "has_children": node_has_children(node),  # ✅ ADD THIS
@@ -359,10 +364,7 @@ def extract_items(data: Dict[str, Any]) -> List[StudyItem]:
                 or path.get("phylum"),
             ),
             "fin_by_rank": dict(path_fin),
-            "image": first_nonempty(
-                node.get("image"),
-                find_nearest_image(path_nodes + [node]),
-            ),
+            "image": img,
         }
 
         items.append(StudyItem(answer=ans, meta=meta, node_id=current_node_id))
@@ -515,42 +517,64 @@ def build_pool_indices(items: List[StudyItem]) -> List[int]:
 
     def deepest_filled_rank_idx(it: StudyItem) -> int:
         ans = it.answer
-        if it.meta.get("_kind") == "specie" and ans.get("genus", "").strip():
-            return RANK_INDEX["species"]
+
+        # Species items are at species depth only if genus/species are enabled.
+        # Otherwise treat them as leaf at the deepest enabled rank they can support.
+        if it.meta.get("_kind") == "specie":
+            # If user is not practicing genus/species, don't force species depth
+            if (
+                "genus" in enabled_ranks
+                and "species" in enabled_ranks
+                and ans.get("genus", "").strip()
+            ):
+                return RANK_INDEX["species"]
+
         for r in reversed(RANK_KEYS):
             if ans.get(r, "").strip():
                 return RANK_INDEX[r]
         return -1
 
-    def current_node_rank_idx(it: StudyItem) -> int:
-        # for node-items, the deepest filled rank is the node's own rank
-        return deepest_filled_rank_idx(it)
+    # 1) First, filter by depth (only keep items not deeper than enabled max)
+    depth_ok = [
+        i
+        for i, it in enumerate(items)
+        if deepest_filled_rank_idx(it) <= max_enabled_idx
+    ]
 
-    pool = []
-    for i, it in enumerate(items):
-        d = deepest_filled_rank_idx(it)
+    if not depth_ok:
+        depth_ok = list(range(len(items)))
 
-        # keep only items that are not deeper than user wants
-        if d > max_enabled_idx:
-            continue
-
-        # ✅ drop "higher node" cards if they have children AND user trains deeper ranks
-        if it.meta.get("_kind") == "node" and it.meta.get("has_children"):
-            node_rank = current_node_rank_idx(it)
-            if max_enabled_idx > node_rank:
-                continue
-
-        pool.append(i)
-
-    if not pool:
-        pool = list(range(len(items)))
-
+    # 2) Apply taxa-node selection filter
     enabled_nodes = get_enabled_nodes()
     if enabled_nodes:
-        leaves = [
-            i for i in pool if is_allowed(items[i].node_id, enabled_nodes)
+        depth_ok = [
+            i for i in depth_ok if is_allowed(items[i].node_id, enabled_nodes)
         ]
-    return leaves
+
+    if not depth_ok:
+        return []
+
+    # 3) Now remove "node" cards ONLY if there exists a deeper eligible descendant
+    #    (descendant = node_id startswith this node_id + ">" )
+    eligible_node_ids = [items[i].node_id for i in depth_ok]
+
+    # Build a fast lookup: for each prefix, is there any deeper item?
+    # We'll just test by scanning prefixes using startswith on the list — fine
+    # for typical sizes.
+    def has_deeper_descendant(node_id: str) -> bool:
+        prefix = node_id + ">"
+        return any(nid.startswith(prefix) for nid in eligible_node_ids)
+
+    final = []
+    for i in depth_ok:
+        it = items[i]
+        if it.meta.get("_kind") == "node":
+            # If there is any deeper eligible descendant, drop this node card
+            if has_deeper_descendant(it.node_id):
+                continue
+        final.append(i)
+
+    return final
 
 
 def get_deck_key(dataset: str) -> str:
