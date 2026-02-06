@@ -63,15 +63,19 @@
 
       <pre id="answers" class="answers" style="display:none;"></pre>
     </section>
-      <div id="imgBox" class="imgBox" style="">
-        <img id="img" alt="example" />
-      </div>
-  </main>
+
+<div id="imgBox" class="imgBox" style="display:none;">
+  <div id="thumbs" class="thumbs"></div>
+</div>
+
 <div id="lightbox" class="lightbox" hidden>
   <div class="lightboxInner">
     <img id="lightboxImg" alt="large preview" />
+    <div id="lightboxCaption" class="lightboxCaption"></div>
   </div>
 </div>
+  </main>
+
   <script>
     const RANK_FI = {{ rank_fi|tojson }};
 
@@ -98,21 +102,6 @@
     }
 
 
-function openLightbox(src) {
-  const lb = document.getElementById("lightbox");
-  const im = document.getElementById("lightboxImg");
-  if (!lb || !im || !src) return;
-  im.src = src;
-  lb.hidden = false;
-}
-
-function closeLightbox() {
-  const lb = document.getElementById("lightbox");
-  const im = document.getElementById("lightboxImg");
-  if (!lb || !im) return;
-  lb.hidden = true;
-  im.removeAttribute("src");
-}
 function updateCounter() {
   const el = document.getElementById("cardCounter");
   if (!el) return;
@@ -178,21 +167,60 @@ function applyVisibleFieldsFromAnswer(answer) {
   }
 }
 
+function openLightbox(photo) {
+  const lb = document.getElementById("lightbox");
+  const im = document.getElementById("lightboxImg");
+  const cap = document.getElementById("lightboxCaption");
+  if (!lb || !im) return;
+
+  im.src = photo.url || photo.url_square || "";
+  lb.hidden = false;
+
+  const txt = (photo.attribution || "").trim();
+  cap.textContent = txt ? txt : "";
+}
+
+function closeLightbox() {
+  const lb = document.getElementById("lightbox");
+  const im = document.getElementById("lightboxImg");
+  const cap = document.getElementById("lightboxCaption");
+  if (!lb || !im) return;
+  lb.hidden = true;
+  im.removeAttribute("src");
+  if (cap) cap.textContent = "";
+}
 
 function setImage(meta) {
   const imgBox = document.getElementById("imgBox");
-  const img = document.getElementById("img");
-  if (meta && meta.image) {
-    img.src = meta.image;
-    imgBox.style.display = "block";
+  const thumbs = document.getElementById("thumbs");
+  if (!imgBox || !thumbs) return;
 
-    img.onclick = () => openLightbox(meta.image); // ✅ add
-  } else {
-    img.removeAttribute("src");
-    img.onclick = null; // ✅ add
+  const photos = meta?.images || [];
+  if (!Array.isArray(photos) || photos.length === 0) {
+    thumbs.innerHTML = "";
     imgBox.style.display = "none";
+    return;
   }
+
+  imgBox.style.display = "block";
+  thumbs.innerHTML = photos.map((p, i) => {
+    const src = (p.url_square || p.url || "").toString();
+    return `
+      <div class="thumb" data-i="${i}" title="Klikkaa suuremmaksi">
+        <img src="${src}" alt="photo ${i+1}" loading="lazy" />
+      </div>
+    `;
+  }).join("");
+
+  // bind clicks
+  thumbs.querySelectorAll(".thumb").forEach(el => {
+    el.addEventListener("click", () => {
+      const i = Number(el.dataset.i || "0");
+      openLightbox(photos[i]);
+    });
+  });
 }
+
 
 function updateMeta(meta) {
   setImage(meta);
@@ -402,12 +430,7 @@ function buildForm() {
     });
 
   // close lightbox on click outside image
-  document.getElementById("lightbox")?.addEventListener("click", (e) => {
-    if (e.target.id === "lightbox" || e.target.classList.contains("lightboxInner")) {
-      closeLightbox();
-    }
-  });
-
+  document.getElementById("lightbox")?.addEventListener("click", () => closeLightbox());
   // close on Escape
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") closeLightbox();

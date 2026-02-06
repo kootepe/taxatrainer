@@ -89,6 +89,7 @@
         {
           "lat": "turbellaria",
           "fin": "värysmadot",
+          "image": "turbellaria.jpg",
           "order": [
             {
               "lat": "tricladida",
@@ -106,6 +107,7 @@
         {
           "lat": "trematoda",
           "fin": "tiehytmadot",
+          "image": "trematoda.jpg",
           "specie": [
             {
               "genus": "fasciola",
@@ -117,6 +119,7 @@
         {
           "lat": "cestoda",
           "fin": "heisimadot",
+          "image": "cestoda.jpg",
           "specie": [
             {
               "genus": "diphyllobothrium",
@@ -197,7 +200,7 @@
               ]
             },
             {
-              "lat": "enchytaeidae",
+              "lat": "enchytraeidae",
               "fin": "änkyrimadot"
             }
           ]
@@ -272,7 +275,7 @@
                   "specie": [
                     {
                       "genus": "deroceras",
-                      "species": "agrestre",
+                      "species": "agreste",
                       "fin": "peltoetana"
                     }
                   ]
@@ -387,7 +390,7 @@
                   "specie": [
                     {
                       "genus": "astacus",
-                      "species": "astacua",
+                      "species": "astacus",
                       "fin": "jokirapu"
                     }
                   ]
@@ -1375,7 +1378,7 @@
                   "specie": [
                     {
                       "genus": "formica",
-                      "species": "rufa–ryhmä",
+                      "species": "rufa",
                       "fin": "kekomuurahaiset"
                     },
                     {
@@ -1453,7 +1456,7 @@
               ],
               "superfamily": [
                 {
-                  "lat": "icheumonoidea",
+                  "lat": "ichneumonoidea",
                   "fin": "loistpistiäiset"
                 },
                 {

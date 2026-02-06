@@ -240,7 +240,8 @@ def load_json(path: str) -> Dict[str, Any]:
 def load_dataset_cached(stem: str):
     path = DATA_DIR / f"{stem}.json"
     data = load_json(str(path))
-    items = extract_items(data)
+    taxa_photos = load_taxa_photos_cached(f"taxa_photos")
+    items = extract_items(data, taxa_photos)
     taxa_tree = build_taxa_tree(data)
     return data, items, taxa_tree
 
@@ -315,7 +316,9 @@ def get_enabled_nodes() -> Set[str]:
 
 
 # ---------- item extraction ----------
-def extract_items(data: Dict[str, Any]) -> List[StudyItem]:
+def extract_items(
+    data: Dict[str, Any], taxa_photos: Optional[Dict[str, Any]] = None
+) -> List[StudyItem]:
     items: List[StudyItem] = []
 
     phyla = data.get("phylum", [])
@@ -348,11 +351,11 @@ def extract_items(data: Dict[str, Any]) -> List[StudyItem]:
         ans = {k: "" for k in RANK_KEYS}
         ans.update(path)
 
-        img = first_nonempty(
-            node.get("image"),
-            find_nearest_image(path_nodes + [node]),
-        )
-        img = "static/img/" + img if img is not None else None
+        taxon_key = (path.get("genus") or "").strip()  # usually empty for nodes
+        if not taxon_key:
+            taxon_key = safe_lat(node)  # fallback
+        images = get_images_for_taxon(taxa_photos or {}, taxon_key)
+
         meta = {
             "_kind": "node",
             "has_children": node_has_children(node),  # ✅ ADD THIS
@@ -364,8 +367,19 @@ def extract_items(data: Dict[str, Any]) -> List[StudyItem]:
                 or path.get("phylum"),
             ),
             "fin_by_rank": dict(path_fin),
-            "image": img,
         }
+
+        meta["images"] = [
+            {
+                "url": (p.get("url") or "").strip(),
+                "url_square": (p.get("url_square") or "").strip(),
+                "attribution": (p.get("attribution") or "").strip(),
+                "photo_page_url": (p.get("photo_page_url") or "").strip(),
+                "observation_url": (p.get("observation_url") or "").strip(),
+                "license_code": (p.get("license_code") or "").strip(),
+            }
+            for p in images
+        ]
 
         items.append(StudyItem(answer=ans, meta=meta, node_id=current_node_id))
 
@@ -400,6 +414,14 @@ def extract_items(data: Dict[str, Any]) -> List[StudyItem]:
                 sp_fin = str(sp.get("fin") or "").strip()
                 if sp_fin:
                     fin_by_rank["species"] = sp_fin
+
+                taxon_key = genus.strip() or f"{genus} {species}".strip()
+                taxon_key = (
+                    genus.strip()
+                    if species.strip() == ""
+                    else f"{genus} {species}"
+                )
+                images = get_images_for_taxon(taxa_photos or {}, taxon_key)
                 meta = {
                     "_kind": "specie",
                     "fin": fin_or_lat(
@@ -412,6 +434,22 @@ def extract_items(data: Dict[str, Any]) -> List[StudyItem]:
                         find_nearest_image(path_nodes + [sp]),
                     ),
                 }
+
+                meta["images"] = [
+                    {
+                        "url": (p.get("url") or "").strip(),
+                        "url_square": (p.get("url_square") or "").strip(),
+                        "attribution": (p.get("attribution") or "").strip(),
+                        "photo_page_url": (
+                            p.get("photo_page_url") or ""
+                        ).strip(),
+                        "observation_url": (
+                            p.get("observation_url") or ""
+                        ).strip(),
+                        "license_code": (p.get("license_code") or "").strip(),
+                    }
+                    for p in images
+                ]
 
                 items.append(
                     StudyItem(answer=ans, meta=meta, node_id=current_node_id)
@@ -467,6 +505,71 @@ def extract_items(data: Dict[str, Any]) -> List[StudyItem]:
         walk(ph, "phylum", path, path_fin, [ph], ph_id)
 
     return items
+
+
+@lru_cache(maxsize=8)
+def load_taxa_photos_cached(stem: str) -> Dict[str, Any]:
+    """
+    Expects JSON with shape: { "taxa": { "<taxon_key>": { "photos": [...] } } }
+    """
+    path = DATA_DIR / f"{stem}.json"
+    if not path.exists():
+        return {}
+    return load_json(str(path))
+
+
+def normalize_taxon_key(s: str) -> str:
+    return (s or "").strip().lower()
+
+
+def get_images_for_taxon(
+    taxa_photos: Dict[str, Any], taxon_name: str
+) -> List[Dict[str, Any]]:
+    """
+    Returns list of photo dicts like:
+    { "url": "...", "url_square": "...", "attribution": "...", "photo_page_url": "...", ... }
+    """
+    if not isinstance(taxa_photos, dict):
+        return []
+    taxa = taxa_photos.get("taxa")
+    if not isinstance(taxa, dict):
+        return []
+
+    key = normalize_taxon_key(taxon_name)
+    entry = taxa.get(key)
+    if not isinstance(entry, dict):
+        return []
+
+    photos = entry.get("photos", [])
+    if not isinstance(photos, list):
+        return []
+
+    out = []
+    for p in photos:
+        if not isinstance(p, dict):
+            continue
+        url = p.get("url") or ""
+        sq = p.get("url_square") or ""
+        if isinstance(url, str) and url.strip():
+            out.append(p)
+        elif isinstance(sq, str) and sq.strip():
+            out.append(p)
+    return out
+
+
+def pick_taxon_key_for_item(item: StudyItem) -> Optional[str]:
+    ans = item.answer
+    # Prefer genus if present (works with your example)
+    g = (ans.get("genus") or "").strip()
+    if g:
+        return g
+
+    # Otherwise choose deepest filled rank
+    for r in reversed(RANK_KEYS):
+        v = (ans.get(r) or "").strip()
+        if v:
+            return v
+    return None
 
 
 # ---------- quiz logic ----------
