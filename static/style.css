@@ -124,7 +124,7 @@ body[data-actions="top"] .actions {
 @media (max-width: 480px) {
   body[data-actions="bottom"] .actions {
     position: fixed;
-    bottom: 15px;
+    bottom: 0px;
     left: 50%;
     transform: translateX(-50%);
 
@@ -138,6 +138,7 @@ body[data-actions="top"] .actions {
     padding: 10px 0 calc(10px + env(safe-area-inset-bottom));
     background: #0f172a;
     border-top: 1px solid #243244;
+    border-bottom: 1px solid #243244;
     z-index: 1000;
   }
 
@@ -336,3 +337,8 @@ label:has(input[type="checkbox"][name="enabled"]) span {
   max-width: min(1400px, 95vw);
 }
 
+@media (max-width: 600px) {
+  .btn.secondary {
+    font-size: 0.85rem;
+  }
+}
