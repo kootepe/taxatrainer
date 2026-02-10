@@ -90,6 +90,7 @@
       counter: {{ counter|tojson }},
       total: {{ total|tojson }},
       hint_language: {{ hint_language|tojson }},
+      img_toggle: {{ img_toggle|tojson }},
     };
 
     let showMode = "hidden"; // hidden -> lat -> fin -> lat -> fin ...
@@ -206,6 +207,11 @@ function setImage(meta) {
   const imgBox = document.getElementById("imgBox");
   const thumbs = document.getElementById("thumbs");
   if (!imgBox || !thumbs) return;
+
+  if (!current?.img_toggle) {
+    if (imgBox) imgBox.style.display = "none";
+    return;
+      }
 
   const photos = meta?.images || [];
   if (!Array.isArray(photos) || photos.length === 0) {

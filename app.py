@@ -74,6 +74,15 @@ def get_hint_language() -> str:
     return v if v in ("fin", "lat") else "fin"
 
 
+def get_img_toggle() -> bool:
+    v = session.get("img_toggle")
+    if isinstance(v, bool):
+        return v
+    if isinstance(v, str):
+        return v in ("1", "true", "on", "yes")
+    return True  # default ON
+
+
 # ---------- transparent container traversal (Option C) ----------
 def looks_taxonomic_container(node: Dict[str, Any]) -> bool:
     if not isinstance(node, dict):
@@ -757,6 +766,7 @@ def index():
         total=total,
         actions_position=actions_position,
         hint_language=get_hint_language(),
+        img_toggle=get_img_toggle(),
     )
 
 
@@ -780,6 +790,7 @@ def new_item():
     payload["counter"] = counter
     payload["total"] = total
     payload["hint_language"] = get_hint_language()
+    payload["img_toggle"] = get_img_toggle()
     return jsonify(payload)
 
 
@@ -838,6 +849,7 @@ def settings():
         rank_fi=RANK_FI,
         actions_position=get_actions_position(),
         hint_language=get_hint_language(),
+        img_toggle=get_img_toggle(),
     )
 
 
@@ -879,6 +891,8 @@ def save_settings():
     session["hint_language"] = (
         hint_lang if hint_lang in ("fin", "lat") else "fin"
     )
+    img_toggle = request.form.get("img_toggle") == "1"
+    session["img_toggle"] = img_toggle
 
     return render_template(
         "settings.html",
@@ -889,6 +903,7 @@ def save_settings():
         rank_fi=RANK_FI,
         actions_position=session.get("actions_position", "top"),
         hint_language=get_hint_language(),
+        img_toggle=img_toggle,
         saved=True,
     )
 
