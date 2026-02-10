@@ -72,6 +72,8 @@
   <div class="lightboxInner">
     <img id="lightboxImg" alt="large preview" />
     <div id="lightboxCaption" class="lightboxCaption"></div>
+    <div id="lightboxLink" class="lightboxLink">
+          </div>
   </div>
 </div>
   </main>
@@ -171,7 +173,15 @@ function openLightbox(photo) {
   const lb = document.getElementById("lightbox");
   const im = document.getElementById("lightboxImg");
   const cap = document.getElementById("lightboxCaption");
+  const linkel = document.getElementById("lightboxLink");
   if (!lb || !im) return;
+
+  const link = document.createElement("a");
+  link.href = photo.photo_page_url;
+  link.textContent = "Link to original";
+  link.target = "_blank"; // optional
+
+  linkel.appendChild(link)
 
   im.src = photo.url || photo.url_square || "";
   lb.hidden = false;
@@ -184,9 +194,11 @@ function closeLightbox() {
   const lb = document.getElementById("lightbox");
   const im = document.getElementById("lightboxImg");
   const cap = document.getElementById("lightboxCaption");
+  const ln = document.getElementById("lightboxLink");
   if (!lb || !im) return;
   lb.hidden = true;
   im.removeAttribute("src");
+  ln.innerHTML = '';
   if (cap) cap.textContent = "";
 }
 
@@ -443,6 +455,7 @@ function buildForm() {
 
       if (e.key.toLowerCase() === "n") {
         e.preventDefault();
+        closeLightbox();
         newItem();
       }
     });
