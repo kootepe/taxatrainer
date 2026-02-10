@@ -548,7 +548,7 @@ def get_images_for_taxon(
     for p in photos:
         if not isinstance(p, dict):
             continue
-        url = p.get("url") or ""
+        url = p.get("url_medium") or ""
         sq = p.get("url_square") or ""
         if isinstance(url, str) and url.strip():
             out.append(p)
