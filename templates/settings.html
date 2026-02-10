@@ -6,6 +6,13 @@
   <title>Asetukset - Taxa treenaus</title>
   <link rel="stylesheet" href="/static/style.css" />
 </head>
+<script>
+  // Make sure unsaved UI changes don't "stick" after refresh/back.
+  window.addEventListener("pageshow", () => {
+    const f = document.getElementById("settingsForm");
+    if (f) f.reset(); // resets to the HTML-rendered checked/selected values
+  });
+</script>
 <body>
   <main class="wrap">
     <header class="top">
@@ -43,7 +50,7 @@
       </div>
 
       <!-- ONE POST form for everything else -->
-      <form method="POST" action="/settings">
+      <form id="settingsForm" method="POST" action="/settings">
         <p style="margin-top:0; opacity:0.9;">Valitse mitä harjoitellaan.</p>
 
         <!-- Rank toggles -->
