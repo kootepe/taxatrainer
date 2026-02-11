@@ -630,10 +630,8 @@ def build_pool_indices(items: List[StudyItem]) -> List[int]:
     def deepest_filled_rank_idx(it: StudyItem) -> int:
         ans = it.answer
 
-        # Species items are at species depth only if genus/species are enabled.
-        # Otherwise treat them as leaf at the deepest enabled rank they can support.
+        # Only treat specie items as "species-depth" if user enabled genus+species
         if it.meta.get("_kind") == "specie":
-            # If user is not practicing genus/species, don't force species depth
             if (
                 "genus" in enabled_ranks
                 and "species" in enabled_ranks
@@ -646,47 +644,40 @@ def build_pool_indices(items: List[StudyItem]) -> List[int]:
                 return RANK_INDEX[r]
         return -1
 
-    # 1) First, filter by depth (only keep items not deeper than enabled max)
-    depth_ok = [
+    def has_any_enabled_value(it: StudyItem) -> bool:
+        ans = it.answer
+
+        # genus+species toggle: require genus at least (species may be blank in some datasets)
+        if "genus" in enabled_ranks and "species" in enabled_ranks:
+            if ans.get("genus", "").strip():
+                return True
+
+        # all other enabled ranks: must be present
+        for r in enabled_ranks:
+            if r in ("genus", "species"):
+                continue
+            if ans.get(r, "").strip():
+                return True
+
+        return False
+
+    # must be within depth AND must actually have something in enabled ranks
+    pool = [
         i
         for i, it in enumerate(items)
         if deepest_filled_rank_idx(it) <= max_enabled_idx
+        and has_any_enabled_value(it)
     ]
 
-    if not depth_ok:
-        depth_ok = list(range(len(items)))
-
-    # 2) Apply taxa-node selection filter
-    enabled_nodes = get_enabled_nodes()
-    if enabled_nodes:
-        depth_ok = [
-            i for i in depth_ok if is_allowed(items[i].node_id, enabled_nodes)
-        ]
-
-    if not depth_ok:
+    # If nothing eligible, don't silently fall back to everything (that causes "Acari" again)
+    if not pool:
         return []
 
-    # 3) Now remove "node" cards ONLY if there exists a deeper eligible descendant
-    #    (descendant = node_id startswith this node_id + ">" )
-    eligible_node_ids = [items[i].node_id for i in depth_ok]
+    enabled_nodes = get_enabled_nodes()
+    if enabled_nodes:
+        pool = [i for i in pool if is_allowed(items[i].node_id, enabled_nodes)]
 
-    # Build a fast lookup: for each prefix, is there any deeper item?
-    # We'll just test by scanning prefixes using startswith on the list — fine
-    # for typical sizes.
-    def has_deeper_descendant(node_id: str) -> bool:
-        prefix = node_id + ">"
-        return any(nid.startswith(prefix) for nid in eligible_node_ids)
-
-    final = []
-    for i in depth_ok:
-        it = items[i]
-        if it.meta.get("_kind") == "node":
-            # If there is any deeper eligible descendant, drop this node card
-            if has_deeper_descendant(it.node_id):
-                continue
-        final.append(i)
-
-    return final
+    return pool
 
 
 def get_deck_key(dataset: str) -> str:
