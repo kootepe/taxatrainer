@@ -675,9 +675,34 @@ def build_pool_indices(items: List[StudyItem]) -> List[int]:
 
     enabled_nodes = get_enabled_nodes()
     if enabled_nodes:
-        pool = [i for i in pool if is_allowed(items[i].node_id, enabled_nodes)]
+        depth_ok = [
+            i for i in pool if is_allowed(items[i].node_id, enabled_nodes)
+        ]
 
-    return pool
+    if not depth_ok:
+        return []
+
+    # 3) Now remove "node" cards ONLY if there exists a deeper eligible descendant
+    #    (descendant = node_id startswith this node_id + ">" )
+    eligible_node_ids = [items[i].node_id for i in depth_ok]
+
+    # Build a fast lookup: for each prefix, is there any deeper item?
+    # We'll just test by scanning prefixes using startswith on the list — fine
+    # for typical sizes.
+    def has_deeper_descendant(node_id: str) -> bool:
+        prefix = node_id + ">"
+        return any(nid.startswith(prefix) for nid in eligible_node_ids)
+
+    final = []
+    for i in depth_ok:
+        it = items[i]
+        if it.meta.get("_kind") == "node":
+            # If there is any deeper eligible descendant, drop this node card
+            if has_deeper_descendant(it.node_id):
+                continue
+        final.append(i)
+
+    return final
 
 
 def get_deck_key(dataset: str) -> str:
