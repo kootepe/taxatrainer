@@ -691,7 +691,15 @@ def build_pool_indices(items: List[StudyItem]) -> List[int]:
     # for typical sizes.
     def has_deeper_descendant(node_id: str) -> bool:
         prefix = node_id + ">"
-        return any(nid.startswith(prefix) for nid in eligible_node_ids)
+        for j in depth_ok:
+            jt = items[j]
+            nid = jt.node_id
+            if nid.startswith(prefix):
+                return True
+            # species share the parent's node_id, so check same-id + different kind
+            if nid == node_id and jt.meta.get("_kind") == "specie":
+                return True
+        return False
 
     final = []
     for i in depth_ok:
