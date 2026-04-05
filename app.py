@@ -8,7 +8,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set
 from datetime import timedelta
-from collections import Counter
+from collections import Counter, defaultdict
 
 from flask import Flask, jsonify, render_template, request, session
 
@@ -249,8 +249,31 @@ def load_json(path: str) -> Dict[str, Any]:
 def load_dataset_cached(stem: str):
     path = DATA_DIR / f"{stem}.json"
     data = load_json(str(path))
-    taxa_photos = load_taxa_photos_cached(f"taxa_photos")
+
+    taxa_photos = load_taxa_photos_cached(
+        f"taxa_photos"
+    )  # or whatever file you use
+
     items = extract_items(data, taxa_photos)
+
+    # build descendant-image index
+    node_images = build_node_images_index(items)
+    has_desc = build_has_descendants(items)
+    # attach images to node cards (only if they don't already have their own)
+    for it in items:
+        if it.node_id in has_desc:
+            if it.meta.get("_kind") == "node":
+                imgs = node_images.get(it.node_id)
+                if imgs:
+                    it.meta["images"] = imgs
+                    it.meta["image"] = (
+                        imgs[0].get("url") or imgs[0].get("url_square") or ""
+                    )
+            # else: keep whatever it already has (no descendants had images)
+            else:
+                # No species below -> keep its own images (whatever you set in extract_items)
+                it.meta["images"] = it.meta.get("images", []) or []
+
     taxa_tree = build_taxa_tree(data)
     return data, items, taxa_tree
 
@@ -400,8 +423,6 @@ def extract_items(
         path_nodes: List[Dict[str, Any]],
         current_node_id: str,
     ):
-        # ✅ 0) add an item for this rank node (phylum/class/order/family)
-        # (this is the key fix so "family" is selectable even if species exist below)
         if rank in ("phylum", "class", "order", "family"):
             make_node_item(node, path, path_fin, path_nodes, current_node_id)
 
@@ -711,6 +732,87 @@ def build_pool_indices(items: List[StudyItem]) -> List[int]:
         final.append(i)
 
     return final
+
+
+def node_ancestors(node_id: str) -> List[str]:
+    # "phylum:X>class:Y>order:Z" -> ["phylum:X", "phylum:X>class:Y", "phylum:X>class:Y>order:Z"]
+    parts = node_id.split(">")
+    out = []
+    for i in range(1, len(parts) + 1):
+        out.append(">".join(parts[:i]))
+    return out
+
+
+def dedupe_photos(
+    photos: List[Dict[str, Any]], limit: int = 24
+) -> List[Dict[str, Any]]:
+    seen = set()
+    out = []
+    for p in photos:
+        url = (p.get("url") or p.get("url_square") or "").strip()
+        if not url or url in seen:
+            continue
+        seen.add(url)
+        out.append(p)
+        if len(out) >= limit:
+            break
+    return out
+
+
+def build_node_images_index(
+    items: List[StudyItem],
+) -> Dict[str, List[Dict[str, Any]]]:
+    node_images: Dict[str, List[Dict[str, Any]]] = {}
+
+    for it in items:
+        photos = it.meta.get("images")
+        if not isinstance(photos, list) or not photos:
+            continue
+
+        # Propagate to all proper ancestors
+        for anc in node_ancestors(it.node_id):
+            if anc == it.node_id:
+                continue
+            node_images.setdefault(anc, []).extend(photos)
+
+        # Species share their parent's node_id, so also
+        # add species images to that shared node_id
+        if it.meta.get("_kind") == "specie":
+            node_images.setdefault(it.node_id, []).extend(photos)
+
+    for k in list(node_images.keys()):
+        node_images[k] = dedupe_photos(node_images[k], limit=24)
+
+    return node_images
+
+
+def build_has_descendants(items: list[StudyItem]) -> set[str]:
+    ids = [it.node_id for it in items if isinstance(it.node_id, str)]
+    ids.sort()
+    has: set[str] = set()
+
+    for i, nid in enumerate(ids):
+        prefix = nid + ">"
+        for j in range(i + 1, len(ids)):
+            if ids[j].startswith(prefix):
+                has.add(nid)
+                break
+            if ids[j] > prefix and not ids[j].startswith(prefix):
+                continue
+
+    # Also: a node_id has descendants if both node-kind
+    # and specie-kind items share the same node_id
+
+    by_nid = defaultdict(set)
+    for it in items:
+        kind = it.meta.get("_kind", "")
+        if kind:
+            by_nid[it.node_id].add(kind)
+    for nid, kinds in by_nid.items():
+        if "node" in kinds and "specie" in kinds:
+            has.add(nid)
+
+    return has
 
 
 def get_deck_key(dataset: str) -> str:
