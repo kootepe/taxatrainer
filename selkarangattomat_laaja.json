@@ -89,7 +89,6 @@
         {
           "lat": "turbellaria",
           "fin": "värysmadot",
-          "image": "turbellaria.jpg",
           "order": [
             {
               "lat": "tricladida",
@@ -107,7 +106,6 @@
         {
           "lat": "trematoda",
           "fin": "tiehytmadot",
-          "image": "trematoda.jpg",
           "specie": [
             {
               "genus": "fasciola",
@@ -119,7 +117,6 @@
         {
           "lat": "cestoda",
           "fin": "heisimadot",
-          "image": "cestoda.jpg",
           "specie": [
             {
               "genus": "diphyllobothrium",
@@ -1001,7 +998,7 @@
                     },
                     {
                       "genus": "plebeius",
-                      "fin": "useimmat suomen sinisiivet"
+                      "fin": ""
                     }
                   ]
                 },
@@ -1447,7 +1444,7 @@
                       "fin": "kimalaiset"
                     },
                     {
-                      "genus": "psithyrus (nyk. bombus)",
+                      "genus": "psithyrus",
                       "species": "",
                       "fin": "loiskimalaiset"
                     }
