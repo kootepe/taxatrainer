@@ -49,6 +49,7 @@ DEFAULT_ENABLED_RANKS = [
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR
 DEFAULT_DATASET = "selkarangattomat"
+DATASET_DIR = Path("static/datasets/")
 
 # JSON uses "specie" as an array key
 REAL_CHILD_KEYS = {"class", "order", "family", "specie"}
@@ -153,7 +154,7 @@ def collect_species_lists(node: Dict[str, Any]) -> List[List[Dict[str, Any]]]:
 
 # ---------- session helpers ----------
 def list_datasets() -> list[str]:
-    files = sorted(DATA_DIR.glob("*.json"))
+    files = sorted(DATASET_DIR.glob("*.json"))
     return [f.stem for f in files]
 
 
@@ -247,7 +248,7 @@ def load_json(path: str) -> Dict[str, Any]:
 
 @lru_cache(maxsize=16)
 def load_dataset_cached(stem: str):
-    path = DATA_DIR / f"{stem}.json"
+    path = DATASET_DIR / f"{stem}.json"
     data = load_json(str(path))
 
     taxa_photos = load_taxa_photos_cached(
