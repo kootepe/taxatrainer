@@ -1,0 +1,222 @@
+{
+  "phylum": [
+    {
+      "lat": "calcarea & silicea",
+      "fin": "sienieläimet",
+      "class": [
+        {
+          "lat": "demospongiae",
+          "fin": "piisienet",
+          "family": [
+            {
+              "lat": "spongillidae",
+              "fin": "järvisienet",
+              "specie": [
+                {
+                  "genus": "spongilla",
+                  "species": "",
+                  "fin": ""
+                },
+                {
+                  "genus": "ephydatia",
+                  "species": "",
+                  "fin": ""
+                }
+              ]
+            },
+            {
+              "lat": "spongiidae",
+              "fin": "",
+              "specie": [
+                {
+                  "genus": "spongia",
+                  "species": "officinalis",
+                  "fin": ""
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "lat": "cnidaria",
+      "fin": "polttiaiseläimet",
+      "class": [
+        {
+          "lat": "hydrozoa",
+          "fin": "hydropolyypit",
+          "specie": [
+            {
+              "genus": "hydra",
+              "species": "",
+              "fin": "lampipolyyppi"
+            }
+          ]
+        },
+        {
+          "lat": "scyphozoa",
+          "fin": "liuskameduusat",
+          "specie": [
+            {
+              "genus": "aurelia",
+              "species": "aurita",
+              "fin": "korvameduusa"
+            }
+          ]
+        },
+        {
+          "lat": "anthozoa",
+          "fin": "korallit ja merivuokot"
+        }
+      ]
+    },
+    {
+      "lat": "ctenophora",
+      "fin": "kampamaneetit",
+      "specie": [
+        {
+          "genus": "pleurobrachia",
+          "species": "pileus",
+          "fin": "pikkumaneetti"
+        }
+      ]
+    },
+    {
+      "lat": "platyhelminthes",
+      "fin": "laakamadot",
+      "class": [
+        {
+          "lat": "turbellaria",
+          "fin": "värysmadot",
+          "image": "turbellaria.jpg",
+          "order": [
+            {
+              "lat": "tricladida",
+              "fin": "purolattanat",
+              "specie": [
+                {
+                  "genus": "planaria",
+                  "species": "",
+                  "fin": "lattana"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "lat": "trematoda",
+          "fin": "tiehytmadot",
+          "image": "trematoda.jpg",
+          "specie": [
+            {
+              "genus": "fasciola",
+              "species": "hepatica",
+              "fin": "lampaanmaksamato"
+            }
+          ]
+        },
+        {
+          "lat": "cestoda",
+          "fin": "heisimadot",
+          "image": "cestoda.jpg",
+          "specie": [
+            {
+              "genus": "diphyllobothrium",
+              "species": "latum",
+              "fin": "leveäheisimato"
+            },
+            {
+              "genus": "taenia",
+              "species": "solium",
+              "fin": "väkäsheisimato"
+            },
+            {
+              "genus": "taenia",
+              "species": "saginata",
+              "fin": "kapeaheisimato"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "lat": "rotifera",
+      "fin": "rataseläimet"
+    },
+    {
+      "lat": "nematomorpha",
+      "fin": "jouhimadot",
+      "specie": [
+        {
+          "genus": "gordius",
+          "species": "",
+          "fin": "jouhimato"
+        }
+      ]
+    },
+    {
+      "lat": "nematoda",
+      "fin": "sukkulamadot"
+    },
+    {
+      "lat": "annelida",
+      "fin": "nivelmadot",
+      "class": [
+        {
+          "lat": "polychaeta",
+          "fin": "monisukasmadot",
+          "specie": [
+            {
+              "genus": "nereis",
+              "species": "diversicolor",
+              "fin": "merisukajalkainen"
+            }
+          ]
+        },
+        {
+          "lat": "oligochaeta",
+          "fin": "harvasukamadot",
+          "family": [
+            {
+              "lat": "lumbricidae",
+              "fin": "lierot",
+              "specie": [
+                {
+                  "genus": "lumbricus",
+                  "species": "terrestris",
+                  "fin": "kasteliero"
+                },
+                {
+                  "genus": "lumbricus",
+                  "species": "rubellus",
+                  "fin": "onkiliero"
+                },
+                {
+                  "genus": "aporrectodea",
+                  "species": "caliginosa",
+                  "fin": "peltoliero"
+                }
+              ]
+            },
+            {
+              "lat": "enchytraeidae",
+              "fin": "änkyrimadot"
+            }
+          ]
+        },
+        {
+          "lat": "hirudinea",
+          "fin": "juotikkaat",
+          "specie": [
+            {
+              "genus": "haemopis",
+              "species": "sanguisuga",
+              "fin": "hevosjuotikas"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

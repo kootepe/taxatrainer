@@ -51,7 +51,6 @@ body {
 .row {
   display: grid;
   grid-template-columns: 60px minmax(0, 1fr);
-  /* grid-template-columns: 120px 1fr; */
   gap: 12px;
   align-items: center;
   padding: 8px 0;
@@ -73,7 +72,7 @@ body {
   color: #e2e8f0;
   outline: none;
   max-width: 80%;
-  min-width: 0;  /* critical for grid overflow issues */
+  min-width: 0;
 }
 
 .given {
@@ -128,12 +127,12 @@ body[data-actions="top"] .actions {
     left: 50%;
     transform: translateX(-50%);
 
-    width: calc(100% - 32px);   /* match wrap padding feel */
-    max-width: 90%;             /* match .wrap max-width */
+    width: calc(100% - 32px);
+    max-width: 90%;
     box-sizing: border-box;
 
-    display: flex;              /* re-assert */
-    gap: 10px;                  /* re-assert */
+    display: flex;
+    gap: 10px;
 
     padding: 10px 0 calc(10px + env(safe-area-inset-bottom));
     background: #0f172a;
@@ -148,39 +147,12 @@ body[data-actions="top"] .actions {
   }
 
   body[data-actions="bottom"] .wrap {
-    padding-bottom: 110px; /* room for the fixed bar */
+    padding-bottom: 110px;
   }
 }
 
-
-/* .actions { */
-/*   margin-top: 2px; */
-/*   display: flex; */
-/*   gap: 10px; */
-/* } */
-/* @media (max-width: 480px) { */
-/*   .actions { */
-/*     position: fixed; */
-/*     left: 0; */
-/*     right: 0; */
-/*     bottom: 0; */
-/**/
-/*     padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); */
-/*     background: #0f172a;            /* same as body */ */
-/*     border-top: 1px solid #243244; */
-/**/
-/*     z-index: 1000; */
-/*   } */
-/**/
-/**/
-/*   /* Make room so the fixed bar doesn't cover content */ */
-/*   .wrap { */
-/*     padding-bottom: 90px; */
-/*   } */
-/* } */
-
 .actions .btn {
-    flex: 1 1 0;                    /* 50/50 */
+    flex: 1 1 0;
     white-space: nowrap;
 }
 .btn {
@@ -220,13 +192,13 @@ body[data-actions="top"] .actions {
 .cardTitle {
   font-size: 1.05em;
   font-weight: 600;
-  min-width: 0;               /* allows text to shrink */
+  min-width: 0;
 }
 
 .cardCounter {
   font-size: 0.9em;
   opacity: 0.75;
-  white-space: nowrap;        /* keep "x / y" on one line */
+  white-space: nowrap;
 }
 .imgBox {
   margin: 10px 0 14px 0;
@@ -250,8 +222,8 @@ body[data-actions="top"] .actions {
   background: rgba(255,255,255,0.03);
   font-size: 16px;
   overflow: hidden;
-  text-overflow: ellipsis; /* avoid spill */
-  white-space: nowrap;     /* keep one line */
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 a {
   color: #4ea1ff;
@@ -281,11 +253,10 @@ label:has(input[type="checkbox"][name="enabled"]) {
   min-width: 0;
 }
 
-/* Let the long latin/fi names actually shrink/wrap */
 label:has(input[type="checkbox"][name="enabled"]) span {
   min-width: 0;
-  overflow-wrap: anywhere;   /* modern + very effective */
-  word-break: break-word;    /* fallback */
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 .thumbs {
   display: flex;
@@ -309,6 +280,7 @@ label:has(input[type="checkbox"][name="enabled"]) span {
   display: block;
 }
 
+/* ---------- Lightbox ---------- */
 .lightbox[hidden] { display: none; }
 
 .lightbox {
@@ -328,13 +300,242 @@ label:has(input[type="checkbox"][name="enabled"]) span {
   border-radius: 12px;
   box-shadow: 0 20px 60px rgba(0,0,0,0.5);
   background: #111;
+  cursor: pointer;
+}
+
+/* Image wrapper with overlay caption */
+.lightboxImgWrap {
+  position: relative;
+  display: inline-block;
+  line-height: 0;
+}
+
+.lightboxOverlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 8px 12px;
+  background: linear-gradient(transparent, rgba(0,0,0,0.7));
+  border-radius: 0 0 12px 12px;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+  line-height: 1.4;
+}
+
+.lightboxOverlay:empty,
+.lightboxOverlay:not(:has(*:not(:empty))) {
+  display: none;
 }
 
 .lightboxCaption {
+  font-size: 13px;
+  color: rgba(255,255,255,0.85);
+}
+
+.lightboxLink {
+  font-size: 13px;
+}
+
+.lightboxLink a {
+  color: rgba(180,220,255,0.9);
+}
+
+/* Nav toolbar below image */
+.lightboxToolbar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 10px 0 2px;
+}
+
+.lightboxNav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 2rem;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  color: rgba(255,255,255,0.7);
+  background: rgba(255,255,255,0.1);
+  transition: color 0.2s, background 0.2s;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.lightboxNav:hover {
+  color: #fff;
+  background: rgba(255,255,255,0.25);
+}
+
+.lightboxNav:active {
+  background: rgba(255,255,255,0.35);
+}
+
+.lightboxCounter {
+  color: rgba(255,255,255,0.6);
+  font-size: 0.9rem;
+  min-width: 3.5em;
+  text-align: center;
+}
+
+/* ---------- Photo mode ---------- */
+.photoModeWrap {
   margin-top: 10px;
-  font-size: 14px;
-  opacity: 0.9;
-  max-width: min(1400px, 95vw);
+  display: flex;
+  flex-direction: column;
+  height: calc(100dvh - 120px);
+  min-height: 0;
+}
+
+.heroBox {
+  flex: 1 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.heroImgWrap {
+  position: relative;
+  display: inline-block;
+  line-height: 0;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.heroImg {
+  max-width: 100%;
+  max-height: calc(100dvh - 160px);
+  object-fit: contain;
+  border-radius: 12px;
+  border: 1px solid #334155;
+  cursor: pointer;
+}
+
+/* Overlay: chips sit inside the image area, pinned to top */
+.heroOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 8px 10px;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  pointer-events: none; /* let clicks pass through to image */
+  border-radius: 12px 12px 0 0;
+  background: transparent;
+}
+
+.heroOverlay > * {
+  pointer-events: auto; /* re-enable clicks on chips */
+}
+
+.heroCardCounter {
+  flex-shrink: 0;
+  white-space: nowrap;
+  margin-left: auto;
+  color: rgba(255,255,255,0.7);
+  font-size: 0.8rem;
+  padding-top: 3px;
+}
+
+.heroNav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 6px 0 0;
+  flex-shrink: 0;
+}
+
+.heroAttribution {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 5px 10px;
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.8);
+  pointer-events: none;
+  text-align: right;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border-radius: 0 0 12px 12px;
+}
+
+.heroAttribution a {
+  color: rgba(180,220,255,0.7);
+  pointer-events: auto;
+}
+
+.heroCounter {
+  color: rgba(255,255,255,0.6);
+  font-size: 0.9rem;
+  min-width: 3.5em;
+  text-align: center;
+}
+
+/* Reveal chips */
+.photoChips {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.photoChip {
+  padding: 5px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(0,0,0,0.5);
+  color: rgba(255,255,255,0.9);
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  align-self: flex-start;
+}
+
+.photoChip:hover {
+  border-color: rgba(255,255,255,0.5);
+}
+
+.photoChip:active {
+  background: rgba(0,0,0,0.7);
+}
+
+.photoChip.chipRevealed {
+  border-color: #22c55e;
+  background: rgba(0,0,0,0.65);
+}
+
+/* Standalone chips (no image) */
+.photoChipsStandalone {
+  margin-top: 16px;
+}
+
+.photoChipsStandalone .photoChip {
+  background: #0b1220;
+  border-color: #334155;
+  color: #e2e8f0;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.photoChipsStandalone .photoChip.chipRevealed {
+  border-color: #22c55e;
+  background: rgba(34, 197, 94, 0.08);
 }
 
 @media (max-width: 600px) {

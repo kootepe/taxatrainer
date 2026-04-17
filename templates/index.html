@@ -6,6 +6,61 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Taxa treenaus</title>
+  <style>
+    .heroImgWrap {
+      position: relative;
+      max-width: 100%;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    /* Placeholder shown while loading */
+    .heroImgWrap:not(.hasImage) {
+      width: 280px;
+      height: 200px;
+      margin: 0 auto;
+      background: #e8e8e8;
+    }
+    /* Once loaded, shrink to image's natural size */
+    .heroImgWrap.hasImage {
+      width: auto;
+      background: transparent;
+    }
+    .heroImg {
+      transition: opacity 0.15s ease;
+      max-width: 100%;
+      display: block;
+    }
+    .heroImg.loading {
+      /* Completely remove from layout so wrapper uses aspect-ratio for height */
+      position: absolute;
+      opacity: 0;
+    }
+    .heroLoading {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #888;
+      font-size: 0.95rem;
+      border-radius: 8px;
+      z-index: 1;
+    }
+    /* Ensure overlay sits at the bottom of the placeholder, not bunched at top */
+    .heroOverlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+    /* Hide chips until image is loaded */
+    .heroImgWrap:not(.hasImage) .heroOverlay {
+      display: none;
+    }
+  </style>
 </head>
 <body data-actions="{{actions_position }}">
   <main class="wrap">
@@ -21,12 +76,40 @@
         <button id="showBtn" class="btn secondary" type="button">Näytä</button>
         <button id="newBtn" class="btn">Uusi</button>
       </div>
-    <section class="card">
+
+    <!-- ========== PHOTO MODE ========== -->
+    <div id="photoModeWrap" class="photoModeWrap" style="display:none;">
+
+      <div class="heroBox" id="heroBox2">
+        <div class="heroImgWrap">
+          <div id="heroLoading" class="heroLoading" style="display:none;">Ladataan kuvaa…</div>
+          <img id="heroImg" class="heroImg" alt="Tunnista laji" />
+          <div class="heroOverlay" id="heroOverlay">
+            <div id="photoChipsOverlay" class="photoChips"></div>
+            <div id="cardCounter2" class="cardCounter heroCardCounter"></div>
+          </div>
+          <div class="heroAttribution" id="heroAttribution"></div>
+        </div>
+        <div class="heroNav" id="heroNav" style="display:none;">
+          <div class="lightboxNav" id="heroLeft" title="Edellinen">&#8249;</div>
+          <div class="heroCounter" id="heroCounter"></div>
+          <div class="lightboxNav" id="heroRight" title="Seuraava">&#8250;</div>
+        </div>
+      </div>
+
+      <!-- Chips shown standalone when no image -->
+      <div id="photoChipsStandalone" class="photoChipsStandalone" style="display:none;">
+        <div id="cardCounter3" class="cardCounter" style="text-align:right; margin-bottom:6px;"></div>
+        <div id="photoChipsFallback" class="photoChips"></div>
+      </div>
+    </div>
+
+    <!-- ========== NORMAL MODE (card) ========== -->
+    <section id="normalModeWrap" class="card">
 
       <div id="clickhint" style="margin-bottom:15px;">
         <span>Ekalla klikkauksella lattarit näkyviin, toisella suomenkieliset</span>
       </div>
-
 
       <div class="cardHeader">
         <strong class="cardTitle">
@@ -37,45 +120,44 @@
           {{ counter }} / {{ total }}
         </div>
       </div>
-      <!-- <div class="hint"> -->
-      <!--   <div> <strong><span id="fin">{{ item.meta.fin }}</span></strong></div> -->
-      <!-- </div> -->
-
-
 
       <form id="form" autocomplete="off">
         {% for r in ranks %}
-
           <label class="row" id="row_{{ r }}">
             <span class="rank">
               {{ rank_fi.get(r, "") }}
             </span>
-
             <div class="cell">
               <span class="staticVal" id="in_{{ r }}">Klikkaa näkyviin</span>
             </div>
-
             <div class="result" id="res_{{ r }}" hidden></div>
           </label>
         {% endfor %}
       </form>
 
-
       <pre id="answers" class="answers" style="display:none;"></pre>
     </section>
 
-<div id="imgBox" class="imgBox" style="display:none;">
-  <div id="thumbs" class="thumbs"></div>
-</div>
+    <div id="imgBox" class="imgBox" style="display:none;">
+      <div id="thumbs" class="thumbs"></div>
+    </div>
 
-<div id="lightbox" class="lightbox" hidden>
-  <div class="lightboxInner">
-    <img id="lightboxImg" alt="large preview" />
-    <div id="lightboxCaption" class="lightboxCaption"></div>
-    <div id="lightboxLink" class="lightboxLink">
+    <div id="lightbox" class="lightbox" hidden>
+      <div class="lightboxInner">
+        <div class="lightboxImgWrap">
+          <img id="lightboxImg" alt="large preview" />
+          <div class="lightboxOverlay">
+            <span id="lightboxCaption" class="lightboxCaption"></span>
+            <span id="lightboxLink" class="lightboxLink"></span>
           </div>
-  </div>
-</div>
+        </div>
+        <div class="lightboxToolbar" id="lightboxToolbar">
+          <div class="lightboxNav" id="lightboxLeft" title="Edellinen">&#8249;</div>
+          <div class="lightboxCounter" id="lightboxCounter"></div>
+          <div class="lightboxNav" id="lightboxRight" title="Seuraava">&#8250;</div>
+        </div>
+      </div>
+    </div>
   </main>
 
   <script>
@@ -84,360 +166,808 @@
     let current = {
       answer: {{ item.answer|tojson }},
       meta: {{ item.meta|tojson }},
-      quiz_ranks: {{ ranks|tojson }},     // ranks rendered for THIS card
+      quiz_ranks: {{ ranks|tojson }},
       mode: {{ quiz_mode|tojson }},
       given: {{ given|tojson }},
       counter: {{ counter|tojson }},
       total: {{ total|tojson }},
       hint_language: {{ hint_language|tojson }},
       img_toggle: {{ img_toggle|tojson }},
+      photo_mode: {{ photo_mode|tojson }},
     };
 
-    let showMode = "hidden"; // hidden -> lat -> fin -> lat -> fin ...
-    let rankShowMode = Object.create(null); // per-row ( ? )
+    const carMode = {{ car_mode|tojson }};
+    let showMode = "hidden";
+    let rankShowMode = Object.create(null);
+
+    // Hero image state
+    let heroPhotos = [];
+    let heroIndex = 0;
+
+    // Lightbox state
+    let lightboxPhotos = [];
+    let lightboxIndex = 0;
+
+    // Photo mode chip reveal state
+    let chipRevealed = Object.create(null); // key -> "hidden"|"lat"|"fin"
+
     function getRanks() {
       return current.quiz_ranks || [];
     }
 
-    updateCounter();
+    function ucfirst(s) {
+      return s ? s.charAt(0).toUpperCase() + s.slice(1) : "";
+    }
+
     function norm(s) {
       return (s ?? "").toString().trim().toLowerCase().replace(/\s+/g, " ");
     }
 
+    // ---------- Counter ----------
+    function updateCounter() {
+      // Normal mode counter
+      const el = document.getElementById("cardCounter");
+      if (el) {
+        const c = current?.counter ?? "";
+        const t = current?.total ?? "";
+        el.textContent = `${c} / ${t}`.trim();
+      }
+      // Photo mode counter
+      const el2 = document.getElementById("cardCounter2");
+      if (el2) {
+        const c = current?.counter ?? "";
+        const t = current?.total ?? "";
+        el2.textContent = `${c} / ${t}`.trim();
+      }
+    }
+    updateCounter();
 
-function updateCounter() {
-  const el = document.getElementById("cardCounter");
-  if (!el) return;
+    // ---------- Mode switching ----------
+    function applyModeLayout() {
+      const isPhoto = !!current.photo_mode;
+      const photoWrap = document.getElementById("photoModeWrap");
+      const normalWrap = document.getElementById("normalModeWrap");
+      const imgBox = document.getElementById("imgBox");
 
-  const c = current?.counter ?? "";
-  const t = current?.total ?? "";
-  el.textContent = `${c} / ${t}`.trim();
-}
-
-
-function getFinForRank(rank) {
-  const byRank = current?.meta?.fin_by_rank?.[rank];
-  if (byRank && String(byRank).trim()) return String(byRank).trim();
-
-  const one = current?.meta?.fin;
-  if (one && String(one).trim()) return String(one).trim();
-
-  return "";
-}
-function formatByMode(rank, mode) {
-  const lat = (current.answer?.[rank] ?? "").toString().trim();
-  if (!lat) return "";
-
-  if (mode === "fin") {
-    const fin = getFinForRank(rank);
-    return fin || lat;
-  }
-  return lat; // "lat" or default
-}
-function formatShown(rank) {
-  const lat = (current.answer?.[rank] ?? "").toString().trim();
-  if (!lat) return "";
-
-  if (showMode === "fin") {
-    const fin = getFinForRank(rank);
-    return fin || lat; // fallback to latin if no finnish
-  }
-
-  // default latin
-  return lat;
-}
-function applyVisibleFieldsFromAnswer(answer) {
-  for (const r of getRanks() ) {
-    const row = document.getElementById("row_" + r);
-    const input = document.getElementById("in_" + r);
-
-    // If ids don't match, don't crash silently
-    if (!row || !input) {
-      console.warn("Missing DOM for rank:", r, { row, input });
-      continue;
+      if (isPhoto) {
+        photoWrap.style.display = "";
+        normalWrap.style.display = "none";
+        if (imgBox) imgBox.style.display = "none";
+        setHeroImage(current.meta);   // must come first so heroPhotos is set
+        buildPhotoChips();            // then chips know if images exist
+      } else {
+        photoWrap.style.display = "none";
+        normalWrap.style.display = "";
+      }
     }
 
-    const raw = answer?.[r];
-    const expected = (raw === null || raw === undefined) ? "" : String(raw);
-    const shouldShow = expected.trim().length > 0;
-
-    row.hidden = !shouldShow; //
-
-    if (!shouldShow) {
-      input.value = "";
-      input.classList.remove("ok", "bad");
+    // ---------- Photo mode chips ----------
+    function getNameText() {
+      const fin = (current?.meta?.fin ?? "").trim();
+      return fin || getLatinHint() || "";
     }
-  }
-}
 
-function openLightbox(photo) {
-  const lb = document.getElementById("lightbox");
-  const im = document.getElementById("lightboxImg");
-  const cap = document.getElementById("lightboxCaption");
-  const linkel = document.getElementById("lightboxLink");
-  if (!lb || !im) return;
+    function buildPhotoChips() {
+      const noImages = !heroPhotos.length;
 
-  const link = document.createElement("a");
-  link.href = photo.photo_page_url;
-  link.textContent = "Link to original";
-  link.target = "_blank"; // optional
+      // Pick the right container
+      const overlayContainer = document.getElementById("photoChipsOverlay");
+      const fallbackContainer = document.getElementById("photoChipsFallback");
+      const heroOverlay = document.getElementById("heroOverlay");
+      const standalone = document.getElementById("photoChipsStandalone");
 
-  linkel.appendChild(link)
-
-  im.src = photo.url || photo.url_square || "";
-  lb.hidden = false;
-
-  const txt = (photo.attribution || "").trim();
-  cap.textContent = txt ? txt : "";
-}
-
-function closeLightbox() {
-  const lb = document.getElementById("lightbox");
-  const im = document.getElementById("lightboxImg");
-  const cap = document.getElementById("lightboxCaption");
-  const ln = document.getElementById("lightboxLink");
-  if (!lb || !im) return;
-  lb.hidden = true;
-  im.removeAttribute("src");
-  ln.innerHTML = '';
-  if (cap) cap.textContent = "";
-}
-
-function setImage(meta) {
-  const imgBox = document.getElementById("imgBox");
-  const thumbs = document.getElementById("thumbs");
-  if (!imgBox || !thumbs) return;
-
-  if (!current?.img_toggle) {
-    if (imgBox) imgBox.style.display = "none";
-    return;
+      let container;
+      if (noImages) {
+        container = fallbackContainer;
+        if (overlayContainer) overlayContainer.innerHTML = "";
+        if (heroOverlay) heroOverlay.style.display = "none";
+        if (standalone) standalone.style.display = "";
+        // Update standalone counter
+        const c3 = document.getElementById("cardCounter3");
+        if (c3) c3.textContent = `${current?.counter ?? ""} / ${current?.total ?? ""}`.trim();
+      } else {
+        container = overlayContainer;
+        if (fallbackContainer) fallbackContainer.innerHTML = "";
+        if (heroOverlay) heroOverlay.style.display = "";
+        if (standalone) standalone.style.display = "none";
       }
 
-  const photos = meta?.images || [];
-  if (!Array.isArray(photos) || photos.length === 0) {
-    thumbs.innerHTML = "";
-    imgBox.style.display = "none";
-    return;
-  }
+      if (!container) return;
 
-  imgBox.style.display = "block";
-  thumbs.innerHTML = photos.map((p, i) => {
-    const src = (p.url_square || p.url || "").toString();
-    return `
-      <div class="thumb" data-i="${i}" title="Klikkaa suuremmaksi">
-        <img src="${src}" alt="photo ${i+1}" loading="lazy" />
-      </div>
-    `;
-  }).join("");
+      chipRevealed = Object.create(null);
+      const ranks = getRanks();
 
-  // bind clicks
-  thumbs.querySelectorAll(".thumb").forEach(el => {
-    el.addEventListener("click", () => {
-      const i = Number(el.dataset.i || "0");
-      openLightbox(photos[i]);
-    });
-  });
-}
+      // Build: name chip + rank chips (genus+species combined)
+      let html = `<button class="photoChip${noImages ? " chipRevealed" : ""}" data-chip="name">${noImages ? ucfirst(getNameText()) : "Nimi"}</button>`;
+      chipRevealed["name"] = noImages ? "shown" : "hidden";
 
+      const hasGenus = ranks.includes("genus");
+      const hasSpecies = ranks.includes("species");
+      const genusVal = (current.answer?.genus ?? "").trim();
+      const speciesVal = (current.answer?.species ?? "").trim();
 
-function updateMeta(meta) {
-  setImage(meta);
-  renderGivenBox(); // updates fin + given text together
-}
+      for (const r of ranks) {
+        // Skip genus/species individually — we combine them
+        if ((r === "genus" || r === "species") && hasGenus && hasSpecies) continue;
 
-function clearInputs() {
-  for (const r of getRanks()) {
-    const el = document.getElementById("in_" + r);
-    el.textContent = "—";
-    el.classList.remove("ok", "bad");
-  }
-  document.getElementById("answers").style.display = "none";
-  document.getElementById("clickhint").style.display = "none";
-  for (const r of getRanks()) {
-    const res = document.getElementById("res_" + r);
-    if (res) res.hidden = true;
-  }
-}
-function hintFill(rank) {
-  const el = document.getElementById("in_" + rank);
-  const lat = (current.answer?.[rank] ?? "").toString().trim();
-  if (!lat) return;
+        const val = (current.answer?.[r] ?? "").trim();
+        if (!val) continue;
+        const label = ucfirst(RANK_FI[r] || r);
+        if (noImages) {
+          html += `<button class="photoChip chipRevealed" data-chip="${r}">${ucfirst(val)}</button>`;
+          chipRevealed[r] = "lat";
+        } else {
+          html += `<button class="photoChip" data-chip="${r}">${label}</button>`;
+          chipRevealed[r] = "hidden";
+        }
+      }
 
-  // per-rank cycle: hidden -> lat -> fin -> lat -> ...
-  const prev = rankShowMode[rank] || "hidden";
-  const next = (prev === "hidden") ? "lat" : (prev === "lat" ? "fin" : "lat");
-  rankShowMode[rank] = next;
+      // Combined genus+species chip
+      if (hasGenus && hasSpecies && genusVal) {
+        const combined = speciesVal
+          ? `${ucfirst(genusVal)} ${speciesVal.toLowerCase()}`
+          : ucfirst(genusVal);
+        if (noImages) {
+          html += `<button class="photoChip chipRevealed" data-chip="genus_species">${combined}</button>`;
+          chipRevealed["genus_species"] = "lat";
+        } else {
+          html += `<button class="photoChip" data-chip="genus_species">Nimi lat</button>`;
+          chipRevealed["genus_species"] = "hidden";
+        }
+      }
 
-  el.textContent = formatByMode(rank, next);
-  el.classList.add("ok");
-}
+      container.innerHTML = html;
 
+      // Bind clicks
+      container.querySelectorAll(".photoChip").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const key = btn.dataset.chip;
+          toggleChip(key, btn);
+        });
+      });
+    }
 
-async function checkAll() {
-  const inputs = {};
-  for (const r of getRanks()) {
-    inputs[r] = document.getElementById("in_" + r).value;
-  }
+    function getGenusSpeciesText(mode) {
+      const g = (current.answer?.genus ?? "").trim();
+      const s = (current.answer?.species ?? "").trim();
+      if (mode === "fin") {
+        const fin = getFinForRank("species") || getFinForRank("genus");
+        if (fin) return ucfirst(fin);
+      }
+      return s ? `${ucfirst(g)} ${s.toLowerCase()}` : ucfirst(g);
+    }
 
-  const res = await fetch("/check", {
-    method: "POST",
-    credentials: "same-origin",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({ inputs, quiz_ranks: getRanks() })
-  });
+    function toggleChip(key, btn) {
+      const prev = chipRevealed[key] || "hidden";
 
-  const data = await res.json();
-  if (data.error) {
-    console.warn("Check error:", data.error);
-    return;
-  }
+      if (key === "name") {
+        if (prev === "hidden") {
+          chipRevealed[key] = "shown";
+          btn.textContent = ucfirst(getNameText());
+          btn.classList.add("chipRevealed");
+        } else {
+          chipRevealed[key] = "hidden";
+          btn.textContent = "Nimi";
+          btn.classList.remove("chipRevealed");
+        }
+      } else if (key === "genus_species") {
+        if (prev === "hidden") {
+          chipRevealed[key] = "lat";
+          btn.textContent = getGenusSpeciesText("lat");
+          btn.classList.add("chipRevealed");
+        } else if (prev === "lat") {
+          const fin = getGenusSpeciesText("fin");
+          const lat = getGenusSpeciesText("lat");
+          if (fin !== lat) {
+            chipRevealed[key] = "fin";
+            btn.textContent = fin;
+          } else {
+            chipRevealed[key] = "hidden";
+            btn.textContent = "Nimi lat";
+            btn.classList.remove("chipRevealed");
+          }
+        } else {
+          chipRevealed[key] = "hidden";
+          btn.textContent = "Nimi lat";
+          btn.classList.remove("chipRevealed");
+        }
+      } else {
+        // cycle: hidden -> lat -> fin -> lat ...
+        const lat = (current.answer?.[key] ?? "").trim();
+        if (!lat) return;
 
-  for (const r of getRanks()) {
-    const el = document.getElementById("in_" + r);
-    const v = (data[r] ? data[r].correct : null);
+        if (prev === "hidden") {
+          chipRevealed[key] = "lat";
+          btn.textContent = ucfirst(lat);
+          btn.classList.add("chipRevealed");
+        } else if (prev === "lat") {
+          const fin = getFinForRank(key);
+          if (fin && fin.toLowerCase() !== lat.toLowerCase()) {
+            chipRevealed[key] = "fin";
+            btn.textContent = ucfirst(fin);
+          } else {
+            chipRevealed[key] = "hidden";
+            btn.textContent = ucfirst(RANK_FI[key] || key);
+            btn.classList.remove("chipRevealed");
+          }
+        } else {
+          chipRevealed[key] = "hidden";
+          btn.textContent = ucfirst(RANK_FI[key] || key);
+          btn.classList.remove("chipRevealed");
+        }
+      }
+    }
 
-    el.classList.remove("ok", "bad");
-    if (v === true) el.classList.add("ok");
-    if (v === false) el.classList.add("bad");
-  }
-}
-function showAnswers() {
-  // global cycle: hidden -> lat -> fin -> lat ...
-  if (showMode === "hidden") showMode = "lat";
-  else showMode = (showMode === "lat") ? "fin" : "lat";
+    function revealAllChips() {
+      // Find whichever container is active
+      const overlay = document.getElementById("photoChipsOverlay");
+      const fallback = document.getElementById("photoChipsFallback");
+      const container = (heroPhotos.length ? overlay : fallback);
+      if (!container) return;
 
-  for (const r of getRanks()) {
-    const el = document.getElementById("in_" + r);
-    el.textContent = formatByMode(r, showMode);
-    el.classList.add("ok");
-    rankShowMode[r] = showMode;
-  }
-  updateShowButton();
-}
+      // determine next global state
+      if (showMode === "hidden") showMode = "lat";
+      else showMode = (showMode === "lat") ? "fin" : "lat";
 
-async function newItem() {
-  const res = await fetch("/new", {
-    method: "POST",
-    credentials: "same-origin"
-  });
-  const data = await res.json();
+      container.querySelectorAll(".photoChip").forEach(btn => {
+        const key = btn.dataset.chip;
 
-  current = data; // now includes answer/meta/mode/given/quiz_ranks
-  updateCounter();
-  showMode = "hidden";
-  rankShowMode = Object.create(null);
+        if (key === "name") {
+          chipRevealed[key] = "shown";
+          btn.textContent = ucfirst(getNameText());
+          btn.classList.add("chipRevealed");
+        } else if (key === "genus_species") {
+          chipRevealed[key] = showMode;
+          btn.textContent = getGenusSpeciesText(showMode);
+          btn.classList.add("chipRevealed");
+        } else {
+          const lat = (current.answer?.[key] ?? "").trim();
+          if (!lat) return;
 
-  updateMeta(current.meta);
-  renderGivenBox();
-  buildForm();
-  rankShowMode = Object.create(null);
-  clearInputs();
-  updateShowButton();
-}
+          chipRevealed[key] = showMode;
+          if (showMode === "fin") {
+            const fin = getFinForRank(key);
+            btn.textContent = ucfirst(fin || lat);
+          } else {
+            btn.textContent = ucfirst(lat);
+          }
+          btn.classList.add("chipRevealed");
+        }
+      });
 
-function updateShowButton() {
-  const btn = document.getElementById("showBtn");
-  if (!btn) return;
+      updateShowButton();
+    }
 
-  let next;
-  if (showMode === "hidden") next = "lat";
-  else if (showMode === "lat") next = "fin";
-  else next = "lat";
+    // ---------- Hero image ----------
+    // Image preload cache
+    const preloadCache = new Map();
 
-  btn.textContent = `Näytä ${next}`;
-}
+    function preloadImage(url) {
+      if (!url || preloadCache.has(url)) return;
+      const img = new Image();
+      img.src = url;
+      preloadCache.set(url, img);
+    }
 
-function getLatinHint() {
-  // Prefer species/genus, fallback to highest available rank
-  const order = ["species", "genus", "family", "order", "class", "phylum"];
-  for (const r of order) {
-    const v = current?.answer?.[r];
-    if (v && String(v).trim()) return String(v).trim();
-  }
-  return "";
-}
+    function preloadAllHeroPhotos() {
+      for (const p of heroPhotos) {
+        preloadImage(p.url || p.url_square || "");
+      }
+    }
 
-function visibleRankCount() {
-  return (current.quiz_ranks || []).length;
-}
+    // Generation counter — increments on every card change to discard stale callbacks
+    let heroGeneration = 0;
 
+    function showHeroPhoto(index) {
+      if (!heroPhotos.length) return;
+      if (index < 0) index = heroPhotos.length - 1;
+      if (index >= heroPhotos.length) index = 0;
+      heroIndex = index;
 
-function renderGivenBox() {
-  const el = document.getElementById("fin");
-  if (!el) return;
+      const photo = heroPhotos[heroIndex];
+      const im = document.getElementById("heroImg");
+      const loader = document.getElementById("heroLoading");
+      const wrap = im?.closest(".heroImgWrap");
+      if (!im) return;
 
-  const onlyOneRank = visibleRankCount() <= 1;
+      const newSrc = photo.url || photo.url_square || "";
+      const gen = heroGeneration;
 
-  // Force Finnish hint if only one rank (e.g. phylum-only cards)
-  if (onlyOneRank) {
-    el.textContent = current?.meta?.fin ?? "";
-    return;
-  }
+      // If the image is already cached (e.g. preloaded), show immediately
+      const cached = preloadCache.get(newSrc);
+      if (cached && cached.complete && cached.naturalWidth > 0) {
+        im.onload = null;
+        im.onerror = null;
+        im.src = newSrc;
+        im.style.visibility = "visible";
+        im.classList.remove("loading");
+        if (wrap) wrap.classList.add("hasImage");
+        if (loader) loader.style.display = "none";
+      } else {
+        // Hide old image completely
+        im.onload = null;
+        im.onerror = null;
+        im.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+        im.style.visibility = "hidden";
+        im.classList.add("loading");
+        if (wrap) wrap.classList.remove("hasImage");
+        if (loader) {
+          loader.textContent = "Ladataan kuvaa\u2026";
+          loader.style.display = "flex";
+        }
 
-  // Otherwise respect user setting
-  if (current.hint_language === "lat") {
-    el.textContent = getLatinHint();
-  } else {
-    el.textContent = current?.meta?.fin ?? "";
-  }
-}
+        im.onload = () => {
+          // Ignore if a newer card has already started
+          if (gen !== heroGeneration) return;
+          im.style.visibility = "visible";
+          im.classList.remove("loading");
+          if (wrap) wrap.classList.add("hasImage");
+          if (loader) loader.style.display = "none";
+          im.onload = null;
+          im.onerror = null;
+        };
+        im.onerror = () => {
+          if (gen !== heroGeneration) return;
+          im.classList.remove("loading");
+          if (loader) {
+            loader.textContent = "Kuva ei latautunut";
+          }
+          im.onload = null;
+          im.onerror = null;
+        };
+        im.src = newSrc;
+      }
 
-function formatAnswer(rank) {
-  const lat = (current.answer?.[rank] ?? "").toString().trim();
-  if (!lat) return "";
+      const counter = document.getElementById("heroCounter");
+      const nav = document.getElementById("heroNav");
+      if (heroPhotos.length > 1) {
+        if (nav) nav.style.display = "flex";
+        if (counter) counter.textContent = `${heroIndex + 1} / ${heroPhotos.length}`;
+      } else {
+        if (nav) nav.style.display = "none";
+      }
 
-  // Finnish name logic:
-  // species/genus → use meta.fin
-  // higher ranks → meta.fin already matches that node
-  const fin = (current.meta?.fin ?? "").toString().trim();
+      // Attribution
+      const attr = document.getElementById("heroAttribution");
+      if (attr) {
+        const txt = (photo.attribution || "").trim();
+        const url = (photo.photo_page_url || "").trim();
+        if (txt || url) {
+          let html = txt ? `<span>${txt}</span>` : "";
+          if (url) html += ` <a href="${url}" target="_blank">lähde</a>`;
+          attr.innerHTML = html;
+          attr.style.display = "";
+        } else {
+          attr.innerHTML = "";
+          attr.style.display = "none";
+        }
+      }
+    }
 
-  if (fin && fin.toLowerCase() !== lat.toLowerCase()) {
-    return `${lat} (${fin})`;
-  }
-  return lat;
-}
+    function setHeroImage(meta) {
+      const heroBox = document.getElementById("heroBox2");
+      const im = document.getElementById("heroImg");
+      const loader = document.getElementById("heroLoading");
+      const wrap = im?.closest(".heroImgWrap");
+      if (!heroBox) return;
 
-function buildForm() {
-  const form = document.getElementById("form");
-  const ranks = getRanks();
+      // Bump generation so any in-flight onload from old card is ignored
+      heroGeneration++;
 
-  form.innerHTML = ranks.map(r => `
-    <label class="row" id="row_${r}">
-      <span class="rank">${(RANK_FI[r] || r)}</span>
+      // Always clear the old image immediately — revert to placeholder
+      if (im) {
+        im.onload = null;
+        im.onerror = null;
+        im.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+        im.style.visibility = "hidden";
+        im.classList.add("loading");
+      }
+      if (wrap) wrap.classList.remove("hasImage");
+      if (loader) {
+        loader.textContent = "Ladataan kuvaa\u2026";
+        loader.style.display = "none";
+      }
 
-      <div class="cell">
-        <span class="staticVal" id="in_${r}">Klikkaa näkyviin</span>
-      </div>
+      const photos = meta?.images || [];
+      if (!Array.isArray(photos) || photos.length === 0) {
+        heroBox.style.display = "none";
+        heroPhotos = [];
+        return;
+      }
 
-      <div class="result" id="res_${r}" hidden></div>
-    </label>
-  `).join("");
+      heroPhotos = photos;
+      heroIndex = 0;
+      heroBox.style.display = "";
+      preloadAllHeroPhotos();
+      showHeroPhoto(0);
+    }
 
-  // bind hint buttons
-  for (const r of ranks) {
-    document.getElementById("in_" + r).addEventListener("click", () => {
-      hintFill(r);
-    });
-  }
+    // ---------- Normal mode helpers ----------
+    function getFinForRank(rank) {
+      const byRank = current?.meta?.fin_by_rank?.[rank];
+      if (byRank && String(byRank).trim()) return String(byRank).trim();
 
-  applyVisibleFieldsFromAnswer(current.answer);
-}
-    // live checking as you type
+      const one = current?.meta?.fin;
+      if (one && String(one).trim()) return String(one).trim();
 
+      return "";
+    }
+    function formatByMode(rank, mode) {
+      const lat = (current.answer?.[rank] ?? "").toString().trim();
+      if (!lat) return "";
+
+      if (mode === "fin") {
+        const fin = getFinForRank(rank);
+        return fin || lat;
+      }
+      return lat;
+    }
+
+    function applyVisibleFieldsFromAnswer(answer) {
+      for (const r of getRanks()) {
+        const row = document.getElementById("row_" + r);
+        const input = document.getElementById("in_" + r);
+
+        if (!row || !input) continue;
+
+        const raw = answer?.[r];
+        const expected = (raw === null || raw === undefined) ? "" : String(raw);
+        const shouldShow = expected.trim().length > 0;
+
+        row.hidden = !shouldShow;
+
+        if (!shouldShow) {
+          input.value = "";
+          input.classList.remove("ok", "bad");
+        }
+      }
+    }
+
+    // ---------- Lightbox ----------
+    function showLightboxPhoto(index) {
+      if (!lightboxPhotos.length) return;
+      if (index < 0) index = lightboxPhotos.length - 1;
+      if (index >= lightboxPhotos.length) index = 0;
+      lightboxIndex = index;
+
+      const photo = lightboxPhotos[lightboxIndex];
+      const im = document.getElementById("lightboxImg");
+      const cap = document.getElementById("lightboxCaption");
+      const linkel = document.getElementById("lightboxLink");
+      const counter = document.getElementById("lightboxCounter");
+
+      im.src = photo.url || photo.url_square || "";
+
+      linkel.innerHTML = '';
+      if (photo.photo_page_url) {
+        const link = document.createElement("a");
+        link.href = photo.photo_page_url;
+        link.textContent = "Link to original";
+        link.target = "_blank";
+        linkel.appendChild(link);
+      }
+
+      const txt = (photo.attribution || "").trim();
+      cap.textContent = txt ? txt : "";
+
+      if (lightboxPhotos.length > 1) {
+        counter.textContent = `${lightboxIndex + 1} / ${lightboxPhotos.length}`;
+      } else {
+        counter.textContent = "";
+      }
+
+      const toolbar = document.getElementById("lightboxToolbar");
+      if (toolbar) {
+        toolbar.style.display = lightboxPhotos.length > 1 ? "flex" : "none";
+      }
+    }
+
+    function openLightbox(photo, allPhotos, startIndex) {
+      const lb = document.getElementById("lightbox");
+      if (!lb) return;
+      lightboxPhotos = allPhotos || [photo];
+      lightboxIndex = (typeof startIndex === "number") ? startIndex : 0;
+      lb.hidden = false;
+      showLightboxPhoto(lightboxIndex);
+    }
+
+    function closeLightbox() {
+      const lb = document.getElementById("lightbox");
+      const im = document.getElementById("lightboxImg");
+      const cap = document.getElementById("lightboxCaption");
+      const ln = document.getElementById("lightboxLink");
+      const counter = document.getElementById("lightboxCounter");
+      if (!lb || !im) return;
+      lb.hidden = true;
+      im.removeAttribute("src");
+      ln.innerHTML = '';
+      if (cap) cap.textContent = "";
+      if (counter) counter.textContent = "";
+      lightboxPhotos = [];
+      lightboxIndex = 0;
+    }
+
+    // ---------- Normal mode image thumbs ----------
+    function setImage(meta) {
+      const imgBox = document.getElementById("imgBox");
+      const thumbs = document.getElementById("thumbs");
+      if (!imgBox || !thumbs) return;
+
+      if (current.photo_mode) {
+        imgBox.style.display = "none";
+        return;
+      }
+
+      if (!current?.img_toggle) {
+        imgBox.style.display = "none";
+        return;
+      }
+
+      const photos = meta?.images || [];
+      if (!Array.isArray(photos) || photos.length === 0) {
+        thumbs.innerHTML = "";
+        imgBox.style.display = "none";
+        return;
+      }
+
+      imgBox.style.display = "block";
+      thumbs.innerHTML = photos.map((p, i) => {
+        const src = (p.url_square || p.url || "").toString();
+        return `
+          <div class="thumb" data-i="${i}" title="Klikkaa suuremmaksi">
+            <img src="${src}" alt="photo ${i+1}" loading="lazy" />
+          </div>
+        `;
+      }).join("");
+
+      thumbs.querySelectorAll(".thumb").forEach(el => {
+        el.addEventListener("click", () => {
+          const i = Number(el.dataset.i || "0");
+          openLightbox(photos[i], photos, i);
+        });
+      });
+    }
+
+    function updateMeta(meta) {
+      if (current.photo_mode) {
+        setHeroImage(meta);
+      } else {
+        setImage(meta);
+      }
+      renderGivenBox();
+    }
+
+    // ---------- Normal mode form ----------
+    function clearInputs() {
+      for (const r of getRanks()) {
+        const el = document.getElementById("in_" + r);
+        if (el) {
+          el.textContent = "Klikkaa näkyviin";
+          el.classList.remove("ok", "bad");
+        }
+      }
+      const ans = document.getElementById("answers");
+      if (ans) ans.style.display = "none";
+      const hint = document.getElementById("clickhint");
+      if (hint) hint.style.display = "none";
+      for (const r of getRanks()) {
+        const res = document.getElementById("res_" + r);
+        if (res) res.hidden = true;
+      }
+    }
+
+    function hintFill(rank) {
+      const el = document.getElementById("in_" + rank);
+      const lat = (current.answer?.[rank] ?? "").toString().trim();
+      if (!lat) return;
+
+      const prev = rankShowMode[rank] || "hidden";
+      const next = (prev === "hidden") ? "lat" : (prev === "lat" ? "fin" : "lat");
+      rankShowMode[rank] = next;
+
+      el.textContent = formatByMode(rank, next);
+      el.classList.add("ok");
+    }
+
+    function showAnswers() {
+      if (current.photo_mode) {
+        revealAllChips();
+        return;
+      }
+
+      const langOrder = current.hint_language === "lat"
+        ? ["fin", "lat"]
+        : ["lat", "fin"];
+
+      if (showMode === "hidden") showMode = langOrder[0];
+      else showMode = showMode === langOrder[0] ? langOrder[1] : langOrder[0];
+
+      for (const r of getRanks()) {
+        const el = document.getElementById("in_" + r);
+        if (!el) continue;
+        el.textContent = formatByMode(r, showMode);
+        el.classList.add("ok");
+        rankShowMode[r] = showMode;
+      }
+      updateShowButton();
+    }
+    // ---------- Prefetch next card ----------
+    let prefetchedNext = null;
+    let prefetchInFlight = false;
+
+    function prefetchNextCard() {
+      if (prefetchInFlight) return;
+      prefetchInFlight = true;
+      fetch("/new", { method: "POST", credentials: "same-origin" })
+        .then(r => r.json())
+        .then(data => {
+          prefetchedNext = data;
+          // Preload images from the prefetched card
+          const photos = data?.meta?.images || [];
+          for (const p of photos) {
+            preloadImage(p.url || p.url_square || "");
+          }
+        })
+        .catch(() => { prefetchedNext = null; })
+        .finally(() => { prefetchInFlight = false; });
+    }
+
+    async function newItem() {
+      let data;
+      if (prefetchedNext) {
+        data = prefetchedNext;
+        prefetchedNext = null;
+      } else {
+        const res = await fetch("/new", {
+          method: "POST",
+          credentials: "same-origin"
+        });
+        data = await res.json();
+      }
+
+      current = data;
+      updateCounter();
+      showMode = "hidden";
+      rankShowMode = Object.create(null);
+      chipRevealed = Object.create(null);
+
+      applyModeLayout();
+
+      if (!current.photo_mode) {
+        updateMeta(current.meta);
+        renderGivenBox();
+        buildForm();
+        clearInputs();
+      }
+      updateShowButton();
+
+      // Prefetch the next one
+      prefetchNextCard();
+    }
+
+    function updateShowButton() {
+      const btn = document.getElementById("showBtn");
+      if (!btn) return;
+
+      const langOrder = current.hint_language === "lat"
+        ? ["fin", "lat"]
+        : ["lat", "fin"];
+
+      const next = showMode === "hidden" ? langOrder[0]
+        : showMode === langOrder[0] ? langOrder[1]
+        : langOrder[0];
+
+      btn.textContent = `Näytä ${next}`;
+    }
+    function getLatinHint() {
+      const genus = current?.answer?.genus;
+      const species = current?.answer?.species;
+      if (genus && String(genus).trim()) {
+        const g = String(genus).trim();
+        const s = species ? String(species).trim() : "";
+        return s ? `${ucfirst(g)} ${s.toLowerCase()}` : ucfirst(g);
+      }
+      const order = ["family", "order", "class", "phylum"];
+      for (const r of order) {
+        const v = current?.answer?.[r];
+        if (v && String(v).trim()) return String(v).trim();
+      }
+      return "";
+    }
+    function visibleRankCount() {
+      return (current.quiz_ranks || []).length;
+    }
+
+    function renderGivenBox() {
+      const el = document.getElementById("fin");
+      if (!el) return;
+
+      if (current.photo_mode) return; // name hidden in photo mode
+
+      const onlyOneRank = visibleRankCount() <= 1;
+
+      if (onlyOneRank) {
+        el.textContent = current?.meta?.fin ?? "";
+        return;
+      }
+
+      if (current.hint_language === "lat") {
+        el.textContent = getLatinHint();
+      } else {
+        el.textContent = current?.meta?.fin ?? "";
+      }
+    }
+
+    function buildForm() {
+      const form = document.getElementById("form");
+      if (!form) return;
+      const ranks = getRanks();
+
+      form.innerHTML = ranks.map(r => `
+        <label class="row" id="row_${r}">
+          <span class="rank">${(RANK_FI[r] || r)}</span>
+          <div class="cell">
+            <span class="staticVal" id="in_${r}">Klikkaa näkyviin</span>
+          </div>
+          <div class="result" id="res_${r}" hidden></div>
+        </label>
+      `).join("");
+
+      for (const r of ranks) {
+        document.getElementById("in_" + r).addEventListener("click", () => {
+          hintFill(r);
+        });
+      }
+
+      applyVisibleFieldsFromAnswer(current.answer);
+    }
+
+    // ---------- Init ----------
     document.getElementById("newBtn").addEventListener("click", () => newItem().catch(console.error));
     document.getElementById("showBtn").addEventListener("click", showAnswers);
 
+    // Hero image navigation
+    document.getElementById("heroLeft")?.addEventListener("click", () => showHeroPhoto(heroIndex - 1));
+    document.getElementById("heroRight")?.addEventListener("click", () => showHeroPhoto(heroIndex + 1));
+    document.getElementById("heroImg")?.addEventListener("click", () => {
+      if (heroPhotos.length > 1) {
+        showHeroPhoto(heroIndex + 1);
+      } else if (heroPhotos.length === 1) {
+        openLightbox(heroPhotos[0], heroPhotos, 0);
+      }
+    });
 
-    // initial
-    updateMeta(current.meta);
-    setImage(current.meta);
-    renderGivenBox();
-    buildForm(); // binds listeners + hides empty fields
+    // Apply initial layout
+    applyModeLayout();
+    if (!current.photo_mode) {
+      setImage(current.meta);
+      renderGivenBox();
+      buildForm();
+    }
+    updateCounter();
     updateShowButton();
 
+    // Prefetch next card in background
+    prefetchNextCard();
 
+    // Lightbox navigation
+    document.getElementById("lightboxLeft")?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      showLightboxPhoto(lightboxIndex - 1);
+    });
+    document.getElementById("lightboxRight")?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      showLightboxPhoto(lightboxIndex + 1);
+    });
+    document.getElementById("lightboxImg")?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (lightboxPhotos.length > 1) {
+        showLightboxPhoto(lightboxIndex + 1);
+      }
+    });
+
+    // Keyboard shortcuts
     document.addEventListener("keydown", (e) => {
-      // don't trigger while typing in an input
       const tag = (e.target?.tagName || "").toLowerCase();
       if (tag === "input" || tag === "textarea") return;
 
@@ -447,15 +977,22 @@ function buildForm() {
       }
     });
 
-  // close lightbox on click outside image
-  document.getElementById("lightbox")?.addEventListener("click", () => closeLightbox());
-  // close on Escape
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeLightbox();
-  });
+    document.getElementById("lightbox")?.addEventListener("click", (e) => {
+      if (e.target === document.getElementById("lightbox")) {
+        closeLightbox();
+      }
+    });
 
     document.addEventListener("keydown", (e) => {
-      // don't trigger while typing in an input
+      const lb = document.getElementById("lightbox");
+      if (!lb || lb.hidden) return;
+
+      if (e.key === "Escape") { closeLightbox(); return; }
+      if (e.key === "ArrowLeft") { e.preventDefault(); showLightboxPhoto(lightboxIndex - 1); }
+      if (e.key === "ArrowRight") { e.preventDefault(); showLightboxPhoto(lightboxIndex + 1); }
+    });
+
+    document.addEventListener("keydown", (e) => {
       const tag = (e.target?.tagName || "").toLowerCase();
       if (tag === "input" || tag === "textarea") return;
 
@@ -465,6 +1002,40 @@ function buildForm() {
         newItem();
       }
     });
+
+    // ---------- Car Mode ----------
+    function debugLog(msg) {
+      let el = document.getElementById("debugLog");
+      if (!el) {
+        el = document.createElement("pre");
+        el.id = "debugLog";
+        el.style.cssText = "position:fixed;bottom:0;left:0;right:0;background:#000;color:#0f0;font-size:12px;padding:8px;max-height:30vh;overflow:auto;z-index:9999;";
+        document.body.appendChild(el);
+      }
+      el.textContent += msg + "\n";
+      el.scrollTop = el.scrollHeight;
+    }
+    if (carMode) {
+      navigator.wakeLock?.request("screen").catch(() => {});
+      let carStarted = false;
+      document.addEventListener("click", () => {
+        if (carStarted) return;
+        carStarted = true;
+        const a = document.createElement("audio");
+        a.src = "/static/silence.wav";
+        a.loop = true;
+        a.volume = 0.05;
+        a.play().then(() => {
+          debugLog("Audio playing, duration: " + a.duration);
+          navigator.mediaSession.playbackState = "playing";
+          navigator.mediaSession.metadata = new MediaMetadata({ title: "Taxatreeni", artist: "Opiskelu" });
+          navigator.mediaSession.setActionHandler("nexttrack", () => { debugLog("nexttrack"); newItem(); });
+          navigator.mediaSession.setActionHandler("previoustrack", () => { debugLog("previoustrack"); showAnswers(); });
+          navigator.mediaSession.setActionHandler("pause", () => { debugLog("pause"); a.pause(); navigator.mediaSession.playbackState = "paused"; showAnswers(); });
+          navigator.mediaSession.setActionHandler("play", () => { debugLog("play"); a.play(); navigator.mediaSession.playbackState = "playing"; newItem(); });
+        }).catch(e => { debugLog("Audio FAILED: " + e.message); });
+      }, { once: true });
+    }
   </script>
 </body>
 </html>

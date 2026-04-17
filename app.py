@@ -46,10 +46,27 @@ DEFAULT_ENABLED_RANKS = [
     "species",
 ]
 
+PLANT_DATASETS = [
+    "Helsinki_ME_kasvit",
+    "UEF_kasvit_kaksisirkkaiset",
+    "UEF_kasvit_yksisirkkaiset",
+    "UEF_kasvit_itiokasvit",
+    "UEF_kasvit_suppea",
+]
+
+IMAGE_DATASET_MAP = {
+    "Laji.fi": "static/image_datasets/taxa_photos_laji.json",
+    "iNaturalist": "static/image_datasets/taxa_photos.json",
+}
+
+PICTURE_SOURCE = ["laji", "inat"]
+
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR
 DEFAULT_DATASET = "selkarangattomat"
+DEFAULT_IMAGE_DATASET = "taxa_photos"
 DATASET_DIR = Path("static/datasets/")
+IMAGE_DATASET_DIR = Path("static/image_datasets/")
 
 # JSON uses "specie" as an array key
 REAL_CHILD_KEYS = {"class", "order", "family", "specie"}
@@ -84,18 +101,25 @@ def get_img_toggle() -> bool:
     return True  # default ON
 
 
+def get_photo_mode() -> bool:
+    v = session.get("photo_mode")
+    if isinstance(v, bool):
+        return v
+    if isinstance(v, str):
+        return v in ("1", "true", "on", "yes")
+    return False  # default OFF
+
+
 # ---------- transparent container traversal (Option C) ----------
 def looks_taxonomic_container(node: Dict[str, Any]) -> bool:
     if not isinstance(node, dict):
         return False
 
-    # direct known children?
     for k in REAL_CHILD_KEYS:
         v = node.get(k)
         if isinstance(v, list) and any(isinstance(x, dict) for x in v):
             return True
 
-    # nested unknown list-of-dicts that might themselves be containers
     for k, v in node.items():
         if k in REAL_CHILD_KEYS or k in META_KEYS:
             continue
@@ -158,6 +182,11 @@ def list_datasets() -> list[str]:
     return [f.stem for f in files]
 
 
+def list_image_datasets() -> list[str]:
+    files = sorted(IMAGE_DATASET_DIR.glob("*.json"))
+    return [f.stem for f in files]
+
+
 def get_selected_dataset() -> str:
     name = session.get("dataset_name")
     all_sets = list_datasets()
@@ -170,22 +199,30 @@ def get_selected_dataset() -> str:
     )
 
 
+def get_selected_image_dataset() -> str:
+    name = session.get("image_dataset_name")
+    all_sets = list_image_datasets()
+    if isinstance(name, str) and name in all_sets:
+        return name
+    return (
+        DEFAULT_IMAGE_DATASET
+        if DEFAULT_IMAGE_DATASET in all_sets
+        else (all_sets[0] if all_sets else DEFAULT_IMAGE_DATASET)
+    )
+
+
 def get_enabled_ranks() -> List[str]:
     enabled = session.get("enabled_ranks")
 
-    # Normalize to a list of strings
     if not isinstance(enabled, list) or not all(
         isinstance(x, str) for x in enabled
     ):
         enabled = list(DEFAULT_ENABLED_RANKS)
     else:
-        enabled = [
-            r for r in RANK_KEYS if r in enabled
-        ]  # canonical order + known ranks
+        enabled = [r for r in RANK_KEYS if r in enabled]
         if not enabled:
             enabled = list(DEFAULT_ENABLED_RANKS)
 
-    # Force genus/species to be coupled
     has_genus = "genus" in enabled
     has_species = "species" in enabled
     if has_genus ^ has_species:
@@ -247,20 +284,22 @@ def load_json(path: str) -> Dict[str, Any]:
 
 
 @lru_cache(maxsize=16)
-def load_dataset_cached(stem: str):
+def load_dataset_cached(stem: str, image_dataset_stem: str):
+    """Load and extract items from a dataset.
+
+    Both `stem` (the species dataset) and `image_dataset_stem` (the photo
+    dataset) are part of the cache key, so changing either one triggers a
+    fresh load.
+    """
     path = DATASET_DIR / f"{stem}.json"
     data = load_json(str(path))
 
-    taxa_photos = load_taxa_photos_cached(
-        f"taxa_photos"
-    )  # or whatever file you use
+    taxa_photos = load_taxa_photos_cached(image_dataset_stem)
 
     items = extract_items(data, taxa_photos)
 
-    # build descendant-image index
     node_images = build_node_images_index(items)
     has_desc = build_has_descendants(items)
-    # attach images to node cards (only if they don't already have their own)
     for it in items:
         if it.node_id in has_desc:
             if it.meta.get("_kind") == "node":
@@ -270,13 +309,18 @@ def load_dataset_cached(stem: str):
                     it.meta["image"] = (
                         imgs[0].get("url") or imgs[0].get("url_square") or ""
                     )
-            # else: keep whatever it already has (no descendants had images)
             else:
-                # No species below -> keep its own images (whatever you set in extract_items)
                 it.meta["images"] = it.meta.get("images", []) or []
 
     taxa_tree = build_taxa_tree(data)
     return data, items, taxa_tree
+
+
+def _load_current_dataset():
+    """Convenience: load with both the species and image dataset from session."""
+    return load_dataset_cached(
+        get_selected_dataset(), get_selected_image_dataset()
+    )
 
 
 def get_actions_position() -> str:
@@ -322,7 +366,7 @@ def build_taxa_tree(data: Dict[str, Any]) -> List[Dict[str, Any]]:
 
 
 def get_all_node_ids(dataset: str) -> Set[str]:
-    _, _, taxa_tree = load_dataset_cached(dataset)
+    _, _, taxa_tree = load_dataset_cached(dataset, get_selected_image_dataset())
     ids: Set[str] = set()
 
     def walk(n: Dict[str, Any]):
@@ -343,7 +387,6 @@ def get_enabled_nodes() -> Set[str]:
         if s:
             return s
 
-    # default: everything enabled
     dataset = get_selected_dataset()
     return get_all_node_ids(dataset)
 
@@ -359,7 +402,6 @@ def extract_items(
         return items
 
     def node_has_children(node: Dict[str, Any]) -> bool:
-        # group children through transparent containers
         if collect_real_children_through_containers(node, "class"):
             return True
         if collect_real_children_through_containers(node, "order"):
@@ -367,7 +409,6 @@ def extract_items(
         if collect_real_children_through_containers(node, "family"):
             return True
 
-        # species lists (also through containers)
         for specie_list in collect_species_lists(node):
             if isinstance(specie_list, list) and len(specie_list) > 0:
                 return True
@@ -384,14 +425,14 @@ def extract_items(
         ans = {k: "" for k in RANK_KEYS}
         ans.update(path)
 
-        taxon_key = (path.get("genus") or "").strip()  # usually empty for nodes
+        taxon_key = (path.get("genus") or "").strip()
         if not taxon_key:
-            taxon_key = safe_lat(node)  # fallback
+            taxon_key = safe_lat(node)
         images = get_images_for_taxon(taxa_photos or {}, taxon_key)
 
         meta = {
             "_kind": "node",
-            "has_children": node_has_children(node),  # ✅ ADD THIS
+            "has_children": node_has_children(node),
             "fin": fin_or_lat(
                 node.get("fin"),
                 path.get("family")
@@ -427,7 +468,6 @@ def extract_items(
         if rank in ("phylum", "class", "order", "family"):
             make_node_item(node, path, path_fin, path_nodes, current_node_id)
 
-        # 1) species items (specie may exist through any number of transparent containers)
         for specie_list in collect_species_lists(node):
             for sp in specie_list:
                 if not isinstance(sp, dict):
@@ -441,7 +481,6 @@ def extract_items(
                 ans["genus"] = genus
                 ans["species"] = species
                 fin_by_rank = dict(path_fin)
-                # Finnish for the organism itself (best effort)
                 sp_fin = str(sp.get("fin") or "").strip()
                 if sp_fin:
                     fin_by_rank["species"] = sp_fin
@@ -458,7 +497,7 @@ def extract_items(
                     "fin": fin_or_lat(
                         sp.get("fin"), f"{genus} {species}".strip()
                     ),
-                    "fin_by_rank": fin_by_rank,  # ✅ add this
+                    "fin_by_rank": fin_by_rank,
                     "req": sp.get("req", ""),
                     "image": first_nonempty(
                         sp.get("image"),
@@ -486,7 +525,6 @@ def extract_items(
                     StudyItem(answer=ans, meta=meta, node_id=current_node_id)
                 )
 
-        # 2) recurse into real rank children (through transparent containers)
         for ck in ["class", "order", "family"]:
             child_list = collect_real_children_through_containers(node, ck)
             if not child_list:
@@ -540,10 +578,7 @@ def extract_items(
 
 @lru_cache(maxsize=8)
 def load_taxa_photos_cached(stem: str) -> Dict[str, Any]:
-    """
-    Expects JSON with shape: { "taxa": { "<taxon_key>": { "photos": [...] } } }
-    """
-    path = DATA_DIR / f"{stem}.json"
+    path = IMAGE_DATASET_DIR / f"{stem}.json"
     if not path.exists():
         return {}
     return load_json(str(path))
@@ -556,10 +591,6 @@ def normalize_taxon_key(s: str) -> str:
 def get_images_for_taxon(
     taxa_photos: Dict[str, Any], taxon_name: str
 ) -> List[Dict[str, Any]]:
-    """
-    Returns list of photo dicts like:
-    { "url": "...", "url_square": "...", "attribution": "...", "photo_page_url": "...", ... }
-    """
     if not isinstance(taxa_photos, dict):
         return []
     taxa = taxa_photos.get("taxa")
@@ -590,12 +621,10 @@ def get_images_for_taxon(
 
 def pick_taxon_key_for_item(item: StudyItem) -> Optional[str]:
     ans = item.answer
-    # Prefer genus if present (works with your example)
     g = (ans.get("genus") or "").strip()
     if g:
         return g
 
-    # Otherwise choose deepest filled rank
     for r in reversed(RANK_KEYS):
         v = (ans.get(r) or "").strip()
         if v:
@@ -607,7 +636,6 @@ def pick_taxon_key_for_item(item: StudyItem) -> Optional[str]:
 def make_quiz_payload(item: StudyItem) -> Dict[str, Any]:
     enabled_ranks = get_enabled_ranks()
 
-    # ranks that are ticked AND exist on this item
     present = [r for r in enabled_ranks if item.answer.get(r, "").strip()]
 
     payload = {
@@ -618,22 +646,10 @@ def make_quiz_payload(item: StudyItem) -> Dict[str, Any]:
         "quiz_ranks": present if present else enabled_ranks,
     }
 
-    # if we can't do a "given" + "asked", just ask what exists
     if len(present) < 2:
         return payload
 
-    # ✅ highest (most general) selected rank is allowed to be given
     given_rank = min(present, key=lambda r: RANK_INDEX[r])
-
-    # quiz_ranks = [
-    #     r
-    #     for r in enabled_ranks
-    #     if RANK_INDEX[r] > RANK_INDEX[given_rank]
-    #     and item.answer.get(r, "").strip()
-    # ]
-
-    # if not quiz_ranks:
-    #     return payload
 
     payload["given"] = {"rank": given_rank, "value": item.answer[given_rank]}
     payload["mode"] = "higher_from_subtaxon"
@@ -652,7 +668,6 @@ def build_pool_indices(items: List[StudyItem]) -> List[int]:
     def deepest_filled_rank_idx(it: StudyItem) -> int:
         ans = it.answer
 
-        # Only treat specie items as "species-depth" if user enabled genus+species
         if it.meta.get("_kind") == "specie":
             if (
                 "genus" in enabled_ranks
@@ -669,12 +684,10 @@ def build_pool_indices(items: List[StudyItem]) -> List[int]:
     def has_any_enabled_value(it: StudyItem) -> bool:
         ans = it.answer
 
-        # genus+species toggle: require genus at least (species may be blank in some datasets)
         if "genus" in enabled_ranks and "species" in enabled_ranks:
             if ans.get("genus", "").strip():
                 return True
 
-        # all other enabled ranks: must be present
         for r in enabled_ranks:
             if r in ("genus", "species"):
                 continue
@@ -683,7 +696,6 @@ def build_pool_indices(items: List[StudyItem]) -> List[int]:
 
         return False
 
-    # must be within depth AND must actually have something in enabled ranks
     pool = [
         i
         for i, it in enumerate(items)
@@ -691,7 +703,6 @@ def build_pool_indices(items: List[StudyItem]) -> List[int]:
         and has_any_enabled_value(it)
     ]
 
-    # If nothing eligible, don't silently fall back to everything (that causes "Acari" again)
     if not pool:
         return []
 
@@ -704,13 +715,8 @@ def build_pool_indices(items: List[StudyItem]) -> List[int]:
     if not depth_ok:
         return []
 
-    # 3) Now remove "node" cards ONLY if there exists a deeper eligible descendant
-    #    (descendant = node_id startswith this node_id + ">" )
     eligible_node_ids = [items[i].node_id for i in depth_ok]
 
-    # Build a fast lookup: for each prefix, is there any deeper item?
-    # We'll just test by scanning prefixes using startswith on the list — fine
-    # for typical sizes.
     def has_deeper_descendant(node_id: str) -> bool:
         prefix = node_id + ">"
         for j in depth_ok:
@@ -718,7 +724,6 @@ def build_pool_indices(items: List[StudyItem]) -> List[int]:
             nid = jt.node_id
             if nid.startswith(prefix):
                 return True
-            # species share the parent's node_id, so check same-id + different kind
             if nid == node_id and jt.meta.get("_kind") == "specie":
                 return True
         return False
@@ -727,7 +732,6 @@ def build_pool_indices(items: List[StudyItem]) -> List[int]:
     for i in depth_ok:
         it = items[i]
         if it.meta.get("_kind") == "node":
-            # If there is any deeper eligible descendant, drop this node card
             if has_deeper_descendant(it.node_id):
                 continue
         final.append(i)
@@ -736,7 +740,6 @@ def build_pool_indices(items: List[StudyItem]) -> List[int]:
 
 
 def node_ancestors(node_id: str) -> List[str]:
-    # "phylum:X>class:Y>order:Z" -> ["phylum:X", "phylum:X>class:Y", "phylum:X>class:Y>order:Z"]
     parts = node_id.split(">")
     out = []
     for i in range(1, len(parts) + 1):
@@ -770,14 +773,11 @@ def build_node_images_index(
         if not isinstance(photos, list) or not photos:
             continue
 
-        # Propagate to all proper ancestors
         for anc in node_ancestors(it.node_id):
             if anc == it.node_id:
                 continue
             node_images.setdefault(anc, []).extend(photos)
 
-        # Species share their parent's node_id, so also
-        # add species images to that shared node_id
         if it.meta.get("_kind") == "specie":
             node_images.setdefault(it.node_id, []).extend(photos)
 
@@ -801,9 +801,6 @@ def build_has_descendants(items: list[StudyItem]) -> set[str]:
             if ids[j] > prefix and not ids[j].startswith(prefix):
                 continue
 
-    # Also: a node_id has descendants if both node-kind
-    # and specie-kind items share the same node_id
-
     by_nid = defaultdict(set)
     for it in items:
         kind = it.meta.get("_kind", "")
@@ -817,9 +814,7 @@ def build_has_descendants(items: list[StudyItem]) -> set[str]:
 
 
 def get_deck_key(dataset: str) -> str:
-    # include settings in the key so deck refreshes when settings change
     ranks_key = ",".join(get_enabled_ranks())
-    # enabled_nodes can be large; but we need it in the key to avoid stale decks
     nodes = sorted(get_enabled_nodes())
     nodes_key = str(hash(tuple(nodes)))
     return f"{dataset}|{ranks_key}|{nodes_key}"
@@ -829,7 +824,6 @@ def draw_item_from_deck(items: List[StudyItem]) -> StudyItem:
     dataset = get_selected_dataset()
     deck_key = get_deck_key(dataset)
 
-    # if settings changed since last time, rebuild
     if session.get("deck_key") != deck_key:
         session["deck_key"] = deck_key
         session.pop("deck", None)
@@ -844,38 +838,44 @@ def draw_item_from_deck(items: List[StudyItem]) -> StudyItem:
         deck = pool
         session["deck"] = deck
 
-    # draw next (no repeats until empty)
     next_idx = int(deck.pop())
     session["deck"] = deck
     return items[next_idx]
 
 
 def choose_item() -> StudyItem:
-    dataset = get_selected_dataset()
-    _, items, _ = load_dataset_cached(dataset)
+    _, items, _ = _load_current_dataset()
     if not items:
+        dataset = get_selected_dataset()
         raise RuntimeError(f"No study items extracted from {dataset}.json")
     return draw_item_from_deck(items)
+
+
+def get_car_mode() -> bool:
+    v = session.get("car_mode")
+    if isinstance(v, bool):
+        return v
+    if isinstance(v, str):
+        return v in ("1", "true", "on", "yes")
+    return False
 
 
 # ---------- routes ----------
 @app.get("/")
 def index():
-    # Refresh = restart run (new deck + counter)
     session.pop("deck", None)
     session.pop("deck_key", None)
     session.pop("current_idx", None)
     session["card_counter"] = 0
 
-    dataset = get_selected_dataset()
-    _, items, _ = load_dataset_cached(dataset)
+    _, items, _ = _load_current_dataset()
     total = get_pool_total(items)
 
-    item = choose_item()  # will rebuild + shuffle deck because we popped it
+    item = choose_item()
     idx = items.index(item)
     session["current_idx"] = idx
 
-    counter = bump_card_counter()  # becomes 1
+    counter = bump_card_counter()
 
     payload = make_quiz_payload(item)
     payload["counter"] = counter
@@ -894,6 +894,8 @@ def index():
         actions_position=actions_position,
         hint_language=get_hint_language(),
         img_toggle=get_img_toggle(),
+        car_mode=get_car_mode(),
+        photo_mode=get_photo_mode(),
     )
 
 
@@ -904,8 +906,7 @@ def manual():
 
 @app.post("/new")
 def new_item():
-    dataset = get_selected_dataset()
-    _, items, _ = load_dataset_cached(dataset)
+    _, items, _ = _load_current_dataset()
 
     item = choose_item()
     session["current_idx"] = items.index(item)
@@ -918,13 +919,13 @@ def new_item():
     payload["total"] = total
     payload["hint_language"] = get_hint_language()
     payload["img_toggle"] = get_img_toggle()
+    payload["photo_mode"] = get_photo_mode()
     return jsonify(payload)
 
 
 @app.post("/check")
 def check():
-    dataset = get_selected_dataset()
-    _, items, _ = load_dataset_cached(dataset)
+    _, items, _ = _load_current_dataset()
 
     idx = session.get("current_idx")
     if idx is None or not (0 <= int(idx) < len(items)):
@@ -966,6 +967,8 @@ def settings():
     enabled = set(get_enabled_ranks())
     datasets = list_datasets()
     selected = get_selected_dataset()
+    image_datasets = list_image_datasets()
+    selected_image_dataset = get_selected_image_dataset()
 
     return render_template(
         "settings.html",
@@ -977,6 +980,10 @@ def settings():
         actions_position=get_actions_position(),
         hint_language=get_hint_language(),
         img_toggle=get_img_toggle(),
+        car_mode=get_car_mode(),
+        photo_mode=get_photo_mode(),
+        image_datasets=image_datasets,
+        selected_image_dataset=selected_image_dataset,
     )
 
 
@@ -986,7 +993,6 @@ def save_settings():
     selected_ranks = request.form.getlist("ranks")
     selected_ranks = [r for r in RANK_KEYS if r in selected_ranks]
 
-    # genus+species combined toggle
     gs_on = request.form.get("ranks_genus_species") == "1"
     if gs_on:
         if "genus" not in selected_ranks:
@@ -998,16 +1004,16 @@ def save_settings():
             r for r in selected_ranks if r not in ("genus", "species")
         ]
 
-    # If nothing selected, fallback
     if not selected_ranks:
         selected_ranks = DEFAULT_ENABLED_RANKS
 
-    # keep canonical order
     selected_ranks = [r for r in RANK_KEYS if r in selected_ranks]
     session["enabled_ranks"] = selected_ranks
 
     datasets = list_datasets()
     selected = get_selected_dataset()
+    image_datasets = list_image_datasets()
+    selected_image_dataset = get_selected_image_dataset()
 
     pos = request.form.get("actions_position", "top")
     session["actions_position"] = pos if pos in ("top", "bottom") else "top"
@@ -1020,6 +1026,8 @@ def save_settings():
     )
     img_toggle = request.form.get("img_toggle") == "1"
     session["img_toggle"] = img_toggle
+    session["car_mode"] = request.form.get("car_mode") == "1"
+    session["photo_mode"] = request.form.get("photo_mode") == "1"
 
     return render_template(
         "settings.html",
@@ -1027,11 +1035,15 @@ def save_settings():
         enabled=set(selected_ranks),
         datasets=datasets,
         selected_dataset=selected,
+        image_datasets=image_datasets,
+        selected_image_dataset=selected_image_dataset,
         rank_fi=RANK_FI,
         actions_position=session.get("actions_position", "top"),
         hint_language=get_hint_language(),
         img_toggle=img_toggle,
         saved=True,
+        car_mode=request.form.get("car_mode") == "1",
+        photo_mode=request.form.get("photo_mode") == "1",
     )
 
 
@@ -1039,21 +1051,42 @@ def save_settings():
 def set_dataset():
     d = request.args.get("d", "")
     if isinstance(d, str) and d in list_datasets():
+        prev = session.get("dataset_name", DEFAULT_DATASET)
+
         session["dataset_name"] = d
-        session.pop("enabled_nodes", None)  # reset taxa filters per dataset
+        session.pop("enabled_nodes", None)
         session.pop("current_idx", None)
 
         session.pop("deck", None)
         session.pop("deck_key", None)
 
         session.pop("card_counter", None)
+
+        if d in PLANT_DATASETS and prev not in PLANT_DATASETS:
+            session.permanent = True
+            session["enabled_ranks"] = ["genus", "species"]
+
+    return ("", 302, {"Location": "/settings"})
+
+
+@app.get("/settings/image_dataset")
+def set_image_dataset():
+    d = request.args.get("di", "")
+    if isinstance(d, str) and d in list_image_datasets():
+        session["image_dataset_name"] = d
+
+        # Clear deck / current card so the new photos take effect immediately
+        session.pop("deck", None)
+        session.pop("deck_key", None)
+        session.pop("current_idx", None)
+        session.pop("card_counter", None)
+
     return ("", 302, {"Location": "/settings"})
 
 
 @app.get("/settings/taxa")
 def settings_taxa():
-    dataset = get_selected_dataset()
-    _, _, taxa_tree = load_dataset_cached(dataset)
+    _, _, taxa_tree = _load_current_dataset()
 
     enabled = get_enabled_nodes()
     return render_template(
@@ -1064,8 +1097,7 @@ def settings_taxa():
 @app.post("/settings/taxa")
 def save_settings_taxa():
     session.permanent = True
-    dataset = get_selected_dataset()
-    _, _, taxa_tree = load_dataset_cached(dataset)
+    _, _, taxa_tree = _load_current_dataset()
 
     selected = request.form.getlist("enabled")
     selected = [x for x in selected if isinstance(x, str) and x.strip()]
@@ -1085,10 +1117,10 @@ def save_settings_taxa():
 
 @app.get("/debug/payload")
 def debug_payload():
-    dataset = get_selected_dataset()
-    _, items, _ = load_dataset_cached(dataset)
+    _, items, _ = _load_current_dataset()
 
     if not items:
+        dataset = get_selected_dataset()
         return jsonify({"error": f"no items in dataset {dataset}"}), 400
 
     idx = session.get("current_idx")
@@ -1101,7 +1133,8 @@ def debug_payload():
 
     payload = make_quiz_payload(item)
     payload["_debug"] = {
-        "dataset": dataset,
+        "dataset": get_selected_dataset(),
+        "image_dataset": get_selected_image_dataset(),
         "current_idx": int(idx),
         "enabled_ranks": get_enabled_ranks(),
         "enabled_nodes_count": len(get_enabled_nodes()),
@@ -1117,9 +1150,8 @@ from collections import Counter
 @app.get("/debug/stats")
 def debug_stats():
     dataset = get_selected_dataset()
-    _, items, _ = load_dataset_cached(dataset)
+    _, items, _ = _load_current_dataset()
 
-    # paging
     try:
         limit = int(request.args.get("limit", "200"))
     except ValueError:
@@ -1129,7 +1161,7 @@ def debug_stats():
     except ValueError:
         offset = 0
 
-    limit = max(1, min(limit, 5000))  # safety cap
+    limit = max(1, min(limit, 5000))
     offset = max(0, offset)
 
     include_pool_cards = request.args.get("pool", "0") == "1"
@@ -1152,13 +1184,12 @@ def debug_stats():
 
     pool = build_pool_indices(items)
 
-    # serialize ALL items (but paginate in response)
     def serialize(it: StudyItem, idx: int) -> Dict[str, Any]:
         return {
             "idx": idx,
             "node_id": it.node_id,
             "kind": it.meta.get("_kind"),
-            "answer": it.answer,  # latin per rank
+            "answer": it.answer,
             "fin_by_rank": it.meta.get("fin_by_rank", {}),
             "fin": it.meta.get("fin", ""),
             "image": it.meta.get("image", ""),
@@ -1169,6 +1200,7 @@ def debug_stats():
 
     out: Dict[str, Any] = {
         "dataset": dataset,
+        "image_dataset": get_selected_image_dataset(),
         "items_total": len(items),
         "pool_total": len(pool),
         "enabled_ranks": get_enabled_ranks(),
@@ -1183,12 +1215,11 @@ def debug_stats():
             if (offset + limit) < len(items)
             else None,
         },
-        "cards": cards,  # ✅ this is the card list (paged)
-        "pool_indices": pool[:2000],  # keep pool list from becoming enormous
+        "cards": cards,
+        "pool_indices": pool[:2000],
     }
 
     if include_pool_cards:
-        # pool cards can also be huge, so return up to first 2000
         pool_cards = [
             serialize(items[i], i) for i in pool[:2000] if 0 <= i < len(items)
         ]

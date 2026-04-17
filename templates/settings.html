@@ -7,6 +7,24 @@
   <link rel="stylesheet" href="/static/style.css" />
 </head>
 <script>
+function updatePhotoModeDeps() {
+  const isPhoto = document.querySelector('[name="photo_mode"]')?.checked;
+
+  const hintSection = document.getElementById('hintSection');
+  hintSection.querySelectorAll('input[type="radio"]').forEach(r => r.disabled = isPhoto);
+  hintSection.style.opacity = isPhoto ? '0.4' : '1';
+  hintSection.style.pointerEvents = isPhoto ? 'none' : '';
+
+  const imgLabel = document.getElementById('imgToggleLabel');
+  imgLabel.querySelector('input').disabled = isPhoto;
+  imgLabel.style.opacity = isPhoto ? '0.4' : '1';
+  imgLabel.style.pointerEvents = isPhoto ? 'none' : '';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelector('[name="photo_mode"]').addEventListener('change', updatePhotoModeDeps);
+  updatePhotoModeDeps();
+});
   // Make sure unsaved UI changes don't "stick" after refresh/back.
   window.addEventListener("pageshow", () => {
     const f = document.getElementById("settingsForm");
@@ -33,7 +51,8 @@
         <div style="margin-top:0; opacity:0.9;
           margin-bottom:8px;">Harjoiteltavat lajit</div>
 
-        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+          margin-bottom: 10px;">
           <select id="datasetSelect" class="inp" style="max-width: 320px;">
             {% for d in datasets %}
               <option value="{{ d }}" {% if d == selected_dataset %}selected{% endif %}>
@@ -47,10 +66,34 @@
             Käytä
           </button>
         </div>
+        <div style="margin-top:0; opacity:0.9;
+          margin-bottom:8px;">Kuvien lähde</div>
+        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+          <select id="imageDatasetSelect" class="inp" style="max-width: 320px;">
+            {% for di in image_datasets %}
+              <option value="{{ di }}" {% if di == selected_image_dataset %}selected{% endif %}>
+                {{ di }}
+              </option>
+            {% endfor %}
+          </select>
+          <button class="btn secondary" type="button"
+                  onclick="window.location.href='/settings/image_dataset?di=' +
+                  document.getElementById('imageDatasetSelect').value;">
+            Käytä
+          </button>
+        </div>
       </div>
 
       <!-- ONE POST form for everything else -->
       <form id="settingsForm" method="POST" action="/settings">
+      <div style="margin-bottom: 16px;">
+            <label style="display:flex; gap:10px; align-items:center; margin-top:8px;">
+              <input type="checkbox" name="photo_mode" value="1"
+                {% if photo_mode %}checked{% endif %}>
+              <span>Kuvatila <span style="opacity:0.7;">(Vihjeenä iso kuva,
+                  nimet pienellä kuvan päällä)</span></span>
+            </label>
+            </div>
         <p style="margin-top:0; opacity:0.9;">Valitse mitä harjoitellaan.</p>
 
         <!-- Rank toggles -->
@@ -108,7 +151,7 @@
 
         <hr style="border:0; border-top:1px solid #243244; margin:16px 0;" />
 
-        <div style="margin: 12px 0 16px 0;">
+        <div style="margin: 12px 0 16px 0;" id="hintSection">
           <div style="margin-bottom:8px; opacity:0.9;">Vihje kortin yläosassa</div>
 
           <label style="display:flex; gap:10px; align-items:center;">
@@ -128,11 +171,17 @@
         <div style="margin: 12px 0 16px 0;">
           <div style="margin-bottom:8px; opacity:0.9;">Muut</div>
 
-            <label style="display:flex; gap:10px; align-items:center;">
+            <label style="display:flex; gap:10px; align-items:center;"
+              id="imgToggleLabel">
               <input type="checkbox" name="img_toggle" value="1"
                 {% if img_toggle %}checked{% endif %}>
               <span>Näytä taxonin kuvat</span>
             </label>
+            <!-- <label style="display:flex; gap:10px; align-items:center; margin-top:8px;"> -->
+            <!--   <input type="checkbox" name="car_mode" value="1" -->
+            <!--     {% if car_mode %}checked{% endif %}> -->
+            <!--   <span>Autotila (medianapit)</span> -->
+            <!-- </label> -->
 
         </div>
         <div style="margin-top:16px;">
@@ -145,4 +194,3 @@
   </main>
 </body>
 </html>
-
