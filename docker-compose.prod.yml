@@ -3,9 +3,6 @@ services:
     build: .
     env_file: ".env"
     container_name: taxonomy_trainer
-    environment:
-      # REQUIRED for Flask sessions to work consistently
-
     networks:
       - edge
     restart: unless-stopped
