@@ -120,7 +120,6 @@ body[data-actions="top"] .actions {
   position: static;
 }
 
-@media (max-width: 480px) {
   body[data-actions="bottom"] .actions {
     position: fixed;
     bottom: 0px;
@@ -149,7 +148,6 @@ body[data-actions="top"] .actions {
   body[data-actions="bottom"] .wrap {
     padding-bottom: 110px;
   }
-}
 
 .actions .btn {
     flex: 1 1 0;
@@ -471,6 +469,9 @@ label:has(input[type="checkbox"][name="enabled"]) span {
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   border-radius: 0 0 12px 12px;
+  white-space: normal;        /* add this */
+  word-break: break-word;     /* add this */
+  line-height: 1.4;           /* add this — helps readability when wrapped */
 }
 
 .heroAttribution a {

@@ -47,30 +47,48 @@ DEFAULT_ENABLED_RANKS = [
 ]
 
 PLANT_DATASETS = [
-    "Helsinki_ME_kasvit",
-    "UEF_kasvit_kaksisirkkaiset",
-    "UEF_kasvit_yksisirkkaiset",
-    "UEF_kasvit_itiokasvit",
-    "UEF_kasvit_suppea",
+    "Helsinki ME kasvit",
+    "UEF kasvit kaksisirkkaiset",
+    "UEF kasvit yksisirkkaiset",
+    "UEF kasvit itiökasvit",
+    "UEF kasvit suppea",
 ]
 
-IMAGE_DATASET_MAP = {
-    "Laji.fi": "static/image_datasets/taxa_photos_laji.json",
-    "iNaturalist": "static/image_datasets/taxa_photos.json",
-}
 
 PICTURE_SOURCE = ["laji", "inat"]
 
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR
-DEFAULT_DATASET = "selkarangattomat"
-DEFAULT_IMAGE_DATASET = "taxa_photos"
+DEFAULT_DATASET = "UEF kasvit suppea"
+DEFAULT_IMAGE_DATASET = "Laji.fi"
 DATASET_DIR = Path("static/datasets/")
 IMAGE_DATASET_DIR = Path("static/image_datasets/")
 
 # JSON uses "specie" as an array key
 REAL_CHILD_KEYS = {"class", "order", "family", "specie"}
 META_KEYS = {"lat", "fin", "req", "image"}
+
+IMAGE_DATASET_MAP = {
+    "Laji.fi": IMAGE_DATASET_DIR / "Laji.json",
+    "iNaturalist taksonikuvat": IMAGE_DATASET_DIR / "iNaturalist.json",
+    "iNaturalist suosituimmat havainnot": IMAGE_DATASET_DIR
+    / "iNaturalist_observations.json",
+}
+
+DATASET_MAP = {
+    "UEF kasvit suppea": DATASET_DIR / "UEF_kasvit_suppea.json",
+    "UEF kasvit yksisirkkaiset": DATASET_DIR / "UEF_kasvit_yksisirkkaiset.json",
+    "UEF kasvit kaksisirkkaiset": DATASET_DIR
+    / "UEF_kasvit_kaksisirkkaiset.json",
+    "UEF kasvit itiökasvit": DATASET_DIR / "UEF_kasvit_itiokasvit.json",
+    "UEF selkärangattomat laaja": DATASET_DIR
+    / "UEF_selkarangattomat_laaja.json",
+    "UEF selkärangattomat suppea": DATASET_DIR
+    / "UEF_selkarangattomat_suppea.json",
+    "UEF selkärankaiset laaja": DATASET_DIR / "UEF_selkarankaiset_laaja.json",
+    "UEF selkärankaiset suppea": DATASET_DIR / "UEF_selkarankaiset_suppea.json",
+    "Helsinki ME kasvit": DATASET_DIR / "Helsinki_ME_kasvit.json",
+}
 
 
 # ---------- models ----------
@@ -178,13 +196,13 @@ def collect_species_lists(node: Dict[str, Any]) -> List[List[Dict[str, Any]]]:
 
 # ---------- session helpers ----------
 def list_datasets() -> list[str]:
-    files = sorted(DATASET_DIR.glob("*.json"))
-    return [f.stem for f in files]
+    # files = sorted(DATASET_DIR.glob("*.json"))
+    return list(DATASET_MAP.keys())
+    # return [f.stem for f in files]
 
 
 def list_image_datasets() -> list[str]:
-    files = sorted(IMAGE_DATASET_DIR.glob("*.json"))
-    return [f.stem for f in files]
+    return list(IMAGE_DATASET_MAP.keys())
 
 
 def get_selected_dataset() -> str:
@@ -291,7 +309,8 @@ def load_dataset_cached(stem: str, image_dataset_stem: str):
     dataset) are part of the cache key, so changing either one triggers a
     fresh load.
     """
-    path = DATASET_DIR / f"{stem}.json"
+    # path = DATASET_DIR / f"{stem}.json"
+    path = DATASET_MAP.get(stem)
     data = load_json(str(path))
 
     taxa_photos = load_taxa_photos_cached(image_dataset_stem)
@@ -578,7 +597,8 @@ def extract_items(
 
 @lru_cache(maxsize=8)
 def load_taxa_photos_cached(stem: str) -> Dict[str, Any]:
-    path = IMAGE_DATASET_DIR / f"{stem}.json"
+    path = IMAGE_DATASET_MAP.get(stem)
+    # path = IMAGE_DATASET_DIR / f"{name}"
     if not path.exists():
         return {}
     return load_json(str(path))
