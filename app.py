@@ -930,6 +930,7 @@ def manual():
 @app.post("/new")
 def new_item():
     dataset, items, _ = _load_current_dataset()
+    maybe_qualify_visitor()
 
     item = choose_item()
     session["current_idx"] = items.index(item)
@@ -1016,6 +1017,7 @@ def save_settings():
     session.permanent = True
     selected_ranks = request.form.getlist("ranks")
     selected_ranks = [r for r in RANK_KEYS if r in selected_ranks]
+    maybe_qualify_visitor()
 
     gs_on = request.form.get("ranks_genus_species") == "1"
     if gs_on:
@@ -1310,10 +1312,22 @@ def track_card_opened(dataset: str):
     )
 
 
+VISITOR_QUALIFY_THRESHOLD = 3  # cards opened before counting as real visitor
+
+
 @app.before_request
 def count_visitor():
-    if not session.get("visited"):
-        session["visited"] = True
+    pass
+
+
+def maybe_qualify_visitor():
+    if session.get("counted_as_visitor"):
+        return
+    actions = int(session.get("qualifying_actions", 0)) + 1
+    session["qualifying_actions"] = actions
+    session.modified = True
+    if actions >= VISITOR_QUALIFY_THRESHOLD:
+        session["counted_as_visitor"] = True
         track_new_visitor()
 
 
