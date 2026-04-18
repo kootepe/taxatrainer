@@ -1044,14 +1044,21 @@ def save_settings():
 
     session.pop("deck", None)
     session.pop("deck_key", None)
-    hint_lang = request.form.get("hint_language", "fin")
-    session["hint_language"] = (
-        hint_lang if hint_lang in ("fin", "lat") else "fin"
-    )
-    img_toggle = request.form.get("img_toggle") == "1"
-    session["img_toggle"] = img_toggle
+
+    photo_mode = bool(int(request.form.get("photo_mode", 0)))
+    session["photo_mode"] = photo_mode
     session["car_mode"] = request.form.get("car_mode") == "1"
-    session["photo_mode"] = bool(int(request.form.get("photo_mode", 0))) is True
+
+    if photo_mode:
+        img_toggle = get_img_toggle()
+        hint_lang = get_hint_language()
+    else:
+        img_toggle = request.form.get("img_toggle") == "1"
+        hint_lang = request.form.get("hint_language", "fin")
+        hint_lang = hint_lang if hint_lang in ("fin", "lat") else "fin"
+
+    session["img_toggle"] = img_toggle
+    session["hint_language"] = hint_lang
 
     return render_template(
         "settings.html",
@@ -1063,11 +1070,11 @@ def save_settings():
         selected_image_dataset=selected_image_dataset,
         rank_fi=RANK_FI,
         actions_position=session.get("actions_position", "top"),
-        hint_language=get_hint_language(),
+        hint_language=hint_lang,
         img_toggle=img_toggle,
         saved=True,
-        car_mode=request.form.get("car_mode") == "1",
-        photo_mode=bool(int(request.form.get("photo_mode", 0))) is True,
+        car_mode=session["car_mode"],
+        photo_mode=photo_mode,
     )
 
 
