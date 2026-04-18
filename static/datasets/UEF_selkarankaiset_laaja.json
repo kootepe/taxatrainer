@@ -1620,55 +1620,55 @@
                   "specie": [
                     {
                       "req": "s",
-                      "genus": "Acrocephalus",
+                      "genus": "acrocephalus",
                       "species": "schoenobaenus",
                       "fin": "ruokokerttunen"
                     },
                     {
                       "req": "s",
-                      "genus": "Sylvia",
+                      "genus": "sylvia",
                       "species": "borin",
                       "fin": "lehtokerttu"
                     },
                     {
                       "req": "l",
-                      "genus": "Sylvia",
+                      "genus": "sylvia",
                       "species": "atricapilla",
                       "fin": "mustapääkerttu"
                     },
                     {
                       "req": "l",
-                      "genus": "Sylvia",
+                      "genus": "sylvia",
                       "species": "communis",
                       "fin": "pensaskerttu"
                     },
                     {
                       "req": "s",
-                      "genus": "Sylvia",
+                      "genus": "sylvia",
                       "species": "curruca",
                       "fin": "hernekerttu"
                     },
                     {
                       "req": "l",
-                      "genus": "Phylloscopus",
+                      "genus": "phylloscopus",
                       "species": "sibilatrix",
                       "fin": "sirittäjä"
                     },
                     {
                       "req": "s",
-                      "genus": "Phylloscopus",
+                      "genus": "phylloscopus",
                       "species": "trochilus",
                       "fin": "pajulintu"
                     },
                     {
                       "req": "l",
-                      "genus": "Phylloscopus",
+                      "genus": "phylloscopus",
                       "species": "collybita",
                       "fin": "tiltaltti"
                     },
                     {
                       "req": "s",
-                      "genus": "Regulus",
+                      "genus": "regulus",
                       "species": "regulus",
                       "fin": "hippiäinen"
                     }

@@ -8,7 +8,8 @@
 </head>
 <script>
 function updatePhotoModeDeps() {
-  const isPhoto = document.querySelector('[name="photo_mode"]')?.checked;
+  // const isPhoto = document.querySelector('[name="photo_mode"]')?.checked;
+  const isPhoto = document.querySelector('[name="photo_mode"]:checked')?.value === "1";
 
   const hintSection = document.getElementById('hintSection');
   hintSection.querySelectorAll('input[type="radio"]').forEach(r => r.disabled = isPhoto);
@@ -22,6 +23,9 @@ function updatePhotoModeDeps() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('[name="photo_mode"]').forEach(r =>
+    r.addEventListener('change', updatePhotoModeDeps)
+  );
   document.querySelector('[name="photo_mode"]').addEventListener('change', updatePhotoModeDeps);
   updatePhotoModeDeps();
 });
@@ -88,13 +92,28 @@ document.addEventListener('DOMContentLoaded', () => {
       <!-- ONE POST form for everything else -->
       <form id="settingsForm" method="POST" action="/settings">
       <div style="margin-bottom: 16px;">
-            <label style="display:flex; gap:10px; align-items:center; margin-top:8px;">
-              <input type="checkbox" name="photo_mode" value="1"
-                {% if photo_mode %}checked{% endif %}>
-              <span>Kuvatila <span style="opacity:0.7;">(Vihjeenä iso kuva,
-                  nimet pienellä kuvan päällä)</span></span>
-            </label>
-            </div>
+        <div style="margin-bottom:8px; opacity:0.9;">Harjoittelutila</div>
+
+        <label style="display:flex; gap:10px; align-items:center;">
+          <input type="radio" name="photo_mode" value="0"
+            {% if not photo_mode %}checked{% endif %}>
+          <span>Korttitila<span style="opacity:0.7;">(Perusnäkymä, näyttää kortin jossa taksonitasot ja alapuolella taksoninkuvat)</span></span>
+        </label>
+
+        <label style="display:flex; gap:10px; align-items:center; margin-top:8px;">
+          <input type="radio" name="photo_mode" value="1"
+            {% if photo_mode %}checked{% endif %}>
+          <span>Kuvatila <span style="opacity:0.7;">(Vihjeenä iso kuva, nimet pienellä päällä)</span></span>
+        </label>
+      </div>
+      <!-- <div style="margin-bottom: 16px;"> -->
+      <!--       <label style="display:flex; gap:10px; align-items:center; margin-top:8px;"> -->
+      <!--         <input type="checkbox" name="photo_mode" value="1" -->
+      <!--           {% if photo_mode %}checked{% endif %}> -->
+      <!--         <span>Kuvatila <span style="opacity:0.7;">(Vihjeenä iso kuva, -->
+      <!--             nimet pienellä kuvan päällä)</span></span> -->
+      <!--       </label> -->
+      <!--       </div> -->
 
         <!-- Rank toggles -->
         <div style="margin: 12px 0 16px 0;">

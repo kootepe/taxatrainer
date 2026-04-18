@@ -545,6 +545,7 @@
     }
 
     function setHeroImage(meta) {
+      console.log("setHeroImage meta.images:", meta?.images);
       const heroBox = document.getElementById("heroBox2");
       const im = document.getElementById("heroImg");
       const loader = document.getElementById("heroLoading");
@@ -930,13 +931,16 @@
     document.getElementById("heroLeft")?.addEventListener("click", () => showHeroPhoto(heroIndex - 1));
     document.getElementById("heroRight")?.addEventListener("click", () => showHeroPhoto(heroIndex + 1));
     document.getElementById("heroImg")?.addEventListener("click", () => {
+      if (current.photo_mode) {
+        if (heroPhotos.length > 1) showHeroPhoto(heroIndex + 1);
+        return;
+      }
       if (heroPhotos.length > 1) {
         showHeroPhoto(heroIndex + 1);
       } else if (heroPhotos.length === 1) {
         openLightbox(heroPhotos[0], heroPhotos, 0);
       }
     });
-
     // Apply initial layout
     applyModeLayout();
     if (!current.photo_mode) {

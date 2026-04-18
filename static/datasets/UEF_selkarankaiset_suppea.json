@@ -925,31 +925,31 @@
                   "specie": [
                     {
                       "req": "s",
-                      "genus": "Acrocephalus",
+                      "genus": "acrocephalus",
                       "species": "schoenobaenus",
                       "fin": "ruokokerttunen"
                     },
                     {
                       "req": "s",
-                      "genus": "Sylvia",
+                      "genus": "sylvia",
                       "species": "borin",
                       "fin": "lehtokerttu"
                     },
                     {
                       "req": "s",
-                      "genus": "Sylvia",
+                      "genus": "sylvia",
                       "species": "curruca",
                       "fin": "hernekerttu"
                     },
                     {
                       "req": "s",
-                      "genus": "Phylloscopus",
+                      "genus": "phylloscopus",
                       "species": "trochilus",
                       "fin": "pajulintu"
                     },
                     {
                       "req": "s",
-                      "genus": "Regulus",
+                      "genus": "regulus",
                       "species": "regulus",
                       "fin": "hippiäinen"
                     }

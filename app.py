@@ -10,7 +10,9 @@ from typing import Any, Dict, List, Optional, Set
 from datetime import timedelta
 from collections import Counter, defaultdict
 
-from flask import Flask, jsonify, render_template, request, session
+from flask import Flask, g, jsonify, render_template, request, session
+import sqlite3
+import datetime
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY", "dev-secret-change-me")
@@ -46,14 +48,6 @@ DEFAULT_ENABLED_RANKS = [
     "species",
 ]
 
-PLANT_DATASETS = [
-    "Helsinki ME kasvit",
-    "UEF kasvit kaksisirkkaiset",
-    "UEF kasvit yksisirkkaiset",
-    "UEF kasvit itiökasvit",
-    "UEF kasvit suppea",
-]
-
 
 PICTURE_SOURCE = ["laji", "inat"]
 
@@ -75,20 +69,28 @@ IMAGE_DATASET_MAP = {
     / "iNaturalist_observations.json",
 }
 
-DATASET_MAP = {
+PLANT_DATASET_MAP = {
     "UEF kasvit suppea": DATASET_DIR / "UEF_kasvit_suppea.json",
     "UEF kasvit yksisirkkaiset": DATASET_DIR / "UEF_kasvit_yksisirkkaiset.json",
     "UEF kasvit kaksisirkkaiset": DATASET_DIR
     / "UEF_kasvit_kaksisirkkaiset.json",
     "UEF kasvit itiökasvit": DATASET_DIR / "UEF_kasvit_itiokasvit.json",
+    "Helsinki ME kasvit": DATASET_DIR / "Helsinki_ME_kasvit.json",
+}
+
+ANIMAL_DATASET_MAP = {
     "UEF selkärangattomat laaja": DATASET_DIR
     / "UEF_selkarangattomat_laaja.json",
     "UEF selkärangattomat suppea": DATASET_DIR
     / "UEF_selkarangattomat_suppea.json",
     "UEF selkärankaiset laaja": DATASET_DIR / "UEF_selkarankaiset_laaja.json",
     "UEF selkärankaiset suppea": DATASET_DIR / "UEF_selkarankaiset_suppea.json",
-    "Helsinki ME kasvit": DATASET_DIR / "Helsinki_ME_kasvit.json",
 }
+
+DATASET_MAP = {**PLANT_DATASET_MAP, **ANIMAL_DATASET_MAP}
+
+PLANT_DATASETS = list(PLANT_DATASET_MAP.keys())
+ANIMAL_DATASETS = list(ANIMAL_DATASET_MAP.keys())
 
 
 # ---------- models ----------
@@ -120,7 +122,8 @@ def get_img_toggle() -> bool:
 
 
 def get_photo_mode() -> bool:
-    v = session.get("photo_mode")
+    v = bool(int(session.get("photo_mode", 0)))
+    # v = session.get("photo_mode")
     if isinstance(v, bool):
         return v
     if isinstance(v, str):
@@ -926,7 +929,7 @@ def manual():
 
 @app.post("/new")
 def new_item():
-    _, items, _ = _load_current_dataset()
+    dataset, items, _ = _load_current_dataset()
 
     item = choose_item()
     session["current_idx"] = items.index(item)
@@ -940,6 +943,7 @@ def new_item():
     payload["hint_language"] = get_hint_language()
     payload["img_toggle"] = get_img_toggle()
     payload["photo_mode"] = get_photo_mode()
+    track_card_opened(session.get("dataset_name", DEFAULT_DATASET))
     return jsonify(payload)
 
 
@@ -1047,7 +1051,7 @@ def save_settings():
     img_toggle = request.form.get("img_toggle") == "1"
     session["img_toggle"] = img_toggle
     session["car_mode"] = request.form.get("car_mode") == "1"
-    session["photo_mode"] = request.form.get("photo_mode") == "1"
+    session["photo_mode"] = bool(int(request.form.get("photo_mode", 0))) is True
 
     return render_template(
         "settings.html",
@@ -1063,7 +1067,7 @@ def save_settings():
         img_toggle=img_toggle,
         saved=True,
         car_mode=request.form.get("car_mode") == "1",
-        photo_mode=request.form.get("photo_mode") == "1",
+        photo_mode=bool(int(request.form.get("photo_mode", 0))) is True,
     )
 
 
@@ -1085,6 +1089,9 @@ def set_dataset():
         if d in PLANT_DATASETS and prev not in PLANT_DATASETS:
             session.permanent = True
             session["enabled_ranks"] = ["genus", "species"]
+        if d in ANIMAL_DATASETS and prev not in ANIMAL_DATASETS:
+            session.permanent = True
+            session["enabled_ranks"] = DEFAULT_ENABLED_RANKS
 
     return ("", 302, {"Location": "/settings"})
 
@@ -1246,6 +1253,72 @@ def debug_stats():
         out["pool_cards_first_2000"] = pool_cards
 
     return jsonify(out)
+
+
+DB_PATH = "stats.db"
+
+
+def get_db():
+    if "db" not in g:
+        g.db = sqlite3.connect(DB_PATH)
+        g.db.execute("""CREATE TABLE IF NOT EXISTS daily_cards (
+            date TEXT PRIMARY KEY, count INTEGER DEFAULT 0)""")
+        g.db.execute("""CREATE TABLE IF NOT EXISTS visitors (
+            count INTEGER DEFAULT 0, last_reset TEXT)""")
+        g.db.execute(
+            """INSERT OR IGNORE INTO visitors(count, last_reset)
+            VALUES(0, ?)""",
+            (datetime.date.today().isoformat(),),
+        )
+        g.db.execute("""CREATE TABLE IF NOT EXISTS dataset_usage (
+            dataset TEXT PRIMARY KEY, count INTEGER DEFAULT 0)""")
+        g.db.commit()
+    return g.db
+
+
+@app.teardown_appcontext
+def close_db(e=None):
+    db = g.pop("db", None)
+    if db is not None:
+        db.commit()
+        db.close()
+
+
+def track_new_visitor():
+    get_db().execute("UPDATE visitors SET count = count + 1")
+
+
+def track_card_opened(dataset: str):
+    today = datetime.date.today().isoformat()
+    db = get_db()
+    db.execute(
+        """INSERT INTO daily_cards(date, count) VALUES(?,1)
+        ON CONFLICT(date) DO UPDATE SET count=count+1""",
+        (today,),
+    )
+    db.execute(
+        """INSERT INTO dataset_usage(dataset, count) VALUES(?,1)
+        ON CONFLICT(dataset) DO UPDATE SET count=count+1""",
+        (dataset,),
+    )
+
+
+@app.before_request
+def count_visitor():
+    if not session.get("visited"):
+        session["visited"] = True
+        track_new_visitor()
+
+
+@app.route("/stats")
+def stats():
+    db = get_db()
+    cards = db.execute("SELECT SUM(count) FROM daily_cards").fetchone()[0] or 0
+    visitors = db.execute("SELECT count FROM visitors").fetchone()[0] or 0
+    datasets = db.execute(
+        "SELECT dataset, count FROM dataset_usage ORDER BY count DESC"
+    ).fetchall()
+    return {"cards": cards, "visitors": visitors, "datasets": dict(datasets)}
 
 
 if __name__ == "__main__":
