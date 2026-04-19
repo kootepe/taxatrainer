@@ -1267,7 +1267,7 @@ def debug_stats():
     return jsonify(out)
 
 
-DB_PATH = "stats.db"
+DB_PATH = "/app/data/stats.db"
 
 
 def get_db():
