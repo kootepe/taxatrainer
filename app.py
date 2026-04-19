@@ -40,10 +40,10 @@ RANK_KEYS = ["phylum", "class", "order", "family", "genus", "species"]
 RANK_INDEX = {r: i for i, r in enumerate(RANK_KEYS)}
 
 DEFAULT_ENABLED_RANKS = [
-    "phylum",
-    "class",
-    "order",
-    "family",
+    # "phylum",
+    # "class",
+    # "order",
+    # "family",
     "genus",
     "species",
 ]
@@ -347,7 +347,7 @@ def _load_current_dataset():
 
 def get_actions_position() -> str:
     v = session.get("actions_position")
-    return v if v in ("top", "bottom") else "top"
+    return v if v in ("top", "bottom") else "bottom"
 
 
 # ---------- taxa tree + enabled nodes ----------
