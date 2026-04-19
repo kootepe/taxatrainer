@@ -124,7 +124,6 @@ def get_img_toggle() -> bool:
 
 def get_photo_mode() -> bool:
     v = bool(int(session.get("photo_mode", 1)))
-    # v = session.get("photo_mode")
     if isinstance(v, bool):
         return v
     if isinstance(v, str):
@@ -1049,7 +1048,7 @@ def save_settings():
     session.pop("deck", None)
     session.pop("deck_key", None)
 
-    photo_mode = get_photo_mode()
+    photo_mode = bool(int(request.form.get("photo_mode", 1)))
     session["photo_mode"] = photo_mode
     session["car_mode"] = request.form.get("car_mode") == "1"
 
