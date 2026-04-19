@@ -24,7 +24,7 @@
                       "req": "s",
                       "genus": "mylia",
                       "species": "anomala",
-                      "fin": ""
+                      "fin": "rahkanäivesammal"
                     }
                   ]
                 },
@@ -37,19 +37,19 @@
                       "req": "s",
                       "genus": "barbilophozia",
                       "species": "kunzeana",
-                      "fin": ""
+                      "fin": "aapapykäsammal"
                     },
                     {
                       "req": "s",
                       "genus": "gymnocolea",
                       "species": "inflata",
-                      "fin": ""
+                      "fin": "nevaruoppasammal"
                     },
                     {
                       "req": "s",
                       "genus": "leiocolea",
                       "species": "rutheana",
-                      "fin": ""
+                      "fin": "lettohammassammal"
                     }
                   ]
                 },
@@ -62,7 +62,7 @@
                       "req": "s",
                       "genus": "scapania",
                       "species": "paludosa",
-                      "fin": ""
+                      "fin": "hetekinnassammal"
                     }
                   ]
                 },
@@ -75,13 +75,13 @@
                       "req": "s",
                       "genus": "cladopodiella",
                       "species": "fluitans",
-                      "fin": ""
+                      "fin": "silmäkerihmasammal"
                     },
                     {
                       "req": "s",
                       "genus": "odontochisma",
                       "species": "elongatum",
-                      "fin": ""
+                      "fin": "rantapyörösammal"
                     }
                   ]
                 },
@@ -94,7 +94,7 @@
                       "req": "s",
                       "genus": "chiloscyphus",
                       "species": "polyanthos",
-                      "fin": ""
+                      "fin": "hetealvesammal"
                     }
                   ]
                 }
@@ -128,151 +128,151 @@
                       "req": "s",
                       "genus": "sphagnum",
                       "species": "angustifolium",
-                      "fin": ""
+                      "fin": "rämerahkasammal"
                     },
                     {
                       "req": "s",
                       "genus": "sphagnum",
                       "species": "annulatum",
-                      "fin": ""
+                      "fin": "rimpirahkasammal"
                     },
                     {
                       "req": "s",
                       "genus": "sphagnum",
                       "species": "aongstroemii",
-                      "fin": ""
+                      "fin": "kuultorahkasammal"
                     },
                     {
                       "req": "s",
                       "genus": "sphagnum",
                       "species": "balticum",
-                      "fin": ""
+                      "fin": "silmäkerahkasammal"
                     },
                     {
                       "req": "s",
                       "genus": "sphagnum",
                       "species": "capillifolium",
-                      "fin": ""
+                      "fin": "kangasrahkasammal"
                     },
                     {
                       "req": "s",
                       "genus": "sphagnum",
                       "species": "centrale",
-                      "fin": ""
+                      "fin": "vaalearahkasammal"
                     },
                     {
                       "req": "s",
                       "genus": "sphagnum",
                       "species": "contortum",
-                      "fin": ""
+                      "fin": "kutrirahkasammal"
                     },
                     {
                       "req": "s",
                       "genus": "sphagnum",
                       "species": "cuspidatum",
-                      "fin": ""
+                      "fin": "kuljurahkasammal"
                     },
                     {
                       "req": "s",
                       "genus": "sphagnum",
                       "species": "divinum",
-                      "fin": ""
+                      "fin": "punaterärahkasammal"
                     },
                     {
                       "req": "s",
                       "genus": "sphagnum",
                       "species": "jensenii",
-                      "fin": ""
+                      "fin": "pohjanrimpirahkasammal"
                     },
                     {
                       "req": "s",
                       "genus": "sphagnum",
                       "species": "lindbergii",
-                      "fin": ""
+                      "fin": "aaparahkasammal"
                     },
                     {
                       "req": "s",
                       "genus": "sphagnum",
                       "species": "medium",
-                      "fin": ""
+                      "fin": "punarahkasammal"
                     },
                     {
                       "req": "s",
                       "genus": "sphagnum",
                       "species": "majus",
-                      "fin": ""
+                      "fin": "vajorahkasammal"
                     },
                     {
                       "req": "s",
                       "genus": "sphagnum",
                       "species": "papillosum",
-                      "fin": ""
+                      "fin": "kalvakkarahkasammal"
                     },
                     {
                       "req": "s",
                       "genus": "sphagnum",
                       "species": "platyphyllum",
-                      "fin": ""
+                      "fin": "lamparerahkasammal"
                     },
                     {
                       "req": "s",
                       "genus": "sphagnum",
                       "species": "pulchrum",
-                      "fin": ""
+                      "fin": "kurjenrahkasammal"
                     },
                     {
                       "req": "s",
                       "genus": "sphagnum",
                       "species": "riparium",
-                      "fin": ""
+                      "fin": "haprarahkasammal"
                     },
                     {
                       "req": "s",
                       "genus": "sphagnum",
                       "species": "rubellum",
-                      "fin": ""
+                      "fin": "rusorahkasammal"
                     },
                     {
                       "req": "s",
                       "genus": "sphagnum",
                       "species": "russowii",
-                      "fin": ""
+                      "fin": "varvikkorahkasammal"
                     },
                     {
                       "req": "s",
                       "genus": "sphagnum",
                       "species": "squarrosum",
-                      "fin": ""
+                      "fin": "okarahkasammal"
                     },
                     {
                       "req": "s",
                       "genus": "sphagnum",
                       "species": "subfulvum",
-                      "fin": ""
+                      "fin": "pohjanrahkasammal"
                     },
                     {
                       "req": "s",
                       "genus": "sphagnum",
                       "species": "subsecundum",
-                      "fin": ""
+                      "fin": "koukkurahkasammal"
                     },
                     {
                       "req": "s",
                       "genus": "sphagnum",
                       "species": "tenellum",
-                      "fin": ""
+                      "fin": "hentorahkasammal"
                     },
                     {
                       "req": "s",
                       "genus": "sphagnum",
                       "species": "teres",
-                      "fin": ""
+                      "fin": "lettorahkasammal"
                     },
                     {
                       "req": "s",
                       "genus": "sphagnum",
                       "species": "warnstorfii",
-                      "fin": ""
+                      "fin": "heterahkasammal"
                     }
                   ]
                 }
@@ -299,55 +299,55 @@
                       "req": "s",
                       "genus": "dicranella",
                       "species": "cerviculata",
-                      "fin": ""
+                      "fin": "ojanukkasammal"
                     },
                     {
                       "req": "s",
                       "genus": "dicranella",
                       "species": "palustris",
-                      "fin": ""
+                      "fin": "isovesikonsammal"
                     },
                     {
                       "req": "s",
                       "genus": "dicranum",
                       "species": "angustum",
-                      "fin": ""
+                      "fin": "äimäkynsisammal"
                     },
                     {
                       "req": "s",
                       "genus": "dicranum",
                       "species": "bergeri",
-                      "fin": ""
+                      "fin": "rämekynsisammal"
                     },
                     {
                       "req": "s",
                       "genus": "dicranum",
                       "species": "bonjeanii",
-                      "fin": ""
+                      "fin": "lettokynsisammal"
                     },
                     {
                       "req": "s",
                       "genus": "dicranum",
                       "species": "elongatum",
-                      "fin": ""
+                      "fin": "tunturikynsisammal"
                     },
                     {
                       "req": "s",
                       "genus": "dicranum",
                       "species": "majus",
-                      "fin": ""
+                      "fin": "isokynsisammal"
                     },
                     {
                       "req": "s",
                       "genus": "dicranum",
                       "species": "polysetum",
-                      "fin": ""
+                      "fin": "kangaskynsisammal"
                     },
                     {
                       "req": "s",
                       "genus": "dicranum",
                       "species": "scoparium",
-                      "fin": ""
+                      "fin": "kivikynsisammal"
                     }
                   ]
                 },
@@ -360,13 +360,13 @@
                       "req": "s",
                       "genus": "fissidens",
                       "species": "adianthoides",
-                      "fin": ""
+                      "fin": "lettosiipisammal"
                     },
                     {
                       "req": "s",
                       "genus": "fissidens",
                       "species": "osmundoides",
-                      "fin": ""
+                      "fin": "rantasiipisammal"
                     }
                   ]
                 },
@@ -379,7 +379,7 @@
                       "req": "s",
                       "genus": "oncophorus",
                       "species": "virens",
-                      "fin": ""
+                      "fin": "sahatihkusammal"
                     }
                   ]
                 }
@@ -399,13 +399,13 @@
                       "req": "s",
                       "genus": "bryum",
                       "species": "pseudotriquetrum",
-                      "fin": ""
+                      "fin": "lettohiirensammal"
                     },
                     {
                       "req": "s",
                       "genus": "bryum",
                       "species": "weigelii",
-                      "fin": ""
+                      "fin": "hetehiirensammal"
                     }
                   ]
                 },
@@ -418,43 +418,43 @@
                       "req": "s",
                       "genus": "plagiomnium",
                       "species": "elatum",
-                      "fin": ""
+                      "fin": "tihkulehväsammal"
                     },
                     {
                       "req": "s",
                       "genus": "plagiomnium",
                       "species": "ellipticum",
-                      "fin": ""
+                      "fin": "korpilehväsammal"
                     },
                     {
                       "req": "s",
                       "genus": "pseudobryum",
                       "species": "cinclidioides",
-                      "fin": ""
+                      "fin": "kiiltolehväsammal"
                     },
                     {
                       "req": "s",
                       "genus": "rhizomnium",
                       "species": "pseudopunctatum",
-                      "fin": ""
+                      "fin": "lettolehväsammal"
                     },
                     {
                       "req": "s",
                       "genus": "rhizomnium",
                       "species": "punctatum",
-                      "fin": ""
+                      "fin": "kilpilehväsammal"
                     },
                     {
                       "req": "s",
                       "genus": "cinclidium",
                       "species": "stygium",
-                      "fin": ""
+                      "fin": "lettokilpisammal"
                     },
                     {
                       "req": "s",
                       "genus": "cinclidium",
                       "species": "subrotundum",
-                      "fin": ""
+                      "fin": "luhtakilpisammal"
                     }
                   ]
                 },
@@ -467,7 +467,7 @@
                       "req": "s",
                       "genus": "aulacomnium",
                       "species": "palustre",
-                      "fin": ""
+                      "fin": "suonihuopasammal"
                     }
                   ]
                 },
@@ -480,19 +480,19 @@
                       "req": "s",
                       "genus": "paludella",
                       "species": "squarrosa",
-                      "fin": ""
+                      "fin": "rassisammal"
                     },
                     {
                       "req": "s",
                       "genus": "meesia",
                       "species": "triquetra",
-                      "fin": ""
+                      "fin": "kairasammal"
                     },
                     {
                       "req": "s",
                       "genus": "catoscopium",
                       "species": "nigritum",
-                      "fin": ""
+                      "fin": "mustapääsammal"
                     }
                   ]
                 },
@@ -505,7 +505,7 @@
                       "req": "s",
                       "genus": "philonotis",
                       "species": "fontana",
-                      "fin": ""
+                      "fin": "purolähdesammal"
                     }
                   ]
                 }
@@ -525,109 +525,109 @@
                       "req": "s",
                       "genus": "calliergon",
                       "species": "cordifolium",
-                      "fin": ""
+                      "fin": "luhtakuirisammal"
                     },
                     {
                       "req": "s",
                       "genus": "calliergon",
                       "species": "giganteum",
-                      "fin": ""
+                      "fin": "hetekuirisammal"
                     },
                     {
                       "req": "s",
                       "genus": "calliergon",
                       "species": "richardsonii",
-                      "fin": ""
+                      "fin": "lettokuirisammal"
                     },
                     {
                       "req": "s",
                       "genus": "calliergonella",
                       "species": "cuspidata",
-                      "fin": ""
+                      "fin": "otaluhtasammal"
                     },
                     {
                       "req": "s",
                       "genus": "campylium",
                       "species": "stellatum",
-                      "fin": ""
+                      "fin": "lettoväkäsammal"
                     },
                     {
                       "req": "s",
                       "genus": "cratoneuron",
                       "species": "filicinum",
-                      "fin": ""
+                      "fin": "sirohuurresammal"
                     },
                     {
                       "req": "s",
                       "genus": "hamatocaulis",
                       "species": "vernicosus",
-                      "fin": ""
+                      "fin": "kiiltosirppisammal"
                     },
                     {
                       "req": "s",
                       "genus": "loeskypnum",
                       "species": "badium",
-                      "fin": ""
+                      "fin": "kultasirppisammal"
                     },
                     {
                       "req": "s",
                       "genus": "palustriella",
                       "species": "decipiens",
-                      "fin": ""
+                      "fin": "pohjanhuurresammal"
                     },
                     {
                       "req": "s",
                       "genus": "palustriella",
                       "species": "falcata",
-                      "fin": ""
+                      "fin": "sirppihuurresammal"
                     },
                     {
                       "req": "s",
                       "genus": "scorpidium",
                       "species": "cossonii",
-                      "fin": ""
+                      "fin": "lettosirppisammal"
                     },
                     {
                       "req": "s",
                       "genus": "scorpidium",
                       "species": "revolvens",
-                      "fin": ""
+                      "fin": "rimpisirppisammal"
                     },
                     {
                       "req": "s",
                       "genus": "scorpidium",
                       "species": "scorpioides",
-                      "fin": ""
+                      "fin": "lettolierosammal"
                     },
                     {
                       "req": "s",
                       "genus": "straminergon",
                       "species": "stramineum",
-                      "fin": ""
+                      "fin": "kalvaskuirisammal"
                     },
                     {
                       "req": "s",
                       "genus": "warnstorfia",
                       "species": "exannulata",
-                      "fin": ""
+                      "fin": "hetesirppisammal"
                     },
                     {
                       "req": "s",
                       "genus": "warnstorfia",
                       "species": "fluitans",
-                      "fin": ""
+                      "fin": "nevasirppisammal"
                     },
                     {
                       "req": "s",
                       "genus": "warnstorfia",
                       "species": "procera",
-                      "fin": ""
+                      "fin": "aapasirppisammal"
                     },
                     {
                       "req": "s",
                       "genus": "warnstorfia",
                       "species": "sarmentosa",
-                      "fin": ""
+                      "fin": "punasirppisammal"
                     }
                   ]
                 },
@@ -640,13 +640,13 @@
                       "req": "s",
                       "genus": "brachythecium",
                       "species": "rivulare",
-                      "fin": ""
+                      "fin": "purosuikerosammal"
                     },
                     {
                       "req": "s",
                       "genus": "tomentypnum",
                       "species": "nitens",
-                      "fin": ""
+                      "fin": "kultasammal"
                     }
                   ]
                 },
@@ -659,7 +659,7 @@
                       "req": "s",
                       "genus": "helodium",
                       "species": "blandowii",
-                      "fin": ""
+                      "fin": "kampasammal"
                     }
                   ]
                 },
@@ -672,13 +672,13 @@
                       "req": "s",
                       "genus": "hylocomium",
                       "species": "splendens",
-                      "fin": ""
+                      "fin": "metsäkerrossammal"
                     },
                     {
                       "req": "s",
                       "genus": "hylocomiastrum",
                       "species": "umbratum",
-                      "fin": ""
+                      "fin": "korpikerrossammal"
                     }
                   ]
                 }
@@ -698,25 +698,25 @@
                       "req": "s",
                       "genus": "polytrichum",
                       "species": "commune",
-                      "fin": ""
+                      "fin": "korpikarhunsammal"
                     },
                     {
                       "req": "s",
                       "genus": "polytrichum",
                       "species": "jensenii",
-                      "fin": ""
+                      "fin": "rantakarhunsammal"
                     },
                     {
                       "req": "s",
                       "genus": "polytrichum",
                       "species": "strictum",
-                      "fin": ""
+                      "fin": "rämekarhunsammal"
                     },
                     {
                       "req": "s",
                       "genus": "polytrichum",
                       "species": "swartzii",
-                      "fin": ""
+                      "fin": "luhtakarhunsammal"
                     }
                   ]
                 }
@@ -750,7 +750,7 @@
                       "req": "s",
                       "genus": "lycopodiella",
                       "species": "inundata",
-                      "fin": ""
+                      "fin": "tulvakonnanlieko"
                     }
                   ]
                 }
@@ -770,7 +770,7 @@
                       "req": "s",
                       "genus": "selaginella",
                       "species": "selaginoides",
-                      "fin": ""
+                      "fin": "mähkä"
                     }
                   ]
                 }
@@ -804,19 +804,19 @@
                       "req": "s",
                       "genus": "equisetum",
                       "species": "fluviatile",
-                      "fin": ""
+                      "fin": "järvikorte"
                     },
                     {
                       "req": "s",
                       "genus": "equisetum",
                       "species": "palustre",
-                      "fin": ""
+                      "fin": "suokorte"
                     },
                     {
                       "req": "s",
                       "genus": "equisetum",
                       "species": "variegatum",
-                      "fin": ""
+                      "fin": "kirjokorte"
                     }
                   ]
                 }
@@ -843,13 +843,13 @@
                       "req": "s",
                       "genus": "thelypteris",
                       "species": "palustris",
-                      "fin": ""
+                      "fin": "nevaimarre"
                     },
                     {
                       "req": "s",
                       "genus": "thelypteris",
                       "species": "phegopteris",
-                      "fin": ""
+                      "fin": "korpi-imarre"
                     }
                   ]
                 }
@@ -883,7 +883,7 @@
                       "req": "s",
                       "genus": "bistorta",
                       "species": "vivipara",
-                      "fin": ""
+                      "fin": "nurmikonnantatar"
                     }
                   ]
                 },
@@ -896,19 +896,19 @@
                       "req": "s",
                       "genus": "drosera",
                       "species": "anglica",
-                      "fin": ""
+                      "fin": "pitkälehtikihokki"
                     },
                     {
                       "req": "s",
                       "genus": "drosera",
                       "species": "intermedia",
-                      "fin": ""
+                      "fin": "pikkukihokki"
                     },
                     {
                       "req": "s",
                       "genus": "drosera",
                       "species": "rotundifolia",
-                      "fin": ""
+                      "fin": "pyöreälehtikihokki"
                     }
                   ]
                 },
@@ -921,7 +921,7 @@
                       "req": "s",
                       "genus": "montia",
                       "species": "fontana",
-                      "fin": ""
+                      "fin": "hetekaali"
                     }
                   ]
                 }
@@ -941,31 +941,31 @@
                       "req": "s",
                       "genus": "andromeda",
                       "species": "polifolia",
-                      "fin": ""
+                      "fin": "suokukka"
                     },
                     {
                       "req": "s",
                       "genus": "chamaedaphne",
                       "species": "calyculata",
-                      "fin": ""
+                      "fin": "vaivero"
                     },
                     {
                       "req": "s",
                       "genus": "ledum",
                       "species": "palustre",
-                      "fin": ""
+                      "fin": "suopursu"
                     },
                     {
                       "req": "s",
                       "genus": "vaccinium",
                       "species": "microcarpum",
-                      "fin": ""
+                      "fin": "pikkukarpalo"
                     },
                     {
                       "req": "s",
                       "genus": "vaccinium",
                       "species": "oxycoccos",
-                      "fin": ""
+                      "fin": "isokarpalo"
                     }
                   ]
                 },
@@ -978,7 +978,7 @@
                       "req": "s",
                       "genus": "parnassia",
                       "species": "palustris",
-                      "fin": ""
+                      "fin": "suovilukko"
                     }
                   ]
                 }
@@ -998,37 +998,37 @@
                       "req": "s",
                       "genus": "salix",
                       "species": "aurita",
-                      "fin": ""
+                      "fin": "virpapaju"
                     },
                     {
                       "req": "s",
                       "genus": "salix",
                       "species": "lapponum",
-                      "fin": ""
+                      "fin": "pohjanpaju"
                     },
                     {
                       "req": "s",
                       "genus": "salix",
                       "species": "myrsinifolia",
-                      "fin": ""
+                      "fin": "mustuvapaju"
                     },
                     {
                       "req": "s",
                       "genus": "salix",
                       "species": "myrsinites",
-                      "fin": ""
+                      "fin": "lettopaju"
                     },
                     {
                       "req": "s",
                       "genus": "salix",
                       "species": "myrtilloides",
-                      "fin": ""
+                      "fin": "juolukkapaju"
                     },
                     {
                       "req": "s",
                       "genus": "salix",
                       "species": "phylicifolia",
-                      "fin": ""
+                      "fin": "kiiltopaju"
                     }
                   ]
                 },
@@ -1041,13 +1041,13 @@
                       "req": "s",
                       "genus": "viola",
                       "species": "epipsila",
-                      "fin": ""
+                      "fin": "korpiorvokki"
                     },
                     {
                       "req": "s",
                       "genus": "viola",
                       "species": "palustris",
-                      "fin": ""
+                      "fin": "suo-orvokki"
                     }
                   ]
                 }
@@ -1067,13 +1067,13 @@
                       "req": "s",
                       "genus": "saxifraga",
                       "species": "aizoides",
-                      "fin": ""
+                      "fin": "kultarikko"
                     },
                     {
                       "req": "s",
                       "genus": "saxifraga",
                       "species": "hirculus",
-                      "fin": ""
+                      "fin": "lettorikko"
                     }
                   ]
                 }
@@ -1093,7 +1093,7 @@
                       "req": "s",
                       "genus": "rubus",
                       "species": "chamaemorus",
-                      "fin": ""
+                      "fin": "muurain"
                     }
                   ]
                 }
@@ -1113,19 +1113,19 @@
                       "req": "s",
                       "genus": "epilobium",
                       "species": "alsinifolium",
-                      "fin": ""
+                      "fin": "hetehorsma"
                     },
                     {
                       "req": "s",
                       "genus": "epilobium",
                       "species": "davuricum",
-                      "fin": ""
+                      "fin": "vuorolehtihorsma"
                     },
                     {
                       "req": "s",
                       "genus": "epilobium",
                       "species": "palustre",
-                      "fin": ""
+                      "fin": "suohorsma"
                     }
                   ]
                 }
@@ -1145,7 +1145,7 @@
                       "req": "s",
                       "genus": "peucedanum",
                       "species": "palustre",
-                      "fin": ""
+                      "fin": "luhtasuoputki"
                     }
                   ]
                 }
@@ -1165,13 +1165,13 @@
                       "req": "s",
                       "genus": "galium",
                       "species": "palustre",
-                      "fin": ""
+                      "fin": "rantamatara"
                     },
                     {
                       "req": "s",
                       "genus": "galium",
                       "species": "uliginosum",
-                      "fin": ""
+                      "fin": "luhtamatara"
                     }
                   ]
                 }
@@ -1191,19 +1191,19 @@
                       "req": "s",
                       "genus": "bartsia",
                       "species": "alpina",
-                      "fin": ""
+                      "fin": "punakko"
                     },
                     {
                       "req": "s",
                       "genus": "pedicularis",
                       "species": "palustris",
-                      "fin": ""
+                      "fin": "luhtakuusio"
                     },
                     {
                       "req": "s",
                       "genus": "pedicularis",
                       "species": "sceptrum-carolinum",
-                      "fin": ""
+                      "fin": "kaarlenvaltikka"
                     }
                   ]
                 },
@@ -1216,37 +1216,37 @@
                       "req": "s",
                       "genus": "pinguicula",
                       "species": "alpina",
-                      "fin": ""
+                      "fin": "valkoyökönlehti"
                     },
                     {
                       "req": "s",
                       "genus": "pinguicula",
                       "species": "villosa",
-                      "fin": ""
+                      "fin": "karvayökönlehti"
                     },
                     {
                       "req": "s",
                       "genus": "pinguicula",
                       "species": "vulgaris",
-                      "fin": ""
+                      "fin": "siniyökönlehti"
                     },
                     {
                       "req": "s",
                       "genus": "utricularia",
                       "species": "intermedia",
-                      "fin": ""
+                      "fin": "rimpivesiherne"
                     },
                     {
                       "req": "s",
                       "genus": "utricularia",
                       "species": "minor",
-                      "fin": ""
+                      "fin": "pikkuvesiherne"
                     },
                     {
                       "req": "s",
                       "genus": "utricularia",
                       "species": "vulgaris",
-                      "fin": ""
+                      "fin": "isovesiherne"
                     }
                   ]
                 }
@@ -1266,7 +1266,7 @@
                       "req": "s",
                       "genus": "menyanthes",
                       "species": "trifoliata",
-                      "fin": ""
+                      "fin": "raate"
                     }
                   ]
                 },
@@ -1279,19 +1279,19 @@
                       "req": "s",
                       "genus": "cirsium",
                       "species": "palustre",
-                      "fin": ""
+                      "fin": "suo-ohdake"
                     },
                     {
                       "req": "s",
                       "genus": "crepis",
                       "species": "paludosa",
-                      "fin": ""
+                      "fin": "suokeltto"
                     },
                     {
                       "req": "s",
                       "genus": "saussurea",
                       "species": "alpina",
-                      "fin": ""
+                      "fin": "lääte"
                     }
                   ]
                 }
@@ -1318,7 +1318,7 @@
                       "req": "s",
                       "genus": "tofieldia",
                       "species": "pusilla",
-                      "fin": ""
+                      "fin": "pohjankarhunruoho"
                     }
                   ]
                 }
@@ -1338,31 +1338,31 @@
                       "req": "s",
                       "genus": "dactylorhiza",
                       "species": "incarnata",
-                      "fin": ""
+                      "fin": "punakämmekkä"
                     },
                     {
                       "req": "s",
                       "genus": "dactylorhiza",
                       "species": "maculata",
-                      "fin": ""
+                      "fin": "maariankämmekkä"
                     },
                     {
                       "req": "s",
                       "genus": "hammarbya",
                       "species": "paludosa",
-                      "fin": ""
+                      "fin": "suovalkku"
                     },
                     {
                       "req": "s",
                       "genus": "listera",
                       "species": "cordata",
-                      "fin": ""
+                      "fin": "herttakaksikko"
                     },
                     {
                       "req": "s",
                       "genus": "listera",
                       "species": "ovata",
-                      "fin": ""
+                      "fin": "soikkokaksikko"
                     }
                   ]
                 }
@@ -1382,7 +1382,7 @@
                       "req": "s",
                       "genus": "scheuchzeria",
                       "species": "palustris",
-                      "fin": ""
+                      "fin": "leväkkö"
                     }
                   ]
                 },
@@ -1395,13 +1395,13 @@
                       "req": "s",
                       "genus": "triglochin",
                       "species": "maritima",
-                      "fin": ""
+                      "fin": "merisuolake"
                     },
                     {
                       "req": "s",
                       "genus": "triglochin",
                       "species": "palustris",
-                      "fin": ""
+                      "fin": "hentosuolake"
                     }
                   ]
                 }
@@ -1421,13 +1421,13 @@
                       "req": "s",
                       "genus": "juncus",
                       "species": "filiformis",
-                      "fin": ""
+                      "fin": "jouhivihvilä"
                     },
                     {
                       "req": "s",
                       "genus": "juncus",
                       "species": "stygius",
-                      "fin": ""
+                      "fin": "rimpivihvilä"
                     }
                   ]
                 },
@@ -1440,223 +1440,223 @@
                       "req": "s",
                       "genus": "carex",
                       "species": "aquatilis",
-                      "fin": ""
+                      "fin": "vesisara"
                     },
                     {
                       "req": "s",
                       "genus": "carex",
                       "species": "bergrothii",
-                      "fin": ""
+                      "fin": "lettohernesara"
                     },
                     {
                       "req": "s",
                       "genus": "carex",
                       "species": "buxbaumii",
-                      "fin": ""
+                      "fin": "karttusara"
                     },
                     {
                       "req": "s",
                       "genus": "carex",
                       "species": "canescens",
-                      "fin": ""
+                      "fin": "harmaasara"
                     },
                     {
                       "req": "s",
                       "genus": "carex",
                       "species": "capillaris",
-                      "fin": ""
+                      "fin": "hapsisara"
                     },
                     {
                       "req": "s",
                       "genus": "carex",
                       "species": "capitata",
-                      "fin": ""
+                      "fin": "lettonuppisara"
                     },
                     {
                       "req": "s",
                       "genus": "carex",
                       "species": "cespitosa",
-                      "fin": ""
+                      "fin": "mätässara"
                     },
                     {
                       "req": "s",
                       "genus": "carex",
                       "species": "chordorrhiza",
-                      "fin": ""
+                      "fin": "juurtosara"
                     },
                     {
                       "req": "s",
                       "genus": "carex",
                       "species": "diandra",
-                      "fin": ""
+                      "fin": "liereäsara"
                     },
                     {
                       "req": "s",
                       "genus": "carex",
                       "species": "dioica",
-                      "fin": ""
+                      "fin": "äimäsara"
                     },
                     {
                       "req": "s",
                       "genus": "carex",
                       "species": "echinata",
-                      "fin": ""
+                      "fin": "tähtisara"
                     },
                     {
                       "req": "s",
                       "genus": "carex",
                       "species": "flava",
-                      "fin": ""
+                      "fin": "keltasara"
                     },
                     {
                       "req": "s",
                       "genus": "carex",
                       "species": "globularis",
-                      "fin": ""
+                      "fin": "pallosara"
                     },
                     {
                       "req": "s",
                       "genus": "carex",
                       "species": "heleonastes",
-                      "fin": ""
+                      "fin": "lettosara"
                     },
                     {
                       "req": "s",
                       "genus": "carex",
                       "species": "lasiocarpa",
-                      "fin": ""
+                      "fin": "jouhisara"
                     },
                     {
                       "req": "s",
                       "genus": "carex",
                       "species": "laxa",
-                      "fin": ""
+                      "fin": "velttosara"
                     },
                     {
                       "req": "s",
                       "genus": "carex",
                       "species": "limosa",
-                      "fin": ""
+                      "fin": "mutasara"
                     },
                     {
                       "req": "s",
                       "genus": "carex",
                       "species": "livida",
-                      "fin": ""
+                      "fin": "vaaleasara"
                     },
                     {
                       "req": "s",
                       "genus": "carex",
                       "species": "nigra",
-                      "fin": ""
+                      "fin": "jokapaikansara"
                     },
                     {
                       "req": "s",
                       "genus": "carex",
                       "species": "panicea",
-                      "fin": ""
+                      "fin": "hirssisara"
                     },
                     {
                       "req": "s",
                       "genus": "carex",
                       "species": "pauciflora",
-                      "fin": ""
+                      "fin": "rahkasara"
                     },
                     {
                       "req": "s",
                       "genus": "carex",
                       "species": "paupercula",
-                      "fin": ""
+                      "fin": "riippasara"
                     },
                     {
                       "req": "s",
                       "genus": "carex",
                       "species": "rostrata",
-                      "fin": ""
+                      "fin": "pullosara"
                     },
                     {
                       "req": "s",
                       "genus": "carex",
                       "species": "rotundata",
-                      "fin": ""
+                      "fin": "aapasara"
                     },
                     {
                       "req": "s",
                       "genus": "carex",
                       "species": "serotina",
-                      "fin": ""
+                      "fin": "hernesara"
                     },
                     {
                       "req": "s",
                       "genus": "carex",
                       "species": "vaginata",
-                      "fin": ""
+                      "fin": "tuppisara"
                     },
                     {
                       "req": "s",
                       "genus": "carex",
                       "species": "vesicaria",
-                      "fin": ""
+                      "fin": "luhtasara"
                     },
                     {
                       "req": "s",
                       "genus": "eriophorum",
                       "species": "angustifolium",
-                      "fin": ""
+                      "fin": "luhtavilla"
                     },
                     {
                       "req": "s",
                       "genus": "eriophorum",
                       "species": "gracile",
-                      "fin": ""
+                      "fin": "hoikkavilla"
                     },
                     {
                       "req": "s",
                       "genus": "eriophorum",
                       "species": "latifolium",
-                      "fin": ""
+                      "fin": "lettovilla"
                     },
                     {
                       "req": "s",
                       "genus": "eriophorum",
                       "species": "russeolum",
-                      "fin": ""
+                      "fin": "ruostevilla"
                     },
                     {
                       "req": "s",
                       "genus": "eriophorum",
                       "species": "vaginatum",
-                      "fin": ""
+                      "fin": "tupasvilla"
                     },
                     {
                       "req": "s",
                       "genus": "rhynchospora",
                       "species": "alba",
-                      "fin": ""
+                      "fin": "valkopiirtoheinä"
                     },
                     {
                       "req": "s",
                       "genus": "rhynchospora",
                       "species": "fusca",
-                      "fin": ""
+                      "fin": "ruskopiirtoheinä"
                     },
                     {
                       "req": "s",
                       "genus": "schoenus",
                       "species": "ferrugineus",
-                      "fin": ""
+                      "fin": "ruskoruosteheinä"
                     },
                     {
                       "req": "s",
                       "genus": "trichophorum",
                       "species": "alpinum",
-                      "fin": ""
+                      "fin": "villapääluikka"
                     },
                     {
                       "req": "s",
                       "genus": "trichophorum",
                       "species": "cespitosum",
-                      "fin": ""
+                      "fin": "tupasluikka"
                     }
                   ]
                 },
@@ -1669,31 +1669,31 @@
                       "req": "s",
                       "genus": "molinia",
                       "species": "caerulea",
-                      "fin": ""
+                      "fin": "siniheinä"
                     },
                     {
                       "req": "s",
                       "genus": "phalaris",
                       "species": "arundinacea",
-                      "fin": ""
+                      "fin": "ruokohelpi"
                     },
                     {
                       "req": "s",
                       "genus": "phragmites",
                       "species": "australis",
-                      "fin": ""
+                      "fin": "järviruoko"
                     },
                     {
                       "req": "s",
                       "genus": "poa",
                       "species": "alpigena",
-                      "fin": ""
+                      "fin": "pohjannurmikka"
                     },
                     {
                       "req": "s",
                       "genus": "poa",
                       "species": "palustris",
-                      "fin": ""
+                      "fin": "rantanurmikka"
                     }
                   ]
                 }
