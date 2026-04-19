@@ -8,6 +8,8 @@ services:
     restart: unless-stopped
     expose:
       - 5000   # exposed to other containers on the network (not to host)
+    volume:
+      - ./data:/app/data
 
 networks:
   edge:
