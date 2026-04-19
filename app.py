@@ -347,7 +347,8 @@ def _load_current_dataset():
 
 def get_actions_position() -> str:
     v = session.get("actions_position")
-    return v if v in ("top", "bottom") else "bottom"
+    return "bottom"
+    # return v if v in ("top", "bottom") else "bottom"
 
 
 # ---------- taxa tree + enabled nodes ----------
@@ -1042,7 +1043,7 @@ def save_settings():
     selected_image_dataset = get_selected_image_dataset()
 
     pos = request.form.get("actions_position", "top")
-    session["actions_position"] = pos if pos in ("top", "bottom") else "top"
+    session["actions_position"] = "bottom"
 
     session.pop("deck", None)
     session.pop("deck_key", None)
@@ -1071,7 +1072,8 @@ def save_settings():
         image_datasets=image_datasets,
         selected_image_dataset=selected_image_dataset,
         rank_fi=RANK_FI,
-        actions_position=session.get("actions_position", "top"),
+        # actions_position=session.get("actions_position", "top"),
+        actions_position="bottom",
         hint_language=hint_lang,
         img_toggle=img_toggle,
         saved=True,
