@@ -325,6 +325,18 @@
           toggleChip(key, btn);
         });
       });
+      const im = document.getElementById("heroImg");
+      const overlay = document.getElementById("heroOverlay");
+      if (im && overlay && heroPhotos.length) {
+        im.style.minHeight = "";
+        requestAnimationFrame(() => {
+          const chipsH = overlay.scrollHeight + 16; // 16px breathing room
+          const imgH = im.getBoundingClientRect().height;
+          if (chipsH > imgH) {
+            im.style.minHeight = chipsH + "px";
+          }
+        });
+      }
     }
 
     function getGenusSpeciesText(mode) {

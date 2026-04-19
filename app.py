@@ -54,7 +54,7 @@ PICTURE_SOURCE = ["laji", "inat"]
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR
 DEFAULT_DATASET = "UEF kasvit suppea"
-DEFAULT_IMAGE_DATASET = "Laji.fi"
+DEFAULT_IMAGE_DATASET = "iNaturalist taksonikuvat"
 DATASET_DIR = Path("static/datasets/")
 IMAGE_DATASET_DIR = Path("static/image_datasets/")
 
@@ -87,7 +87,7 @@ ANIMAL_DATASET_MAP = {
     "UEF selkärankaiset suppea": DATASET_DIR / "UEF_selkarankaiset_suppea.json",
 }
 
-DATASET_MAP = {**PLANT_DATASET_MAP, **ANIMAL_DATASET_MAP}
+DATASET_MAP = {**ANIMAL_DATASET_MAP, **PLANT_DATASET_MAP}
 
 PLANT_DATASETS = list(PLANT_DATASET_MAP.keys())
 ANIMAL_DATASETS = list(ANIMAL_DATASET_MAP.keys())
@@ -122,7 +122,7 @@ def get_img_toggle() -> bool:
 
 
 def get_photo_mode() -> bool:
-    v = bool(int(session.get("photo_mode", 0)))
+    v = bool(int(session.get("photo_mode", 1)))
     # v = session.get("photo_mode")
     if isinstance(v, bool):
         return v
@@ -1047,7 +1047,7 @@ def save_settings():
     session.pop("deck", None)
     session.pop("deck_key", None)
 
-    photo_mode = bool(int(request.form.get("photo_mode", 0)))
+    photo_mode = get_photo_mode()
     session["photo_mode"] = photo_mode
     session["car_mode"] = request.form.get("car_mode") == "1"
 
