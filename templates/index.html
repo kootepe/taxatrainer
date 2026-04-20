@@ -1016,7 +1016,7 @@
         e.preventDefault();
         if (heroPhotos.length > 1) showHeroPhoto(heroIndex - 1);
       }
-      if (e.key === "ArrowRight") {
+      if (e.key === "ArrowRight" || e.key.toLowerCase() == "b") {
         e.preventDefault();
         if (heroPhotos.length > 1) showHeroPhoto(heroIndex + 1);
       }
