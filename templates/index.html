@@ -987,6 +987,10 @@
       const tag = (e.target?.tagName || "").toLowerCase();
       if (tag === "input" || tag === "textarea") return;
 
+      if (e.key.toLowerCase() === "m") {
+        e.preventDefault();
+        showAnswers();
+      }
       if (e.key.toLowerCase() === "s") {
         e.preventDefault();
         showAnswers();
@@ -1012,6 +1016,11 @@
       const tag = (e.target?.tagName || "").toLowerCase();
       if (tag === "input" || tag === "textarea") return;
 
+      if (e.key === " ") {
+        e.preventDefault();
+        closeLightbox();
+        newItem();
+      }
       if (e.key.toLowerCase() === "n") {
         e.preventDefault();
         closeLightbox();
