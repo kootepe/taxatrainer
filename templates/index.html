@@ -1006,7 +1006,21 @@
         }
       }
     });
+    document.addEventListener("keydown", (e) => {
+      const tag = (e.target?.tagName || "").toLowerCase();
+      if (tag === "input" || tag === "textarea") return;
 
+      if (!current.photo_mode) return;
+
+      if (e.key === "ArrowLeft" || e.key.toLowerCase() === "v") {
+        e.preventDefault();
+        if (heroPhotos.length > 1) showHeroPhoto(heroIndex - 1);
+      }
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
+        if (heroPhotos.length > 1) showHeroPhoto(heroIndex + 1);
+      }
+    });
     document.getElementById("lightbox")?.addEventListener("click", (e) => {
       if (e.target === document.getElementById("lightbox")) {
         closeLightbox();
