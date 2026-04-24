@@ -78,6 +78,7 @@ PLANT_DATASET_MAP = {
     "UEF kasvit suokasvit": DATASET_DIR / "UEF_kasvit_suokasvit.json",
     "UEF kasvit yksikaksi": DATASET_DIR / "UEF_kasvit_laaja_yksikaksi.json",
     "UEF kasvit laaja": DATASET_DIR / "UEF_kasvit_laaja_merge.json",
+    "Eeron yksikaksi": DATASET_DIR / "eero_harj.json",
     "Helsinki ME kasvit": DATASET_DIR / "Helsinki_ME_kasvit.json",
 }
 
