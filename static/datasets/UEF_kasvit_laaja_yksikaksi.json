@@ -1,0 +1,2038 @@
+{
+  "phylum": [
+    {
+      "req": "l",
+      "lat": "anthophyta",
+      "fin": "koppisiemeniset",
+      "class": [
+        {
+          "req": "l",
+          "lat": "liliopsida",
+          "fin": "yksisirkkaiset",
+          "order": [
+            {
+              "req": "l",
+              "lat": "liliales",
+              "fin": "liljakasvien lahko",
+              "family": [
+                {
+                  "req": "l",
+                  "lat": "liliaceae",
+                  "fin": "liljakasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "gagea",
+                      "species": "minima",
+                      "fin": "pikkukäenrieska"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "req": "l",
+              "lat": "asparagales",
+              "fin": "parsakasvien lahko",
+              "family": [
+                {
+                  "req": "l",
+                  "lat": "alliaceae",
+                  "fin": "laukkakasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "allium",
+                      "species": "schoenoprasum",
+                      "fin": "ruoholaukka"
+                    }
+                  ]
+                },
+                {
+                  "req": "l",
+                  "lat": "iridaceae",
+                  "fin": "kurjenmiekkakasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "iris",
+                      "species": "pseudacorus",
+                      "fin": "kurjenmiekka"
+                    }
+                  ]
+                },
+                {
+                  "req": "l",
+                  "lat": "orchidaceae",
+                  "fin": "kämmekkäkasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "cypripedium",
+                      "species": "calceolus",
+                      "fin": "tikankontti"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "listera",
+                      "species": "ovata",
+                      "fin": "soikkokaksikko"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "listera",
+                      "species": "cordata",
+                      "fin": "herttakaksikko"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "gymnadenia",
+                      "species": "conopsea",
+                      "fin": "kirkiruoho"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "coeloglossum",
+                      "species": "viride",
+                      "fin": "pussikämmekkä"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "dactylorhiza",
+                      "species": "incarnata subsp. incarnata",
+                      "fin": "punakämmekkä"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "corallorhiza",
+                      "species": "trifida",
+                      "fin": "harajuuri"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "req": "l",
+              "lat": "alismatales",
+              "fin": "sarpiokasvien lahko",
+              "family": [
+                {
+                  "req": "l",
+                  "lat": "butomaceae",
+                  "fin": "sarjarimpikasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "butomus",
+                      "species": "umbellatus",
+                      "fin": "sarjarimpi"
+                    }
+                  ]
+                },
+                {
+                  "req": "l",
+                  "lat": "alismataceae",
+                  "fin": "sarpiokasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "sagittaria",
+                      "species": "sagittifolia",
+                      "fin": "pystykeiholehti"
+                    }
+                  ]
+                },
+                {
+                  "req": "l",
+                  "lat": "hydrocharitaceae",
+                  "fin": "kilpukkakasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "hydrocharis",
+                      "species": "morsus-ranae",
+                      "fin": "kilpukka"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "stratiotes",
+                      "species": "aloides",
+                      "fin": "sahalehti"
+                    }
+                  ]
+                },
+                {
+                  "req": "l",
+                  "lat": "juncaginaceae",
+                  "fin": "suolakekasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "triglochin",
+                      "species": "palustris",
+                      "fin": "hentosuolake"
+                    }
+                  ]
+                },
+                {
+                  "req": "l",
+                  "lat": "potamogetonaceae",
+                  "fin": "vitakasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "potamogeton",
+                      "species": "gramineus",
+                      "fin": "heinävita"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "potamogeton",
+                      "species": "perfoliatus",
+                      "fin": "ahvenvita"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "potamogeton",
+                      "species": "berchtoldii",
+                      "fin": "pikkuvita"
+                    }
+                  ]
+                },
+                {
+                  "req": "l",
+                  "lat": "zosteraceae",
+                  "fin": "ajokaskasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "zostera",
+                      "species": "marina",
+                      "fin": "meriajokas"
+                    }
+                  ]
+                },
+                {
+                  "req": "l",
+                  "lat": "zannichelliaceae",
+                  "fin": "haurakasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "zannichellia",
+                      "species": "",
+                      "fin": "haurat"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "req": "l",
+              "lat": "poales",
+              "fin": "heinäkasvien lahko",
+              "family": [
+                {
+                  "req": "l",
+                  "lat": "sparganiaceae",
+                  "fin": "palpakkokasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "sparganium",
+                      "species": "erectum subsp. microcarpum",
+                      "fin": "ojapalpakko"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "sparganium",
+                      "species": "gramineum",
+                      "fin": "siimapalpakko"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "sparganium",
+                      "species": "natans",
+                      "fin": "pikkupalpakko"
+                    }
+                  ]
+                },
+                {
+                  "req": "l",
+                  "lat": "juncaceae",
+                  "fin": "vihviläkasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "juncus",
+                      "species": "effusus",
+                      "fin": "röyhyvihvilä"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "juncus",
+                      "species": "bufonius subsp. bufonius",
+                      "fin": "konnanvihvilä"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "juncus",
+                      "species": "alpinoarticulatus",
+                      "fin": "rantavihvilä"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "juncus",
+                      "species": "stygius",
+                      "fin": "rimpivihvilä"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "luzula",
+                      "species": "multiflora subsp. multiflora",
+                      "fin": "nurmipiippo"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "luzula",
+                      "species": "pallescens",
+                      "fin": "kalvaspiippo"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "luzula",
+                      "species": "sudetica",
+                      "fin": "sykeröpiippo"
+                    }
+                  ]
+                },
+                {
+                  "req": "l",
+                  "lat": "cyperaceae",
+                  "fin": "sarakasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "eriophorum",
+                      "species": "gracile",
+                      "fin": "hoikkavilla"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "eleocharis",
+                      "species": "acicularis",
+                      "fin": "hapsiluikka"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "rhynchospora",
+                      "species": "alba",
+                      "fin": "valkopiirtoheinä"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "carex",
+                      "species": "diandra",
+                      "fin": "liereäsara"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "carex",
+                      "species": "dioica",
+                      "fin": "äimäsara"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "carex",
+                      "species": "elongata",
+                      "fin": "pitkäpääsara"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "carex",
+                      "species": "brunnescens",
+                      "fin": "polkusara"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "carex",
+                      "species": "loliacea",
+                      "fin": "korpisara"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "carex",
+                      "species": "disperma",
+                      "fin": "hentosara"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "carex",
+                      "species": "panicea",
+                      "fin": "hirssisara"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "carex",
+                      "species": "vaginata",
+                      "fin": "tuppisara"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "carex",
+                      "species": "livida",
+                      "fin": "vaaleasara"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "carex",
+                      "species": "flava",
+                      "fin": "keltasara"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "carex",
+                      "species": "viridula",
+                      "fin": "hernesara"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "carex",
+                      "species": "magellanica",
+                      "fin": "riippasara"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "carex",
+                      "species": "buxbaumii subsp. buxbaumii",
+                      "fin": "nuijasara"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "carex",
+                      "species": "aquatilis",
+                      "fin": "vesisara"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "carex",
+                      "species": "elata",
+                      "fin": "piukkasara"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "carex",
+                      "species": "cespitosa",
+                      "fin": "mätässara"
+                    }
+                  ]
+                },
+                {
+                  "req": "l",
+                  "lat": "poaceae",
+                  "fin": "heinäkasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "festuca",
+                      "species": "pratensis",
+                      "fin": "nurminata"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "festuca",
+                      "species": "ovina",
+                      "fin": "lampaannata"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "lolium",
+                      "species": "perenne",
+                      "fin": "englanninraiheinä"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "poa",
+                      "species": "trivialis",
+                      "fin": "karheanurmikka"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "poa",
+                      "species": "remota",
+                      "fin": "korpinurmikka"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "poa",
+                      "species": "palustris",
+                      "fin": "rantanurmikka"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "poa",
+                      "species": "nemoralis",
+                      "fin": "lehtonurmikka"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "bromus",
+                      "species": "inermis",
+                      "fin": "idänkattara"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "leymus",
+                      "species": "arenarius",
+                      "fin": "rantavehnä"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "elymus",
+                      "species": "caninus",
+                      "fin": "koiranvehnä"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "hierochloë",
+                      "species": "hirta",
+                      "fin": "niittymaarianheinä"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "agrostis",
+                      "species": "canina",
+                      "fin": "luhtarölli"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "agrostis",
+                      "species": "gigantea",
+                      "fin": "isorölli"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "agrostis",
+                      "species": "stolonifera",
+                      "fin": "rönsyrölli"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "calamagrostis",
+                      "species": "canescens",
+                      "fin": "viitakastikka"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "calamagrostis",
+                      "species": "stricta",
+                      "fin": "luhtakastikka"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "alopecurus",
+                      "species": "geniculatus",
+                      "fin": "polvipuntarpää"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "alopecurus",
+                      "species": "aequalis",
+                      "fin": "rantapuntarpää"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "nardus",
+                      "species": "stricta",
+                      "fin": "jäkki"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "req": "l",
+      "lat": "anthophyta",
+      "fin": "koppisiemeniset",
+      "class": [
+        {
+          "req": "l",
+          "lat": "magnoliopsida",
+          "fin": "kaksisirkkaiset",
+          "order": [
+            {
+              "req": "l",
+              "lat": "nymphaeales",
+              "fin": "lummekasvien lahko",
+              "family": [
+                {
+                  "req": "l",
+                  "lat": "nymphaeaceae",
+                  "fin": "lummekasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "nymphaea",
+                      "species": "tetragona",
+                      "fin": "suomenlumme"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "req": "l",
+              "lat": "ranunculales",
+              "fin": "leinikkikasvien lahko",
+              "family": [
+                {
+                  "req": "l",
+                  "lat": "ranunculaceae",
+                  "fin": "leinikkikasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "actaea",
+                      "species": "spicata",
+                      "fin": "mustakonnanmarja"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "anemone",
+                      "species": "ranunculoides",
+                      "fin": "keltavuokko"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "pulsatilla",
+                      "species": "vernalis",
+                      "fin": "kangasvuokko"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "ranunculus",
+                      "species": "polyanthemos",
+                      "fin": "aholeinikki"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "ranunculus",
+                      "species": "auricomus",
+                      "fin": "kevätleinikit"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "ranunculus",
+                      "species": "sceleratus",
+                      "fin": "konnanleinikki"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "ranunculus",
+                      "species": "reptans",
+                      "fin": "rantaleinikki"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "ranunculus",
+                      "species": "lingua",
+                      "fin": "jokileinikki"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "myosurus",
+                      "species": "minimus",
+                      "fin": "hiirenhäntä"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "thalictrum",
+                      "species": "flavum",
+                      "fin": "keltaängelmä"
+                    }
+                  ]
+                },
+                {
+                  "req": "l",
+                  "lat": "fumariaceae",
+                  "fin": "emäkkikasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "fumaria",
+                      "species": "officinalis",
+                      "fin": "peltoemäkki"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "req": "l",
+              "lat": "rosales",
+              "fin": "ruusukasvien lahko",
+              "family": [
+                {
+                  "req": "l",
+                  "lat": "ulmaceae",
+                  "fin": "jalavakasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "ulmus",
+                      "species": "laevis",
+                      "fin": "kynäjalava"
+                    }
+                  ]
+                },
+                {
+                  "req": "l",
+                  "lat": "cannabaceae",
+                  "fin": "hamppukasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "humulus",
+                      "species": "lupulus",
+                      "fin": "humala"
+                    }
+                  ]
+                },
+                {
+                  "req": "l",
+                  "lat": "rosaceae",
+                  "fin": "ruusukasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "rubus",
+                      "species": "arcticus",
+                      "fin": "mesimarja"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "dryas",
+                      "species": "octopetala",
+                      "fin": "lapinvuokko"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "potentilla",
+                      "species": "argentea",
+                      "fin": "hopeahanhikki"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "potentilla",
+                      "species": "norvegica",
+                      "fin": "peltohanhikki"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "amelanchier",
+                      "species": "spicata",
+                      "fin": "isotuomipihlaja"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "req": "l",
+              "lat": "fagales",
+              "fin": "pyökkikasvien lahko",
+              "family": [
+                {
+                  "req": "l",
+                  "lat": "betulaceae",
+                  "fin": "koivukasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "betula",
+                      "species": "pubescens subsp. czerepanovii",
+                      "fin": "tunturikoivu"
+                    }
+                  ]
+                },
+                {
+                  "req": "l",
+                  "lat": "myricaceae",
+                  "fin": "suomyrttikasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "myrica",
+                      "species": "gale",
+                      "fin": "suomyrtti"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "req": "l",
+              "lat": "caryophyllales",
+              "fin": "kohokkikasvien lahko",
+              "family": [
+                {
+                  "req": "l",
+                  "lat": "caryophyllaceae",
+                  "fin": "kohokkikasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "honckenya",
+                      "species": "peploides",
+                      "fin": "suola-arho"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "stellaria",
+                      "species": "palustris",
+                      "fin": "luhtatähtimö"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "stellaria",
+                      "species": "longifolia",
+                      "fin": "metsätähtimö"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "scleranthus",
+                      "species": "annuus",
+                      "fin": "viherjäsenruoho"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "spergula",
+                      "species": "arvensis",
+                      "fin": "peltohatikka"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "spergularia",
+                      "species": "rubra",
+                      "fin": "punasolmukki"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "lychnis",
+                      "species": "flos-cuculi",
+                      "fin": "käenkukka"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "silene",
+                      "species": "vulgaris",
+                      "fin": "nurmikohokki"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "silene",
+                      "species": "latifolia subsp. alba",
+                      "fin": "valkoailakki"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "saponaria",
+                      "species": "officinalis",
+                      "fin": "suopayrtti"
+                    }
+                  ]
+                },
+                {
+                  "req": "l",
+                  "lat": "chenopodiaceae",
+                  "fin": "savikkakasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "atriplex",
+                      "species": "patula",
+                      "fin": "kylämaltsa"
+                    }
+                  ]
+                },
+                {
+                  "req": "l",
+                  "lat": "polygonaceae",
+                  "fin": "tatarkasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "persicaria",
+                      "species": "hydropiper",
+                      "fin": "katkeratatar"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "persicaria",
+                      "species": "lapathifolia",
+                      "fin": "ukontatar"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "persicaria",
+                      "species": "amphibia",
+                      "fin": "vesitatar"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "fallopia",
+                      "species": "convolvulus",
+                      "fin": "kiertotatar"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "oxyria",
+                      "species": "digyna",
+                      "fin": "hapro"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "rumex",
+                      "species": "aquaticus",
+                      "fin": "vesihierakka"
+                    }
+                  ]
+                },
+                {
+                  "req": "l",
+                  "lat": "droseraceae",
+                  "fin": "kihokkikasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "drosera",
+                      "species": "longifolia",
+                      "fin": "pitkälehtikihokki"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "req": "l",
+              "lat": "malpighiales",
+              "fin": "malpighikasvien lahko",
+              "family": [
+                {
+                  "req": "l",
+                  "lat": "elatinaceae",
+                  "fin": "vesirikkokasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "elatine",
+                      "species": "",
+                      "fin": "vesirikot"
+                    }
+                  ]
+                },
+                {
+                  "req": "l",
+                  "lat": "violaceae",
+                  "fin": "orvokkikasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "viola",
+                      "species": "mirabilis",
+                      "fin": "lehto-orvokki"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "viola",
+                      "species": "rupestris",
+                      "fin": "hietaorvokki"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "viola",
+                      "species": "canina subsp. montana",
+                      "fin": "isoaho-orvokki"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "viola",
+                      "species": "selkirkii",
+                      "fin": "kaiheorvokki"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "viola",
+                      "species": "tricolor",
+                      "fin": "keto-orvokki"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "viola",
+                      "species": "arvensis",
+                      "fin": "pelto-orvokki"
+                    }
+                  ]
+                },
+                {
+                  "req": "l",
+                  "lat": "salicaceae",
+                  "fin": "pajukasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "salix",
+                      "species": "pentandra",
+                      "fin": "halava"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "salix",
+                      "species": "herbacea",
+                      "fin": "vaivaispaju"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "salix",
+                      "species": "myrsinites",
+                      "fin": "lettopaju"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "salix",
+                      "species": "cinerea",
+                      "fin": "tuhkapaju"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "salix",
+                      "species": "starkeana",
+                      "fin": "ahopaju"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "salix",
+                      "species": "myrtilloides",
+                      "fin": "juolukkapaju"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "salix",
+                      "species": "repens",
+                      "fin": "hanhenpaju"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "salix",
+                      "species": "lapponum",
+                      "fin": "pohjanpaju"
+                    }
+                  ]
+                },
+                {
+                  "req": "l",
+                  "lat": "euphorbiaceae",
+                  "fin": "tyräkkikasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "euphorbia",
+                      "species": "esula",
+                      "fin": "kenttätyräkki"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "req": "l",
+              "lat": "brassicales",
+              "fin": "ristikukkaiskasvien lahko",
+              "family": [
+                {
+                  "req": "l",
+                  "lat": "brassicaceae",
+                  "fin": "ristikukkaiskasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "arabidopsis",
+                      "species": "suecica",
+                      "fin": "ruotsinpitkäpalko"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "isatis",
+                      "species": "tinctoria",
+                      "fin": "morsinko"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "bunias",
+                      "species": "orientalis",
+                      "fin": "ukonpalko"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "erysimum",
+                      "species": "cheiranthoides",
+                      "fin": "peltoukonnauris"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "barbarea",
+                      "species": "stricta",
+                      "fin": "rantakanankaali"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "rorippa",
+                      "species": "palustris",
+                      "fin": "rantanenätti"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "cardamine",
+                      "species": "pratensis",
+                      "fin": "luhtalitukka"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "arabis",
+                      "species": "glabra",
+                      "fin": "pölkkyruoho"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "draba",
+                      "species": "incana",
+                      "fin": "harmaakynsimö"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "cochlearia",
+                      "species": "danica",
+                      "fin": "tanskankuirimo"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "thlaspi",
+                      "species": "arvense",
+                      "fin": "peltotaskuruoho"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "subularia",
+                      "species": "aquatica",
+                      "fin": "äimäruoho"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "raphanus",
+                      "species": "raphanistrum",
+                      "fin": "peltoretikka"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "req": "l",
+              "lat": "ericales",
+              "fin": "kanervakasvien lahko",
+              "family": [
+                {
+                  "req": "l",
+                  "lat": "ericaceae",
+                  "fin": "kanervakasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "cassiope",
+                      "species": "hypnoides",
+                      "fin": "sammalvarpio"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "loiseleuria",
+                      "species": "procumbens",
+                      "fin": "sielikkö"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "phyllodoce",
+                      "species": "caerulea",
+                      "fin": "kurjenkanerva"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "arctostaphylos",
+                      "species": "alpina",
+                      "fin": "riekonmarja"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "vaccinium",
+                      "species": "microcarpum",
+                      "fin": "pikkukarpalo"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "pyrola",
+                      "species": "minor",
+                      "fin": "pikkutalvikki"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "pyrola",
+                      "species": "media",
+                      "fin": "kellotalvikki"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "pyrola",
+                      "species": "chlorantha",
+                      "fin": "keltatalvikki"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "moneses",
+                      "species": "uniflora",
+                      "fin": "tähtitalvikki"
+                    }
+                  ]
+                },
+                {
+                  "req": "l",
+                  "lat": "diapensiaceae",
+                  "fin": "uuvanakasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "diapensia",
+                      "species": "lapponica",
+                      "fin": "uuvana"
+                    }
+                  ]
+                },
+                {
+                  "req": "l",
+                  "lat": "myrsinaceae",
+                  "fin": "alpikasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "primula",
+                      "species": "veris",
+                      "fin": "kevätesikko"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "glaux",
+                      "species": "maritima",
+                      "fin": "merirannikki"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "req": "l",
+              "lat": "saxifragales",
+              "fin": "rikkokasvien lahko",
+              "family": [
+                {
+                  "req": "l",
+                  "lat": "saxifragaceae",
+                  "fin": "rikkokasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "saxifraga",
+                      "species": "aizoides",
+                      "fin": "kultarikko"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "chrysosplenium",
+                      "species": "alternifolium",
+                      "fin": "kevätlinnunsilmä"
+                    }
+                  ]
+                },
+                {
+                  "req": "l",
+                  "lat": "crassulaceae",
+                  "fin": "maksaruohokasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "sedum",
+                      "species": "telephium",
+                      "fin": "isomaksaruoho"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "sedum",
+                      "species": "acre",
+                      "fin": "keltamaksaruoho"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "rhodiola",
+                      "species": "rosea",
+                      "fin": "ruusujuuri"
+                    }
+                  ]
+                },
+                {
+                  "req": "l",
+                  "lat": "grossulariaceae",
+                  "fin": "herukkakasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "ribes",
+                      "species": "nigrum",
+                      "fin": "mustaherukka"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "req": "l",
+              "lat": "fabales",
+              "fin": "hernekasvien lahko",
+              "family": [
+                {
+                  "req": "l",
+                  "lat": "fabaceae",
+                  "fin": "hernekasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "astragalus",
+                      "species": "alpinus subsp. arcticus",
+                      "fin": "tunturikurjenherne"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "oxytropis",
+                      "species": "campestris subsp. sordida",
+                      "fin": "idänkeulankärki"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "vicia",
+                      "species": "sylvatica",
+                      "fin": "metsävirna"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "vicia",
+                      "species": "sepium",
+                      "fin": "aitovirna"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "lathyrus",
+                      "species": "palustris",
+                      "fin": "rantanätkelmä"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "trifolium",
+                      "species": "hybridum",
+                      "fin": "alsikeapila"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "trifolium",
+                      "species": "spadiceum",
+                      "fin": "musta-apila"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "trifolium",
+                      "species": "medium",
+                      "fin": "metsäapila"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "lotus",
+                      "species": "corniculatus",
+                      "fin": "keltamaite"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "req": "l",
+              "lat": "myrtales",
+              "fin": "myrttikasv. lahko",
+              "family": [
+                {
+                  "req": "l",
+                  "lat": "onagraceae",
+                  "fin": "horsmakasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "circaea",
+                      "species": "alpina",
+                      "fin": "velholehti"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "epilobium",
+                      "species": "collinum",
+                      "fin": "mäkihorsma"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "epilobium",
+                      "species": "adenocaulon",
+                      "fin": "amerikanhorsma"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "epilobium",
+                      "species": "palustre",
+                      "fin": "suohorsma"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "req": "l",
+              "lat": "geraniales",
+              "fin": "kurjenpolvikasvien lahko",
+              "family": [
+                {
+                  "req": "l",
+                  "lat": "geraniaceae",
+                  "fin": "kurjenpolvikasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "geranium",
+                      "species": "robertianum",
+                      "fin": "haisukurjenpolvi"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "req": "l",
+              "lat": "apiales",
+              "fin": "sarjakukkaiskasvien lahko",
+              "family": [
+                {
+                  "req": "l",
+                  "lat": "apiaceae",
+                  "fin": "sarjakukkaiskasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "pimpinella",
+                      "species": "saxifraga",
+                      "fin": "pukinjuuri"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "carum",
+                      "species": "carvi",
+                      "fin": "kumina"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "heracleum",
+                      "species": "sibiricum",
+                      "fin": "idänukonputki"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "req": "l",
+              "lat": "gentianales",
+              "fin": "katkerokasvien lahko",
+              "family": [
+                {
+                  "req": "l",
+                  "lat": "rubiaceae",
+                  "fin": "matarakasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "galium",
+                      "species": "uliginosum",
+                      "fin": "luhtamatara"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "galium",
+                      "species": "palustre",
+                      "fin": "rantamatara"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "galium",
+                      "species": "trifidum",
+                      "fin": "pikkumatara"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "galium",
+                      "species": "verum",
+                      "fin": "keltamatara"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "galium",
+                      "species": "album",
+                      "fin": "paimenmatara"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "galium",
+                      "species": "spurium subsp. vaillantii",
+                      "fin": "peltomatara"
+                    }
+                  ]
+                },
+                {
+                  "req": "l",
+                  "lat": "gentianaceae",
+                  "fin": "katkerokasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "centaurium",
+                      "species": "",
+                      "fin": "rantasappi"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "req": "l",
+              "lat": "dipsacales",
+              "fin": "kardikukkakasvien lahko",
+              "family": [
+                {
+                  "req": "l",
+                  "lat": "adoxaceae",
+                  "fin": "tesmayrttikasv.",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "sambucus",
+                      "species": "racemosa",
+                      "fin": "terttuselja"
+                    }
+                  ]
+                },
+                {
+                  "req": "l",
+                  "lat": "valerianaceae",
+                  "fin": "virmajuurikasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "valeriana",
+                      "species": "sambucifolia",
+                      "fin": "lehtovirmajuuri"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "req": "l",
+              "lat": "solanales",
+              "fin": "koisokasvien lahko",
+              "family": [
+                {
+                  "req": "l",
+                  "lat": "convolvulaceae",
+                  "fin": "kiertokasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "convolvulus",
+                      "species": "arvensis",
+                      "fin": "peltokierto"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "cuscuta",
+                      "species": "europaea",
+                      "fin": "humalanvieras"
+                    }
+                  ]
+                },
+                {
+                  "req": "l",
+                  "lat": "solanaceae",
+                  "fin": "koisokasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "solanum",
+                      "species": "dulcamara",
+                      "fin": "punakoiso"
+                    }
+                  ]
+                },
+                {
+                  "req": "l",
+                  "lat": "polemoniaceae",
+                  "fin": "sinilatvakasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "polemonium",
+                      "species": "caeruleum",
+                      "fin": "lehtosinilatva"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "req": "l",
+              "lat": "boraginales",
+              "fin": "lemmikkikasvien lahko",
+              "family": [
+                {
+                  "req": "l",
+                  "lat": "boraginaceae",
+                  "fin": "lemmikkikasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "pulmonaria",
+                      "species": "obscura",
+                      "fin": "imikkä"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "symphytum",
+                      "species": "",
+                      "fin": "raunioyrtit"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "myosotis",
+                      "species": "stricta",
+                      "fin": "hietalemmikki"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "myosotis",
+                      "species": "laxa subsp. caespitosa",
+                      "fin": "rantalemmikki"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "req": "l",
+              "lat": "lamiales",
+              "fin": "huulikukkaiskasvien lahko",
+              "family": [
+                {
+                  "req": "l",
+                  "lat": "lamiaceae",
+                  "fin": "huulikukkaiskasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "scutellaria",
+                      "species": "galericulata",
+                      "fin": "luhtavuohennokka"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "galeopsis",
+                      "species": "bifida",
+                      "fin": "peltopillike"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "lamium",
+                      "species": "album",
+                      "fin": "valkopeippi"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "lamium",
+                      "species": "purpureum",
+                      "fin": "punapeippi"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "lamium",
+                      "species": "hybridum",
+                      "fin": "liuskapeippi"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "stachys",
+                      "species": "sylvatica",
+                      "fin": "lehtopähkämö"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "stachys",
+                      "species": "palustris",
+                      "fin": "peltopähkämö"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "satureja",
+                      "species": "vulgaris",
+                      "fin": "mäkiminttu"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "lycopus",
+                      "species": "europaeus",
+                      "fin": "rantayrtti"
+                    }
+                  ]
+                },
+                {
+                  "req": "l",
+                  "lat": "orobanchaceae",
+                  "fin": "näivekasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "melampyrum",
+                      "species": "nemorosum",
+                      "fin": "lehtomaitikka"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "euphrasia",
+                      "species": "",
+                      "fin": "silmäruohot"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "bartsia",
+                      "species": "alpina",
+                      "fin": "punakko"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "pedicularis",
+                      "species": "sceptrum-carolinum",
+                      "fin": "kaarlenvaltikka"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "rhinanthus",
+                      "species": "minor",
+                      "fin": "pikkulaukku"
+                    }
+                  ]
+                },
+                {
+                  "req": "l",
+                  "lat": "scrophulariaceae",
+                  "fin": "naamakukkaiskasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "scrophularia",
+                      "species": "nodosa",
+                      "fin": "syyläjuuri"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "veronica",
+                      "species": "serpyllifolia",
+                      "fin": "orvontädyke"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "veronica",
+                      "species": "scutellata",
+                      "fin": "luhtatädyke"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "veronica",
+                      "species": "verna",
+                      "fin": "kevättädyke"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "veronica",
+                      "species": "longifolia",
+                      "fin": "rantatädyke"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "verbascum",
+                      "species": "thapsus",
+                      "fin": "ukontulikukka"
+                    }
+                  ]
+                },
+                {
+                  "req": "l",
+                  "lat": "plantaginaceae",
+                  "fin": "ratamokasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "plantago",
+                      "species": "maritima",
+                      "fin": "meriratamo"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "callitriche",
+                      "species": "",
+                      "fin": "vesitähdet"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "hippuris",
+                      "species": "vulgaris",
+                      "fin": "vesikuusi"
+                    }
+                  ]
+                },
+                {
+                  "req": "l",
+                  "lat": "lentibulariaceae",
+                  "fin": "vesihernekasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "pinguicula",
+                      "species": "vulgaris",
+                      "fin": "siniyökönlehti"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "utricularia",
+                      "species": "intermedia",
+                      "fin": "rimpivesiherne"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "req": "l",
+              "lat": "asterales",
+              "fin": "asterikasvien lahko",
+              "family": [
+                {
+                  "req": "l",
+                  "lat": "campanulaceae",
+                  "fin": "kellokasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "campanula",
+                      "species": "persicifolia",
+                      "fin": "kurjenkello"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "campanula",
+                      "species": "glomerata",
+                      "fin": "peurankello"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "lobelia",
+                      "species": "dortmanna",
+                      "fin": "nuottaruoho"
+                    }
+                  ]
+                },
+                {
+                  "req": "l",
+                  "lat": "asteraceae",
+                  "fin": "asterikasvit",
+                  "specie": [
+                    {
+                      "req": "l",
+                      "genus": "aster",
+                      "species": "tripolium",
+                      "fin": "meriasteri"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "erigeron",
+                      "species": "acer",
+                      "fin": "karvaskallioinen"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "gnaphalium",
+                      "species": "sylvaticum",
+                      "fin": "ahojäkkärä"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "bidens",
+                      "species": "tripartita",
+                      "fin": "tummarusokki"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "bidens",
+                      "species": "radiata",
+                      "fin": "säderusokki"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "tripleurospermum",
+                      "species": "inodorum",
+                      "fin": "peltosaunio"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "matricaria",
+                      "species": "chamomilla",
+                      "fin": "kamomillasaunio"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "artemisia",
+                      "species": "absinthium",
+                      "fin": "mali"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "senecio",
+                      "species": "viscosus",
+                      "fin": "tahmavillakko"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "senecio",
+                      "species": "vulgaris",
+                      "fin": "peltovillakko"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "arctium",
+                      "species": "minus",
+                      "fin": "pikkutakiainen"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "saussurea",
+                      "species": "alpina",
+                      "fin": "lääte"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "carduus",
+                      "species": "crispus",
+                      "fin": "kyläkarhiainen"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "cirsium",
+                      "species": "vulgare",
+                      "fin": "piikkiohdake"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "cirsium",
+                      "species": "palustre",
+                      "fin": "suo-ohdake"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "centaurea",
+                      "species": "jacea",
+                      "fin": "ahdekaunokki"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "centaurea",
+                      "species": "cyanus",
+                      "fin": "ruiskaunokki"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "hypochoeris",
+                      "species": "maculata",
+                      "fin": "häränsilmä"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "leontodon",
+                      "species": "hispidus",
+                      "fin": "kesämaitiainen"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "tragopogon",
+                      "species": "pratensis",
+                      "fin": "pukinparta"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "lactuca",
+                      "species": "sibirica",
+                      "fin": "siperiansinivalvatti"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "lapsana",
+                      "species": "communis",
+                      "fin": "linnunkaali"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "crepis",
+                      "species": "tectorum",
+                      "fin": "ketokeltto"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "hieracium",
+                      "species": "umbellatum",
+                      "fin": "sarjakeltano"
+                    },
+                    {
+                      "req": "l",
+                      "genus": "pilosella",
+                      "species": "officinarum",
+                      "fin": "huopakeltano"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
